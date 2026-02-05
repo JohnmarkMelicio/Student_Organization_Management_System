@@ -10,14 +10,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.scss']
 })
 export class Login {
-  username = '';
-  password = '';
+  username = 'admin';
+  password = 'admin';
   rememberMe = false;
 
-  constructor(private router:Router){
-
-  }
-
+  constructor(private router:Router){}
+  
   login() {
     if (this.username && this.password){
       this.router.navigate(['/home'])
