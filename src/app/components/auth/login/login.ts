@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.scss']
 })
 export class Login {
+  role = '';
   username = 'admin';
   password = 'admin';
   rememberMe = false;

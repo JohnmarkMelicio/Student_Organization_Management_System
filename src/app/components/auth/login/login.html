@@ -5,8 +5,21 @@
     <div class="login-card">
       <h2>Welcome Back!</h2>    
 
-      <!-- Angular Form -->
+      
       <form (ngSubmit)="login()">
+
+        <label>Role</label>
+        <select
+          [(ngModel)]="role"
+          name="role"
+          required
+          class="role-select"
+        >
+          <option value="" disabled selected>Select Role</option>
+          <option value="admin">Admin</option>
+          <option value="student">Student</option>
+        </select>
+
 
         <label>Username</label>
         <input
@@ -38,14 +51,7 @@
 
       </form>
 
-      <button class="google-btn" type="button">
-        <img src="https://www.svgrepo.com/show/475656/google-color.svg">
-        Continue with Google
-      </button>
-
-      <p class="signup">
-        Don't have an account? <a href="#">Sign Up</a>
-      </p>
+      
     </div>
   </div>
 
