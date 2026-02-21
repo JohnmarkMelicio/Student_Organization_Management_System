@@ -1,0 +1,67 @@
+<div class="payments-container">
+
+  <div class="card">
+
+    <h2 class="title">TRANSACTIONS</h2>
+
+    <!-- Top Controls -->
+    <div class="top-controls">
+
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="Search payments..." />
+        <span class="clear-icon">✕</span>
+      </div>
+
+      <div class="actions">
+        <button class="edit-btn">Edit List</button>
+
+        <button class="filter-btn">
+          Filter by payment method ▼
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Table -->
+    <table class="payments-table">
+      <thead>
+        <tr>
+          <th>Payment Date</th>
+          <th>Amount</th>
+          <th>Total</th>
+          <th>Payed By</th>
+          <th>Payment method</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr *ngFor="let payment of payments">
+          <td>{{ payment.date }}</td>
+          <td>{{ payment.amount }}</td>
+          <td>{{ payment.total }}</td>
+          <td>{{ payment.paidBy }}</td>
+          <td>{{ payment.method }}</td>
+          <td>
+            <button class="details-btn">•••</button>
+          </td>
+        </tr>
+
+        <tr *ngIf="payments.length === 0">
+          <td colspan="6" class="no-record">
+            No payment records yet.
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+
+  </div>
+
+  <button class="add-btn">
+    + Add New Payment
+  </button>
+
+</div>

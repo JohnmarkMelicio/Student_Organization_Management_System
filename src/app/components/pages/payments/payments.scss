@@ -1,0 +1,131 @@
+.payments-container {
+  padding: 30px;
+  width: 1600px;
+  background: #f4f6f9;
+  min-height: 100vh;
+}
+
+/* Card */
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #1f2937;
+}
+
+/* Top Controls */
+.top-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search-box {
+  position: relative;
+  width: 320px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 10px 35px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 9px;
+}
+
+.clear-icon {
+  position: absolute;
+  right: 10px;
+  top: 9px;
+  cursor: pointer;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
+.edit-btn {
+  background: #0f1d5c;
+  color: white;
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.filter-btn {
+  background: #1d2cd3;
+  color: white;
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Table */
+.payments-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.payments-table thead {
+  background: #e5e7eb;
+}
+
+.payments-table th {
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+}
+
+.payments-table td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.payments-table tr:hover {
+  background: #f9fafb;
+}
+
+/* Details Button */
+.details-btn {
+  background: #fbbf24;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* No Record */
+.no-record {
+  text-align: center;
+  padding: 20px;
+  color: gray;
+}
+
+/* Add Button */
+.add-btn {
+  margin-top: 20px;
+  background: #0f1d5c;
+  color: white;
+  padding: 12px 22px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
