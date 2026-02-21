@@ -1,1 +1,72 @@
-<p>attendance works!</p>
+<div class="attendance-wrapper">
+
+  <div class="header">
+    <h2>Admin Attendance Panel</h2>
+    <button class="save-btn">Save Changes</button>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters">
+    <div>
+      <label>Event</label>
+      <select>
+        <option>Select Event</option>
+        <option>Orientation</option>
+        <option>Workshop</option>
+        <option>General Meeting</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Date</label>
+      <input type="date">
+    </div>
+
+    <div class="bulk-actions">
+      <button class="present-all">Mark All Present</button>
+      <button class="absent-all">Mark All Absent</button>
+    </div>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="summary-cards">
+    <div class="card total">
+      <h3>Total</h3>
+      <p>25</p>
+    </div>
+    <div class="card present">
+      <h3>Present</h3>
+      <p>18</p>
+    </div>
+    <div class="card absent">
+      <h3>Absent</h3>
+      <p>7</p>
+    </div>
+  </div>
+
+  <!-- Attendance Table -->
+  <div class="table-box">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Department</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ST001</td>
+          <td>John Doe</td>
+          <td>Computer Science</td>
+          <td>
+            <span class="badge present-badge">Present</span>
+            <span class="badge absent-badge">Absent</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
