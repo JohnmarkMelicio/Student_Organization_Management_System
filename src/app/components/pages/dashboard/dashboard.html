@@ -1,0 +1,105 @@
+<div class="dashboard">
+
+  <!-- HEADER -->
+  <div class="dashboard-header">
+    <h1>Dashboard</h1>
+    <p>Welcome back, Johnmark Melicio!</p>
+  </div>
+
+  <!-- ================= STATS CARDS ================= -->
+  <div class="stats-grid">
+
+    <div class="stat-card">
+      <div class="stat-top">
+        <span>Active Members</span>
+      </div>
+      <h2>{{ membersCount }}</h2>
+      <small class="positive">↑ Total members</small>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-top">
+        <span>Upcoming Events</span>
+      </div>
+      <h2>{{ eventsCount }}</h2>
+      <small class="positive">↑ Scheduled events</small>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-top">
+        <span>Total Organizations</span>
+  </div>
+  <h2>{{ organizationsCount }}</h2>
+      <small class="negative">Active</small>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-top">
+        <span>Attendance Records</span>
+      </div>
+      <h2>{{ attendanceCount }}</h2>
+      <small>Recorded attendance</small>
+    </div>
+
+  </div>
+
+  <!-- ================= LOWER SECTION ================= -->
+  <div class="content-grid">
+
+    <!-- UPCOMING EVENTS -->
+    <div class="card">
+
+      <div class="card-header">
+        <h3>Upcoming Events</h3>
+      </div>
+
+      <div *ngFor="let event of upcomingEvents" class="event-item">
+
+        <div class="event-details">
+          <strong>{{ event.title }}</strong>
+          <div class="event-meta">
+            {{ event.date }}
+            <span *ngIf="event.location">• {{ event.location }}</span>
+          </div>
+        </div>
+
+        <span class="tag">
+          {{ event.type || 'event' }}
+        </span>
+
+      </div>
+
+      <div *ngIf="upcomingEvents.length === 0" class="empty">
+        No upcoming events.
+      </div>
+
+    </div>
+
+
+    <!-- RECENT ACTIVITY -->
+    <div class="card">
+
+      <div class="card-header">
+        <h3>Recent Activity</h3>
+      </div>
+
+      <div *ngFor="let act of upcomingEvents.slice(0,5)" class="activity-item">
+
+        <div>
+          <strong>{{ act.title }}</strong>
+          <div class="activity-meta">
+            Scheduled on {{ act.date }}
+          </div>
+        </div>
+
+      </div>
+
+      <div *ngIf="upcomingEvents.length === 0" class="empty">
+        No recent activity.
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

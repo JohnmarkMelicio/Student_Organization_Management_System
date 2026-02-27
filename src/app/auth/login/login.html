@@ -1,0 +1,45 @@
+<div class="login-container">
+  <div class="login-left">
+    <img src="/images/USTPlogo.png" class="ustp-logo" alt="USTP Logo">
+
+    <div class="login-card">
+      <h2>Welcome Back!</h2>    
+
+      
+      <form (ngSubmit)="login()">
+
+        <label>Username</label>
+        <input
+          type="text"
+          placeholder="Username"
+          [(ngModel)]="username"
+          name="username"
+          required
+        >
+
+        <label>Password</label>
+        <input
+          type="password"
+          placeholder="Password"
+          [(ngModel)]="password"
+          name="password"
+          required
+        >
+
+        <div class="options">
+          <label class="remember">
+            <input type="checkbox" [(ngModel)]="rememberMe" name="rememberMe">
+            <span>Remember me</span>
+          </label>
+          <a href="#">Forgot Password</a>
+        </div>
+
+        <button class="login-btn" type="submit">Login</button>
+
+      </form>
+
+    </div>
+  </div>
+
+  <div class="login-right"></div>
+</div>

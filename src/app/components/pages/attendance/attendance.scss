@@ -1,0 +1,109 @@
+.attendance-container {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+.event-select {
+  margin-bottom: 20px;
+}
+
+select, input {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-right: 8px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 25px;
+}
+
+th {
+  background: #f4f6f9;
+  padding: 10px;
+  text-align: left;
+}
+
+td {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+tr:hover {
+  background: #f9f9f9;
+}
+
+.present {
+  color: green;
+  font-weight: 600;
+}
+
+.absent {
+  color: red;
+  font-weight: 600;
+}
+
+.add-section {
+  margin-top: 20px;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+button {
+  padding: 8px 15px;
+  border-radius: 6px;
+  border: none;
+  background: #0d2c6c;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #123d8c;
+}
+
+.no-data {
+  color: #888;
+}
+button {
+  padding: 5px 10px;
+  margin-right: 5px;
+  border-radius: 6px;
+  border: none;
+  background: #0d2c6c;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #123d8c;
+}
+
+.present {
+  color: green;
+  font-weight: 600;
+}
+
+.absent {
+  color: red;
+  font-weight: 600;
+}
+.delete-btn {
+  background: #dc3545;
+}
+
+.delete-btn:hover {
+  background: #b02a37;
+}

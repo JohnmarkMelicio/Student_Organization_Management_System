@@ -1,0 +1,164 @@
+<div class="event-container">
+
+  <!-- Top Toggle -->
+  <div class="top-toggle">
+    <button
+      [class.active]="viewMode === 'create'"
+      (click)="viewMode='create'">
+      Create Event
+    </button>
+
+    <button
+      [class.active]="viewMode === 'list'"
+      (click)="viewMode='list'">
+      Event List
+    </button>
+  </div>
+
+
+  <!-- ====================== -->
+  <!-- CREATE EVENT VIEW -->
+  <!-- ====================== -->
+
+  <div *ngIf="viewMode === 'create'" class="create-card">
+
+    <h2>Create Event</h2>
+
+    <input placeholder="Event Name"
+           [(ngModel)]="newEvent.name">
+
+    <input type="date"
+           [(ngModel)]="newEvent.date">
+
+    <input placeholder="Location"
+           [(ngModel)]="newEvent.location">
+
+    <select [(ngModel)]="newEvent.status">
+      <option value="">Select Status</option>
+      <option value="Upcoming">Upcoming</option>
+      <option value="Ongoing">Ongoing</option>
+      <option value="Completed">Completed</option>
+    </select>
+
+    <input placeholder="Organization In-Charge"
+           [(ngModel)]="newEvent.organization">
+
+    <button class="save-btn"
+            (click)="addEvent()">
+      Save Event
+    </button>
+
+  </div>
+
+
+  <!-- ====================== -->
+  <!-- EVENT LIST VIEW -->
+  <!-- ====================== -->
+
+  <div *ngIf="viewMode === 'list'" class="list-card">
+
+    <div class="list-header">
+      <h2>Event List</h2>
+
+      <button (click)="viewMode='create'">
+        + Create Event
+      </button>
+    </div>
+
+    <input class="search"
+           placeholder="Search events..."
+           [(ngModel)]="searchText"
+           (input)="searchEvents()">
+
+    <table *ngIf="filteredEvents.length">
+      <thead>
+        <tr>
+          <th>Event Name</th>
+          <th>Date</th>
+          <th>Location</th>
+          <th>Status</th>
+          <th>Organization</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let event of filteredEvents">
+
+          <!-- Name -->
+          <td>
+            <input *ngIf="editingId === event.id"
+                   [(ngModel)]="event.name">
+            <span *ngIf="editingId !== event.id">
+              {{ event.name }}
+            </span>
+          </td>
+
+          <!-- Date -->
+          <td>
+            <input type="date"
+                   *ngIf="editingId === event.id"
+                   [(ngModel)]="event.date">
+            <span *ngIf="editingId !== event.id">
+              {{ event.date }}
+            </span>
+          </td>
+
+          <!-- Location -->
+          <td>
+            <input *ngIf="editingId === event.id"
+                   [(ngModel)]="event.location">
+            <span *ngIf="editingId !== event.id">
+              {{ event.location }}
+            </span>
+          </td>
+
+          <!-- Status -->
+          <td>
+            <select *ngIf="editingId === event.id"
+                    [(ngModel)]="event.status">
+              <option value="Upcoming">Upcoming</option>
+              <option value="Ongoing">Ongoing</option>
+              <option value="Completed">Completed</option>
+            </select>
+
+            <span *ngIf="editingId !== event.id"
+                  [ngClass]="event.status.toLowerCase()">
+              {{ event.status }}
+            </span>
+          </td>
+
+          <!-- Organization -->
+          <td>
+            <input *ngIf="editingId === event.id"
+                   [(ngModel)]="event.organization">
+            <span *ngIf="editingId !== event.id">
+              {{ event.organization }}
+            </span>
+          </td>
+
+          <!-- Action -->
+          <td>
+            <button *ngIf="editingId !== event.id"
+                    (click)="editEvent(event)">
+              Edit
+            </button>
+
+            <button *ngIf="editingId === event.id"
+                    (click)="saveEvent(event)">
+              Save
+            </button>
+
+            <button class="delete-btn"
+                    (click)="deleteEvent(event.id)">
+              Delete
+            </button>
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+</div>

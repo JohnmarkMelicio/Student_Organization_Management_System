@@ -1,0 +1,88 @@
+.event-container {
+  padding: 25px;
+}
+
+.top-toggle {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.top-toggle button {
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: none;
+  background: #e0e0e0;
+  cursor: pointer;
+}
+
+.top-toggle button.active {
+  background: #0d2c6c;
+  color: white;
+}
+
+.create-card, .list-card {
+  background: white;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+input, select {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.save-btn {
+  margin-top: 10px;
+  background: #0d2c6c;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.search {
+  margin-bottom: 15px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  background: #f4f6f9;
+  padding: 10px;
+  text-align: left;
+}
+
+td {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+button {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.delete-btn {
+  background: #dc3545;
+  color: white;
+}
+
+.upcoming { background: #3b82f6; color: white; padding: 4px 8px; border-radius: 6px; }
+.completed { background: #16a34a; color: white; padding: 4px 8px; border-radius: 6px; }
+.ongoing { background: #f59e0b; color: white; padding: 4px 8px; border-radius: 6px; }

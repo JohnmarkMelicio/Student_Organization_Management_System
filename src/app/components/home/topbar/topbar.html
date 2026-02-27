@@ -1,0 +1,33 @@
+<div class="topbar">
+
+  <!-- RIGHT SIDE -->
+  <div class="profile-wrapper" (click)="toggleDropdown()">
+
+    <div class="profile-trigger">
+      <div class="avatar">J</div>
+
+      <div class="user-info">
+        <div class="name">Johnmark Melicio</div>
+        <div class="role">Admin</div>
+      </div>
+
+      <span class="arrow">▼</span>
+    </div>
+
+    <!-- DROPDOWN -->
+    <div class="dropdown" *ngIf="showDropdown">
+
+      <div class="dropdown-header">
+        <strong>Johnmark Melicio</strong>
+        <p>johnmarkmelicio@gmail.com</p>
+      </div>
+
+      <div class="logout-item" (click)="logout(); $event.stopPropagation()">
+        ⎋ Logout
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

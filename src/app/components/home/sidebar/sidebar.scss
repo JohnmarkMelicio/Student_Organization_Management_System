@@ -1,0 +1,94 @@
+/* ================= SIDEBAR ================= */
+.sidebar {
+  width: 260px;
+  height: 100vh;
+  background: linear-gradient(180deg, #0f1f3d, #192a44);
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  padding: 22px 18px;
+}
+
+/* ================= HEADER ================= */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 35px;
+}
+
+.logo-box {
+  width: 50px;
+  height: 50px;
+  background: white;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.logo-box img {
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+}
+
+.logo-text h2 {
+  font-size: 18px;
+  margin: 0;
+}
+
+.logo-text p {
+  font-size: 12px;
+  opacity: 0.65;
+  margin-top: 2px;
+}
+
+/* ================= MENU ================= */
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #cbd5e1;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.menu-item .icon {
+  font-size: 16px;
+}
+
+/* Hover */
+.menu-item:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: white;
+}
+
+/* ACTIVE STYLE */
+.menu-item.active {
+  background: rgba(255, 255, 255, 0.08);
+  color: #FDB913;
+  font-weight: 500;
+}
+
+.menu-item.active::before {
+  content: '';
+  position: absolute;
+  left: -18px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: #FDB913;
+  border-radius: 3px;
+}

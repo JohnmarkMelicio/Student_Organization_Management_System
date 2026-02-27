@@ -1,0 +1,132 @@
+<div class="org-detail" *ngIf="organization">
+
+  <!-- TOP HEADER -->
+  <div class="top-header">
+
+    <div class="title-section">
+      <span class="back-btn" (click)="goBack()">Back</span>
+
+      <div>
+        <h1>{{ organization.name }}</h1>
+        <p class="subtitle">
+          {{ organization.description }}
+        </p>
+      </div>
+    </div>
+
+    <button class="primary-btn"
+            (click)="showOfficerModal = true">
+      Manage Officers
+    </button>
+
+  </div>
+
+  <!-- OFFICERS CARD -->
+  <div class="card officers-card">
+
+    <h3>OFFICERS</h3>
+
+    <div class="officer-grid">
+      <div class="officer" *ngFor="let m of members">
+        <div class="avatar">👤</div>
+        <strong>{{ m.position }}</strong>
+        <span>{{ m.name }}</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CONTACT + SOCIAL -->
+  <div class="info-grid">
+
+    <div class="card">
+      <h3>Contact Information</h3>
+      <p>📧 {{ organization.email }}</p>
+      <p>📞 {{ organization.phone }}</p>
+      <p>📍 {{ organization.location }}</p>
+    </div>
+
+    <div class="card">
+      <h3>Social Links</h3>
+      <p *ngIf="organization.social?.facebook">
+        🔗 {{ organization.social.facebook }}
+      </p>
+      <p *ngIf="organization.social?.instagram">
+        📸 {{ organization.social.instagram }}
+      </p>
+    </div>
+
+  </div>
+
+  <!-- MISSION + VISION -->
+  <div class="info-grid">
+
+    <div class="card">
+      <h3>Mission</h3>
+      <p>{{ organization.mission }}</p>
+    </div>
+
+    <div class="card">
+      <h3>Vision</h3>
+      <p>{{ organization.vision }}</p>
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ================= OFFICER MODAL ================= -->
+<div class="modal-backdrop"
+     *ngIf="showOfficerModal">
+
+  <div class="modal-card">
+
+    <div class="modal-header">
+      <h3>Manage Officers</h3>
+      <span class="close-btn"
+            (click)="showOfficerModal = false">✕</span>
+    </div>
+
+    <div class="modal-body">
+
+      <div *ngFor="let m of members"
+           class="officer-row">
+        <strong>{{ m.position }}</strong>
+        <span>{{ m.name }}</span>
+      </div>
+
+      <hr>
+
+      <div class="form-grid">
+
+        <div>
+          <label>Position</label>
+          <input [(ngModel)]="newMember.position">
+        </div>
+
+        <div>
+          <label>Name</label>
+          <input [(ngModel)]="newMember.name">
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+
+      <button class="cancel-btn"
+              (click)="showOfficerModal = false">
+        Cancel
+      </button>
+
+      <button class="save-btn"
+              (click)="addMember()">
+        Add Officer
+      </button>
+
+    </div>
+
+  </div>
+</div>

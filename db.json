@@ -1,0 +1,188 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "password": "admin123",
+      "role": "admin"
+    }
+  ],
+  "events": [
+    {
+      "id": 1,
+      "name": "General Assembly",
+      "date": "2025-01-31",
+      "location": "USTP Gymnasium",
+      "status": "Completed",
+      "organization": "Supreme Student Government"
+    },
+    {
+      "id": 2,
+      "name": "Leadership Seminar",
+      "date": "2025-02-10",
+      "location": "ICT Building Room 203",
+      "status": "Upcoming",
+      "organization": "Leadership Council"
+    },
+    {
+      "name": "Shat",
+      "date": "2026-02-26",
+      "location": "7/11",
+      "status": "Ongoing",
+      "organization": "Chongix and friends",
+      "id": 3
+    }
+  ],
+  "attendance": [
+    {
+      "id": 1,
+      "eventId": 1,
+      "studentId": "2211445566",
+      "name": "Theresa Uayan",
+      "program": "BSIT",
+      "status": "Present",
+      "datetime": "1/31/2025, 9:02 AM"
+    },
+    {
+      "studentId": "12345",
+      "name": "chongix",
+      "program": "BSIT",
+      "status": "Present",
+      "datetime": "2/26/2026, 10:19:31 PM",
+      "eventId": 1,
+      "id": 2
+    },
+    {
+      "studentId": "12345",
+      "name": "Jannah",
+      "program": "BSTCM",
+      "status": "Present",
+      "datetime": "2/26/2026, 10:24:18 PM",
+      "eventId": 2,
+      "id": 3
+    }
+  ],
+  "organizations": [
+    {
+      "id": 1,
+      "name": "Computer Science Society",
+      "shortName": "CSS",
+      "description": "A student organization dedicated to fostering excellence in computer science and technology",
+      "email": "css@university.edu",
+      "phone": "+63 912 000 0001",
+      "location": "Room 201, IT Building",
+      "mission": "To provide a platform for students to enhance technical skills and build leadership.",
+      "vision": "To be the leading student tech organization in the region.",
+      "social": {
+        "facebook": "facebook.com/css",
+        "instagram": "instagram.com/css"
+      }
+    },
+    {
+      "name": "adasd",
+      "shortName": "adasd",
+      "description": "",
+      "email": "adad",
+      "phone": "212313",
+      "location": "sdasdasd",
+      "mission": "12131",
+      "vision": "12312312",
+      "social": {
+        "facebook": "13123123",
+        "instagram": "dad"
+      },
+      "id": 2
+    },
+    {
+      "name": "Undang nata",
+      "shortName": "none",
+      "description": "asdada",
+      "email": "chongchongabugho@gmail.com",
+      "phone": "09090909",
+      "location": "Villanueva",
+      "mission": "asdada",
+      "vision": "sdadasdad",
+      "social": {
+        "facebook": "",
+        "instagram": ""
+      },
+      "id": 3
+    }
+  ],
+  "members": [
+    {
+      "id": 1,
+      "organizationId": 1,
+      "name": "Maria Santos",
+      "position": "President",
+      "program": "BSCS",
+      "yearLevel": "3rd Year"
+    },
+    {
+      "name": "wda",
+      "position": "wdad",
+      "program": "awdad",
+      "yearLevel": "22",
+      "organizationId": 1,
+      "id": 2
+    },
+    {
+      "name": "President",
+      "position": "Chongix",
+      "organizationId": 3,
+      "id": 3
+    }
+  ],
+  "payments": [
+    {
+      "type": "USG",
+      "eventId": null,
+      "studentId": "12345",
+      "name": "kekel",
+      "amount": 500,
+      "paymentMethod": "Cash",
+      "paymentDate": "2026-02-26",
+      "id": 1
+    },
+    {
+      "type": "Event",
+      "eventId": 1,
+      "studentId": "12345",
+      "name": "jaii2",
+      "amount": 1500,
+      "paymentMethod": "Cash",
+      "paymentDate": "2026-02-26",
+      "id": 2
+    },
+    {
+      "type": "Event",
+      "eventId": 2,
+      "studentId": "22222",
+      "name": "tuting",
+      "amount": 1000,
+      "paymentMethod": "Cash",
+      "paymentDate": "2026-02-26",
+      "id": 3
+    },
+    {
+      "type": "USG",
+      "eventId": null,
+      "studentId": "55555",
+      "name": "jannah",
+      "amount": 2000,
+      "paymentMethod": "Cash",
+      "paymentDate": "2026-02-26",
+      "id": 4
+    },
+    {
+      "type": "Event",
+      "eventId": null,
+      "studentId": "12313131",
+      "name": "dadasd",
+      "amount": 144444,
+      "paymentMethod": "GCash",
+      "paymentDate": "2026-02-27",
+      "id": 5
+    }
+  ]
+}

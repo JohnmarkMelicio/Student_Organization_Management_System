@@ -1,0 +1,125 @@
+<div class="payment-container">
+
+  <h2>Payment Management</h2>
+
+  <!-- ========================= -->
+  <!-- PAYMENT FORM -->
+  <!-- ========================= -->
+
+  <div class="payment-form">
+
+    <label>Payment Type</label>
+    <select [(ngModel)]="newPayment.type">
+      <option value="USG">USG Fee</option>
+      <option value="Event">Event</option>
+    </select>
+
+    <div *ngIf="newPayment.type === 'Event'">
+      <label>Select Event</label>
+      <select [(ngModel)]="newPayment.eventId">
+        <option [ngValue]="null">Select Event</option>
+        <option *ngFor="let event of events"
+                [ngValue]="event.id">
+          {{ event.name }}
+        </option>
+      </select>
+    </div>
+
+    <input placeholder="Student ID"
+           [(ngModel)]="newPayment.studentId">
+
+    <input placeholder="Name"
+           [(ngModel)]="newPayment.name">
+
+    <input type="number"
+           placeholder="Amount"
+           [(ngModel)]="newPayment.amount">
+
+    <select [(ngModel)]="newPayment.paymentMethod">
+      <option value="Cash">Cash</option>
+      <option value="GCash">GCash</option>
+      <option value="Bank Transfer">Bank Transfer</option>
+    </select>
+
+    <input type="date"
+           [(ngModel)]="newPayment.paymentDate">
+
+    <button (click)="addPayment()">Add Payment</button>
+
+  </div>
+
+  <!-- ========================= -->
+  <!-- USG PAYMENTS TABLE -->
+  <!-- ========================= -->
+
+  <h3>USG Payments</h3>
+
+  <table *ngIf="usgPayments.length">
+    <thead>
+      <tr>
+        <th>Student ID</th>
+        <th>Name</th>
+        <th>Amount</th>
+        <th>Method</th>
+        <th>Date</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let pay of usgPayments">
+        <td>{{ pay.studentId }}</td>
+        <td>{{ pay.name }}</td>
+        <td>₱{{ pay.amount }}</td>
+        <td>{{ pay.paymentMethod }}</td>
+        <td>{{ pay.paymentDate }}</td>
+
+        <td>
+          <button class="delete-btn"
+                  (click)="deletePayment(pay.id)">
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ========================= -->
+  <!-- EVENT PAYMENTS TABLE -->
+  <!-- ========================= -->
+
+  <h3>Event Payments</h3>
+
+  <table *ngIf="eventPayments.length">
+    <thead>
+      <tr>
+        <th>Event</th>
+        <th>Student ID</th>
+        <th>Name</th>
+        <th>Amount</th>
+        <th>Method</th>
+        <th>Date</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let pay of eventPayments">
+        <td>{{ getEventName(pay.eventId) }}</td>
+        <td>{{ pay.studentId }}</td>
+        <td>{{ pay.name }}</td>
+        <td>₱{{ pay.amount }}</td>
+        <td>{{ pay.paymentMethod }}</td>
+        <td>{{ pay.paymentDate }}</td>
+
+        <td>
+          <button class="delete-btn"
+                  (click)="deletePayment(pay.id)">
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
