@@ -1,6 +1,5 @@
 <div class="org-container">
 
-  <!-- HEADER -->
   <div class="header">
     <div>
       <h2>Organizations</h2>
@@ -12,7 +11,6 @@
     </button>
   </div>
 
-  <!-- ORGANIZATION GRID -->
   <div class="org-grid">
     <div class="org-card"
          *ngFor="let org of organizations"
@@ -32,17 +30,14 @@
     </div>
   </div>
 
-  <!-- MODAL -->
   <div class="modal-backdrop" *ngIf="showModal">
     <div class="modal-card">
 
-      <!-- HEADER -->
       <div class="modal-header">
         <h3>Add Organization</h3>
         <span class="close" (click)="closeModal()">✕</span>
       </div>
 
-      <!-- BODY -->
       <div class="modal-body">
 
         <div class="form-grid">
@@ -91,7 +86,6 @@
 
       </div>
 
-      <!-- FOOTER -->
       <div class="modal-footer">
         <button class="cancel-btn" (click)="closeModal()">Cancel</button>
         <button class="save-btn" (click)="addOrganization()">

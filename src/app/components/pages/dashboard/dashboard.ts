@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { OrganizationService } from '../../../services/organization.service';
 import { EventsService } from '../../../services/events.service';
 import { AttendanceService } from '../../../services/attendance.service';
 import { Organization } from '../../../models/organization.model';
 import { Event } from '../../../models/event.model';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,7 +19,7 @@ export class DashboardComponent implements OnInit {
   organizationsCount = 0;
   eventsCount = 0;
   attendanceCount = 0;
-  membersCount = 0; // Temporary placeholder
+  membersCount = 0;
 
   upcomingEvents: Event[] = [];
 
@@ -30,6 +30,36 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
+    const justLoggedIn = sessionStorage.getItem('justLoggedIn');
+
+    if (justLoggedIn) {
+
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+      let title = '';
+
+      if (user.role === 'admin') {
+        title = 'Welcome Admin!';
+      } 
+      else if (user.role === 'student') {
+        title = 'Welcome Student!';
+      } 
+      else {
+        title = `Welcome ${user.username}!`;
+      }
+
+      Swal.fire({
+        title: title,
+        text: 'You are now in the Dashboard.',
+        icon: 'success',
+        timer: 2000,
+        showConfirmButton: false
+      });
+
+      sessionStorage.removeItem('justLoggedIn');
+    }
+
     this.loadStats();
   }
 
@@ -48,7 +78,6 @@ export class DashboardComponent implements OnInit {
       this.attendanceCount = res.length;
     });
 
-    // You can later replace this with real MemberService
     this.membersCount = 0;
   }
 }

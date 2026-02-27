@@ -1,4 +1,3 @@
-/* ================= SIDEBAR ================= */
 .sidebar {
   width: 260px;
   height: 100vh;
@@ -8,8 +7,6 @@
   flex-direction: column;
   padding: 22px 18px;
 }
-
-/* ================= HEADER ================= */
 .sidebar-header {
   display: flex;
   align-items: center;
@@ -44,8 +41,6 @@
   opacity: 0.65;
   margin-top: 2px;
 }
-
-/* ================= MENU ================= */
 .menu {
   display: flex;
   flex-direction: column;
@@ -69,13 +64,11 @@
   font-size: 16px;
 }
 
-/* Hover */
 .menu-item:hover {
   background: rgba(255, 255, 255, 0.07);
   color: white;
 }
 
-/* ACTIVE STYLE */
 .menu-item.active {
   background: rgba(255, 255, 255, 0.08);
   color: #FDB913;

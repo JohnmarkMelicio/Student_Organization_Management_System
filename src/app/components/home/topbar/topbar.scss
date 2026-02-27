@@ -1,4 +1,3 @@
-/* ================= TOPBAR ================= */
 .topbar {
   display: flex;
   justify-content: flex-end;
@@ -8,14 +7,10 @@
   color: white;
   position: relative;
 }
-
-/* ================= PROFILE WRAPPER ================= */
 .profile-wrapper {
   position: relative;
   cursor: pointer;
 }
-
-/* ================= PROFILE TRIGGER ================= */
 .profile-trigger {
   display: flex;
   align-items: center;
@@ -29,8 +24,6 @@
 .profile-trigger:hover {
   background: #f3f4f6;
 }
-
-/* ================= AVATAR ================= */
 .avatar {
   width: 38px;
   height: 38px;
@@ -43,7 +36,6 @@
   color: white;
 }
 
-/* ================= USER INFO ================= */
 .user-info {
   display: flex;
   flex-direction: column;
@@ -64,7 +56,6 @@
   width: fit-content;
 }
 
-/* ================= DROPDOWN ================= */
 .dropdown {
   position: absolute;
   top: 60px;
@@ -99,7 +90,6 @@
   opacity: 0.8;
 }
 
-/* ================= ANIMATION ================= */
 @keyframes fadeIn {
   from {
     opacity: 0;

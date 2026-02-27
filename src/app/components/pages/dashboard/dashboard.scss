@@ -2,7 +2,6 @@
   padding: 30px;
 }
 
-/* ================= HEADER ================= */
 .dashboard-header h1 {
   font-size: 28px;
   margin-bottom: 6px;
@@ -13,7 +12,6 @@
   margin-bottom: 25px;
 }
 
-/* ================= STATS GRID ================= */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -54,14 +52,12 @@
   font-size: 12px;
 }
 
-/* ================= CONTENT GRID ================= */
 .content-grid {
   display: grid;
   grid-template-columns: 2fr 1.3fr;
   gap: 20px;
 }
 
-/* ================= CARD ================= */
 .card {
   background: white;
   padding: 22px;
@@ -73,7 +69,6 @@
   margin-bottom: 20px;
 }
 
-/* ================= EVENT ITEM ================= */
 .event-item {
   display: flex;
   justify-content: space-between;
@@ -102,7 +97,6 @@
   text-transform: capitalize;
 }
 
-/* ================= ACTIVITY ================= */
 .activity-item {
   padding: 12px 0;
   border-bottom: 1px solid #f1f1f1;
@@ -117,7 +111,6 @@
   color: #6b7280;
 }
 
-/* ================= EMPTY STATE ================= */
 .empty {
   font-size: 13px;
   color: #9ca3af;
@@ -125,7 +118,6 @@
   padding: 20px 0;
 }
 
-/* ================= RESPONSIVE ================= */
 @media (max-width: 1100px) {
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);

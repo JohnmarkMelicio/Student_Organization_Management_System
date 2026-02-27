@@ -1,9 +1,7 @@
-/* ================= CONTAINER ================= */
 .org-container {
   padding: 30px;
 }
 
-/* ================= HEADER ================= */
 .header {
   display: flex;
   justify-content: space-between;
@@ -31,14 +29,12 @@
   background: #2563eb;
 }
 
-/* ================= GRID ================= */
 .org-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 24px;
 }
 
-/* ================= CARD ================= */
 .org-card {
   background: #ffffff;
   border-radius: 18px;
@@ -86,7 +82,6 @@
   margin-left: 8px;
 }
 
-/* ================= MODAL ================= */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -191,8 +186,6 @@
 .save-btn:hover {
   background: #2563eb;
 }
-
-/* ================= RESPONSIVE ================= */
 @media (max-width: 768px) {
   .modal-card {
     width: 90%;

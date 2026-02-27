@@ -18,7 +18,7 @@ export class AttendanceComponent {
   attendanceList: any[] = [];
   selectedEventId: number | null = null;
 
-  editingId: number | null = null; // 🔥 track editing row
+  editingId: number | null = null; 
 
   newRecord: any = {
     studentId: '',

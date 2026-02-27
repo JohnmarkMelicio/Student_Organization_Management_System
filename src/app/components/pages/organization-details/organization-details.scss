@@ -2,7 +2,6 @@
   padding: 30px;
 }
 
-/* HEADER */
 .top-header {
   display: flex;
   justify-content: space-between;
@@ -26,7 +25,6 @@
   margin-top: 6px;
 }
 
-/* BUTTON */
 .primary-btn {
   background: #3b82f6;
   color: white;
@@ -40,7 +38,6 @@
   background: #2563eb;
 }
 
-/* CARD */
 .card {
   background: white;
   padding: 22px;
@@ -53,7 +50,6 @@
   margin-bottom: 15px;
 }
 
-/* OFFICERS */
 .officers-card {
   margin-bottom: 25px;
 }
@@ -81,7 +77,6 @@
   font-size: 28px;
 }
 
-/* GRID */
 .info-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -89,7 +84,6 @@
   margin-bottom: 25px;
 }
 
-/* MODAL */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -137,7 +131,6 @@
   border: 1px solid #ccc;
 }
 
-/* FOOTER */
 .modal-footer {
   display: flex;
   justify-content: flex-end;

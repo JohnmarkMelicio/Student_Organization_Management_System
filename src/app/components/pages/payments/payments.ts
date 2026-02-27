@@ -45,7 +45,6 @@ export class PaymentsComponent {
       .subscribe(res => {
         this.payments = res;
 
-        // 🔥 Separate payments
         this.usgPayments = res.filter(p => p.type === 'USG');
         this.eventPayments = res.filter(p => p.type === 'Event');
       });

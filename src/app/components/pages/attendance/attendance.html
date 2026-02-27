@@ -26,7 +26,6 @@
     <tbody>
       <tr *ngFor="let record of attendanceList">
 
-        <!-- Student ID -->
         <td>
           <input *ngIf="editingId === record.id"
                  [(ngModel)]="record.studentId">
@@ -35,7 +34,6 @@
           </span>
         </td>
 
-        <!-- Name -->
         <td>
           <input *ngIf="editingId === record.id"
                  [(ngModel)]="record.name">
@@ -44,7 +42,6 @@
           </span>
         </td>
 
-        <!-- Program -->
         <td>
           <input *ngIf="editingId === record.id"
                  [(ngModel)]="record.program">
@@ -53,7 +50,6 @@
           </span>
         </td>
 
-        <!-- Status -->
         <td>
           <select *ngIf="editingId === record.id"
                   [(ngModel)]="record.status">
@@ -67,31 +63,25 @@
           </span>
         </td>
 
-        <!-- Date -->
         <td>{{ record.datetime }}</td>
 
-        <!-- Action Buttons -->
         <td>
 
-  <!-- EDIT BUTTON -->
   <button *ngIf="editingId !== record.id"
           (click)="editRecord(record)">
     Edit
   </button>
 
-  <!-- SAVE BUTTON -->
   <button *ngIf="editingId === record.id"
           (click)="saveRecord(record)">
     Save
   </button>
 
-  <!-- CANCEL BUTTON -->
   <button *ngIf="editingId === record.id"
           (click)="cancelEdit()">
     Cancel
   </button>
 
-  <!-- DELETE BUTTON -->
   <button class="delete-btn"
           *ngIf="editingId !== record.id"
           (click)="deleteRecord(record.id)">

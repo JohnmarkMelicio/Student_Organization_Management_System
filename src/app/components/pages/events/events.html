@@ -1,6 +1,5 @@
 <div class="event-container">
 
-  <!-- Top Toggle -->
   <div class="top-toggle">
     <button
       [class.active]="viewMode === 'create'"
@@ -14,11 +13,6 @@
       Event List
     </button>
   </div>
-
-
-  <!-- ====================== -->
-  <!-- CREATE EVENT VIEW -->
-  <!-- ====================== -->
 
   <div *ngIf="viewMode === 'create'" class="create-card">
 
@@ -50,11 +44,6 @@
 
   </div>
 
-
-  <!-- ====================== -->
-  <!-- EVENT LIST VIEW -->
-  <!-- ====================== -->
-
   <div *ngIf="viewMode === 'list'" class="list-card">
 
     <div class="list-header">
@@ -85,7 +74,6 @@
       <tbody>
         <tr *ngFor="let event of filteredEvents">
 
-          <!-- Name -->
           <td>
             <input *ngIf="editingId === event.id"
                    [(ngModel)]="event.name">
@@ -94,7 +82,6 @@
             </span>
           </td>
 
-          <!-- Date -->
           <td>
             <input type="date"
                    *ngIf="editingId === event.id"
@@ -103,8 +90,7 @@
               {{ event.date }}
             </span>
           </td>
-
-          <!-- Location -->
+         
           <td>
             <input *ngIf="editingId === event.id"
                    [(ngModel)]="event.location">
@@ -112,8 +98,7 @@
               {{ event.location }}
             </span>
           </td>
-
-          <!-- Status -->
+         
           <td>
             <select *ngIf="editingId === event.id"
                     [(ngModel)]="event.status">
@@ -127,8 +112,7 @@
               {{ event.status }}
             </span>
           </td>
-
-          <!-- Organization -->
+        
           <td>
             <input *ngIf="editingId === event.id"
                    [(ngModel)]="event.organization">
@@ -136,8 +120,7 @@
               {{ event.organization }}
             </span>
           </td>
-
-          <!-- Action -->
+         
           <td>
             <button *ngIf="editingId !== event.id"
                     (click)="editEvent(event)">
