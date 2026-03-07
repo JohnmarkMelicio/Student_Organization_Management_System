@@ -1,83 +1,50 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule,CommonModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './login.html',
   styleUrls: ['./login.scss']
 })
 export class Login {
 
-  username = '';
+  email = '';
   password = '';
   rememberMe = false;
-  errorMessage = '';
-
-  private apiUrl = 'http://localhost:3000/users';
 
   constructor(
     private router: Router,
-    private http: HttpClient
+    private authService: AuthService
   ) {}
 
   login() {
-  console.log("LOGIN CLICKED");
+    this.authService.login(this.email, this.password)
+      .then(() => {
 
-  this.http.get<any[]>(`${this.apiUrl}?username=${this.username}&password=${this.password}`)
-    .subscribe({
-      next: (res) => {
-        if (res.length > 0) {
-
-          const user = res[0];
-
-          
-          localStorage.setItem('user', JSON.stringify(user));
-          localStorage.setItem('role', user.role);
-
-          if (this.rememberMe) {
-            localStorage.setItem('rememberUser', this.username);
-          }
-
-          
-          Swal.fire({
-            title: 'Login Successful!',
-            text: `Welcome back, ${user.username}!`,
-            icon: 'success',
-            confirmButtonText: 'Continue'
-          }).then(() => {
-            sessionStorage.setItem('justLoggedIn', 'true');
-            this.router.navigate(['/home/dashboard']);
-          });
-
-        } else {
-
-          
-          Swal.fire({
-            title: 'Login Failed!',
-            text: 'Invalid username or password',
-            icon: 'error',
-            confirmButtonText: 'Try Again'
-          });
-
+        if (this.rememberMe) {
+          localStorage.setItem('rememberUser', this.email);
         }
-      },
-      error: () => {
 
-        
         Swal.fire({
-          title: 'Server Error!',
-          text: 'Make sure JSON Server is running.',
-          icon: 'warning',
-          confirmButtonText: 'OK'
+          title: 'Login Successful!',
+          icon: 'success'
+        }).then(() => {
+          this.router.navigate(['/home/dashboard']);
         });
 
-      }
-    });
-}
+      })
+      .catch(error => {
+        Swal.fire({
+          title: 'Login Failed',
+          text: error.message,
+          icon: 'error'
+        });
+      });
+  }
 }
