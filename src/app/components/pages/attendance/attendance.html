@@ -4,14 +4,20 @@
 
   <select [(ngModel)]="selectedEventId"
           (change)="loadAttendance()">
+
     <option [ngValue]="null">Select Event</option>
+
     <option *ngFor="let event of events"
             [ngValue]="event.id">
+
       {{ event.name }} ({{ event.date }})
+
     </option>
+
   </select>
 
   <table *ngIf="attendanceList.length">
+
     <thead>
       <tr>
         <th>Student ID</th>
@@ -24,87 +30,108 @@
     </thead>
 
     <tbody>
+
       <tr *ngFor="let record of attendanceList">
 
         <td>
+
           <input *ngIf="editingId === record.id"
                  [(ngModel)]="record.studentId">
+
           <span *ngIf="editingId !== record.id">
             {{ record.studentId }}
           </span>
+
         </td>
 
         <td>
+
           <input *ngIf="editingId === record.id"
                  [(ngModel)]="record.name">
+
           <span *ngIf="editingId !== record.id">
             {{ record.name }}
           </span>
+
         </td>
 
         <td>
+
           <input *ngIf="editingId === record.id"
                  [(ngModel)]="record.program">
+
           <span *ngIf="editingId !== record.id">
             {{ record.program }}
           </span>
+
         </td>
 
         <td>
+
           <select *ngIf="editingId === record.id"
                   [(ngModel)]="record.status">
+
             <option value="Present">Present</option>
             <option value="Absent">Absent</option>
+
           </select>
 
-          <span *ngIf="editingId !== record.id"
-                [ngClass]="record.status === 'Present' ? 'present' : 'absent'">
+          <span *ngIf="editingId !== record.id">
             {{ record.status }}
           </span>
+
         </td>
 
-        <td>{{ record.datetime }}</td>
+        <td>{{ record.datetime | date:'MMM d, y, h:mm a' }}</td>
 
         <td>
 
-  <button *ngIf="editingId !== record.id"
-          (click)="editRecord(record)">
-    Edit
-  </button>
+          <button *ngIf="editingId !== record.id"
+                  (click)="editRecord(record)">
+            Edit
+          </button>
 
-  <button *ngIf="editingId === record.id"
-          (click)="saveRecord(record)">
-    Save
-  </button>
+          <button *ngIf="editingId === record.id"
+                  (click)="saveRecord(record)">
+            Save
+          </button>
 
-  <button *ngIf="editingId === record.id"
-          (click)="cancelEdit()">
-    Cancel
-  </button>
+          <button *ngIf="editingId === record.id"
+                  (click)="cancelEdit()">
+            Cancel
+          </button>
 
-  <button class="delete-btn"
-          *ngIf="editingId !== record.id"
-          (click)="deleteRecord(record.id)">
-    Delete
-  </button>
+          <button *ngIf="editingId !== record.id"
+                  (click)="deleteRecord(record.id)">
+            Delete
+          </button>
 
-</td>
+        </td>
 
       </tr>
+
     </tbody>
+
   </table>
 
   <h3>Add Attendance</h3>
 
-  <input placeholder="Student ID" [(ngModel)]="newRecord.studentId">
-  <input placeholder="Name" [(ngModel)]="newRecord.name">
-  <input placeholder="Program" [(ngModel)]="newRecord.program">
+  <input placeholder="Student ID"
+         [(ngModel)]="newRecord.studentId">
+
+  <input placeholder="Name"
+         [(ngModel)]="newRecord.name">
+
+  <input placeholder="Program"
+         [(ngModel)]="newRecord.program">
 
   <select [(ngModel)]="newRecord.status">
     <option value="Present">Present</option>
     <option value="Absent">Absent</option>
   </select>
 
-  <button (click)="addAttendance()">Add</button>
+  <button (click)="addAttendance()">
+    Add
+  </button>
 
 </div>

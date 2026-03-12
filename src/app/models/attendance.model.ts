@@ -1,6 +1,14 @@
 export interface Attendance {
-  id?: number;
-  eventId: number;
-  memberId: number;
+
+  id?: string;
+
+  eventId: string;
+  studentId: string;
+
+  name: string;
+  program: string;
+
   status: string;
+  datetime: string;
+
 }

@@ -1,5 +1,15 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {
+  Firestore,
+  collection,
+  collectionData,
+  addDoc,
+  doc,
+  updateDoc,
+  deleteDoc,
+  docData
+} from '@angular/fire/firestore';
+
 import { Observable } from 'rxjs';
 import { Organization } from '../models/organization.model';
 
@@ -8,27 +18,46 @@ import { Organization } from '../models/organization.model';
 })
 export class OrganizationService {
 
-  private api = 'http://localhost:3000/organizations';
-
-  constructor(private http: HttpClient) {}
+  constructor(private firestore: Firestore) {}
 
   getAll(): Observable<Organization[]> {
-    return this.http.get<Organization[]>(this.api);
+
+    const ref = collection(this.firestore, 'organizations');
+
+    return collectionData(ref, { idField: 'id' }) as Observable<Organization[]>;
+
   }
 
-  getById(id: number): Observable<Organization> {
-    return this.http.get<Organization>(`${this.api}/${id}`);
+  getById(id: string): Observable<Organization> {
+
+    const ref = doc(this.firestore, `organizations/${id}`);
+
+    return docData(ref, { idField: 'id' }) as Observable<Organization>;
+
   }
 
-  create(data: Organization): Observable<Organization> {
-    return this.http.post<Organization>(this.api, data);
+  create(data: Organization) {
+
+    const ref = collection(this.firestore, 'organizations');
+
+    return addDoc(ref, data as any);
+
   }
 
-  update(id: number, data: Organization): Observable<Organization> {
-    return this.http.put<Organization>(`${this.api}/${id}`, data);
+  update(id: string, data: Organization) {
+
+    const ref = doc(this.firestore, `organizations/${id}`);
+
+    return updateDoc(ref, data as any);
+
   }
 
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.api}/${id}`);
+  delete(id: string) {
+
+    const ref = doc(this.firestore, `organizations/${id}`);
+
+    return deleteDoc(ref);
+
   }
+
 }

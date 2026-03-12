@@ -11,14 +11,22 @@
     </select>
 
     <div *ngIf="newPayment.type === 'Event'">
+
       <label>Select Event</label>
+
       <select [(ngModel)]="newPayment.eventId">
+
         <option [ngValue]="null">Select Event</option>
+
         <option *ngFor="let event of events"
                 [ngValue]="event.id">
+
           {{ event.name }}
+
         </option>
+
       </select>
+
     </div>
 
     <input placeholder="Student ID"
@@ -32,82 +40,228 @@
            [(ngModel)]="newPayment.amount">
 
     <select [(ngModel)]="newPayment.paymentMethod">
+
       <option value="Cash">Cash</option>
       <option value="GCash">GCash</option>
       <option value="Bank Transfer">Bank Transfer</option>
+
     </select>
 
-    <input type="date"
-           [(ngModel)]="newPayment.paymentDate">
-
-    <button (click)="addPayment()">Add Payment</button>
+    <button (click)="addPayment()">
+      Add Payment
+    </button>
 
   </div>
 
   <h3>USG Payments</h3>
 
   <table *ngIf="usgPayments.length">
+
     <thead>
+
       <tr>
+
         <th>Student ID</th>
         <th>Name</th>
         <th>Amount</th>
         <th>Method</th>
-        <th>Date</th>
         <th>Action</th>
+
       </tr>
+
     </thead>
 
     <tbody>
+
       <tr *ngFor="let pay of usgPayments">
-        <td>{{ pay.studentId }}</td>
-        <td>{{ pay.name }}</td>
-        <td>₱{{ pay.amount }}</td>
-        <td>{{ pay.paymentMethod }}</td>
-        <td>{{ pay.paymentDate }}</td>
 
         <td>
+
+          <input *ngIf="editingId === pay.id"
+                 [(ngModel)]="pay.studentId">
+
+          <span *ngIf="editingId !== pay.id">
+            {{ pay.studentId }}
+          </span>
+
+        </td>
+
+        <td>
+
+          <input *ngIf="editingId === pay.id"
+                 [(ngModel)]="pay.name">
+
+          <span *ngIf="editingId !== pay.id">
+            {{ pay.name }}
+          </span>
+
+        </td>
+
+        <td>
+
+          <input *ngIf="editingId === pay.id"
+                 type="number"
+                 [(ngModel)]="pay.amount">
+
+          <span *ngIf="editingId !== pay.id">
+            ₱{{ pay.amount }}
+          </span>
+
+        </td>
+
+        <td>
+
+          <select *ngIf="editingId === pay.id"
+                  [(ngModel)]="pay.paymentMethod">
+
+            <option value="Cash">Cash</option>
+            <option value="GCash">GCash</option>
+            <option value="Bank Transfer">Bank Transfer</option>
+
+          </select>
+
+          <span *ngIf="editingId !== pay.id">
+            {{ pay.paymentMethod }}
+          </span>
+
+        </td>
+
+        <td>
+
+          <button *ngIf="editingId !== pay.id"
+                  (click)="editPayment(pay)">
+            Edit
+          </button>
+
+          <button *ngIf="editingId === pay.id"
+                  (click)="savePayment(pay)">
+            Save
+          </button>
+
+          <button *ngIf="editingId === pay.id"
+                  (click)="cancelEdit()">
+            Cancel
+          </button>
+
           <button class="delete-btn"
+                  *ngIf="editingId !== pay.id"
                   (click)="deletePayment(pay.id)">
             Delete
           </button>
+
         </td>
+
       </tr>
+
     </tbody>
+
   </table>
 
   <h3>Event Payments</h3>
 
   <table *ngIf="eventPayments.length">
+
     <thead>
+
       <tr>
+
         <th>Event</th>
         <th>Student ID</th>
         <th>Name</th>
         <th>Amount</th>
         <th>Method</th>
-        <th>Date</th>
         <th>Action</th>
+
       </tr>
+
     </thead>
 
     <tbody>
+
       <tr *ngFor="let pay of eventPayments">
+
         <td>{{ getEventName(pay.eventId) }}</td>
-        <td>{{ pay.studentId }}</td>
-        <td>{{ pay.name }}</td>
-        <td>₱{{ pay.amount }}</td>
-        <td>{{ pay.paymentMethod }}</td>
-        <td>{{ pay.paymentDate }}</td>
 
         <td>
+
+          <input *ngIf="editingId === pay.id"
+                 [(ngModel)]="pay.studentId">
+
+          <span *ngIf="editingId !== pay.id">
+            {{ pay.studentId }}
+          </span>
+
+        </td>
+
+        <td>
+
+          <input *ngIf="editingId === pay.id"
+                 [(ngModel)]="pay.name">
+
+          <span *ngIf="editingId !== pay.id">
+            {{ pay.name }}
+          </span>
+
+        </td>
+
+        <td>
+
+          <input *ngIf="editingId === pay.id"
+                 type="number"
+                 [(ngModel)]="pay.amount">
+
+          <span *ngIf="editingId !== pay.id">
+            ₱{{ pay.amount }}
+          </span>
+
+        </td>
+
+        <td>
+
+          <select *ngIf="editingId === pay.id"
+                  [(ngModel)]="pay.paymentMethod">
+
+            <option value="Cash">Cash</option>
+            <option value="GCash">GCash</option>
+            <option value="Bank Transfer">Bank Transfer</option>
+
+          </select>
+
+          <span *ngIf="editingId !== pay.id">
+            {{ pay.paymentMethod }}
+          </span>
+
+        </td>
+
+        <td>
+
+          <button *ngIf="editingId !== pay.id"
+                  (click)="editPayment(pay)">
+            Edit
+          </button>
+
+          <button *ngIf="editingId === pay.id"
+                  (click)="savePayment(pay)">
+            Save
+          </button>
+
+          <button *ngIf="editingId === pay.id"
+                  (click)="cancelEdit()">
+            Cancel
+          </button>
+
           <button class="delete-btn"
+                  *ngIf="editingId !== pay.id"
                   (click)="deletePayment(pay.id)">
             Delete
           </button>
+
         </td>
+
       </tr>
+
     </tbody>
+
   </table>
 
 </div>

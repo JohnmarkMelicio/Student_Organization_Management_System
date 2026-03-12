@@ -12,6 +12,7 @@
   </div>
 
   <div class="org-grid">
+
     <div class="org-card"
          *ngFor="let org of organizations"
          (click)="openOrganization(org.id!)">
@@ -19,18 +20,23 @@
       <div class="org-icon">🏢</div>
 
       <div class="org-info">
+
         <h3>
           {{ org.name }}
           <span class="badge">{{ org.shortName }}</span>
         </h3>
 
         <p>{{ org.description }}</p>
+
       </div>
 
     </div>
+
   </div>
 
+
   <div class="modal-backdrop" *ngIf="showModal">
+
     <div class="modal-card">
 
       <div class="modal-header">
@@ -94,6 +100,7 @@
       </div>
 
     </div>
+
   </div>
 
 </div>

@@ -9,32 +9,33 @@ import { AttendanceComponent } from './components/pages/attendance/attendance';
 import { OrganizationDetailsComponent } from './components/pages/organization-details/organization-details';
 
 export const routes: Routes = [
-     { path: '', redirectTo: 'login', pathMatch: 'full' },
+
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+
   { path: 'login', component: Login },
+
   {
     path: 'home',
     component: Home,
-    children: [{ path: '', component: DashboardComponent },
+    children: [
+
+      { path: '', component: DashboardComponent },
+
       { path: 'dashboard', component: DashboardComponent },
-      { 
-        path: 'events', 
-        component: EventsComponent,
-      },
-      { 
-        path: 'organization', 
-        component: OrganizationComponent,
-      },
-      { path: 'organization/:id',
-         component: OrganizationDetailsComponent,
-      },
-      { 
-        path: 'attendance', 
-        component: AttendanceComponent,
-      },
-      { 
-        path: 'payments', 
-        component: PaymentsComponent,
-      }],
-    }
+
+      { path: 'events', component: EventsComponent },
+
+      { path: 'attendance', component: AttendanceComponent },
+
+      { path: 'payments', component: PaymentsComponent },
+
+      // IMPORTANT: Details route FIRST
+      { path: 'organization/:id', component: OrganizationDetailsComponent },
+
+      // Organization list AFTER
+      { path: 'organization', component: OrganizationComponent }
+
+    ]
+  }
 
 ];

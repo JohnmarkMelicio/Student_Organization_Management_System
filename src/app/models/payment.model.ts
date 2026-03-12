@@ -1,6 +1,19 @@
 export interface Payment {
-  id?: number;
-  memberId: number;
+
+  id?: string;
+
+  type: string;
+
+  eventId?: string | null;
+
+  studentId: string;
+
+  name: string;
+
   amount: number;
-  status: string;
+
+  paymentMethod: string;
+
+  paymentDate: string;
+
 }

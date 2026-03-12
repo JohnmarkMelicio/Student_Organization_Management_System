@@ -1,32 +1,66 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {
+  Firestore,
+  collection,
+  collectionData,
+  addDoc,
+  doc,
+  updateDoc,
+  deleteDoc,
+  query,
+  where
+} from '@angular/fire/firestore';
+
+import { Observable } from 'rxjs';
+import { Attendance } from '../models/attendance.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AttendanceService {
 
-  private api = 'http://localhost:3000/attendance';
+  constructor(private firestore: Firestore) {}
 
-  constructor(private http: HttpClient) {}
+  getAll(): Observable<Attendance[]> {
 
-  getAll() {
-    return this.http.get<any[]>(this.api);
+    const ref = collection(this.firestore, 'attendance');
+
+    return collectionData(ref, { idField: 'id' }) as Observable<Attendance[]>;
+
   }
 
-  getByEvent(eventId: number) {
-    return this.http.get<any[]>(`${this.api}?eventId=${eventId}`);
+  getByEvent(eventId: string): Observable<Attendance[]> {
+
+    const ref = collection(this.firestore, 'attendance');
+
+    const q = query(ref, where('eventId', '==', eventId));
+
+    return collectionData(q, { idField: 'id' }) as Observable<Attendance[]>;
+
   }
 
-  create(data: any) {
-    return this.http.post(this.api, data);
+  create(data: Attendance) {
+
+    const ref = collection(this.firestore, 'attendance');
+
+    return addDoc(ref, data as any);
+
   }
 
-  update(id: number, data: any) {
-    return this.http.put(`${this.api}/${id}`, data);
+  update(id: string, data: Attendance) {
+
+    const ref = doc(this.firestore, `attendance/${id}`);
+
+    return updateDoc(ref, data as any);
+
   }
 
-  delete(id: number) {
-    return this.http.delete(`${this.api}/${id}`);
+  delete(id: string) {
+
+    const ref = doc(this.firestore, `attendance/${id}`);
+
+    return deleteDoc(ref);
+
   }
+
 }

@@ -26,8 +26,8 @@
     <div class="stat-card">
       <div class="stat-top">
         <span>Total Organizations</span>
-  </div>
-  <h2>{{ organizationsCount }}</h2>
+      </div>
+      <h2>{{ organizationsCount }}</h2>
       <small class="negative">Active</small>
     </div>
 
@@ -52,7 +52,8 @@
       <div *ngFor="let event of upcomingEvents" class="event-item">
 
         <div class="event-details">
-          <strong>{{ event.title }}</strong>
+          <strong>{{ event.name }}</strong>
+
           <div class="event-meta">
             {{ event.date }}
             <span *ngIf="event.location">• {{ event.location }}</span>
@@ -60,7 +61,7 @@
         </div>
 
         <span class="tag">
-          {{ event.type || 'event' }}
+          {{ event.status || 'event' }}
         </span>
 
       </div>
@@ -71,7 +72,6 @@
 
     </div>
 
-
     <div class="card">
 
       <div class="card-header">
@@ -81,7 +81,8 @@
       <div *ngFor="let act of upcomingEvents.slice(0,5)" class="activity-item">
 
         <div>
-          <strong>{{ act.title }}</strong>
+          <strong>{{ act.name }}</strong>
+
           <div class="activity-meta">
             Scheduled on {{ act.date }}
           </div>

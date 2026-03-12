@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+
+import { PaymentsService } from '../../../services/payments.service';
+import { EventsService } from '../../../services/events.service';
 
 @Component({
   selector: 'app-payments',
@@ -10,9 +12,7 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './payments.html',
   styleUrls: ['./payments.scss']
 })
-export class PaymentsComponent {
-
-  api = 'http://localhost:3000';
+export class PaymentsComponent implements OnInit {
 
   events: any[] = [];
   payments: any[] = [];
@@ -20,7 +20,9 @@ export class PaymentsComponent {
   usgPayments: any[] = [];
   eventPayments: any[] = [];
 
-  newPayment: any = {
+  editingId: string | null = null;
+
+  newPayment:any = {
     type: 'USG',
     eventId: null,
     studentId: '',
@@ -30,58 +32,124 @@ export class PaymentsComponent {
     paymentDate: ''
   };
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private paymentsService: PaymentsService,
+    private eventsService: EventsService
+  ) {}
+
+  ngOnInit(): void {
+
     this.loadEvents();
     this.loadPayments();
+
   }
 
   loadEvents() {
-    this.http.get<any[]>(`${this.api}/events`)
-      .subscribe(res => this.events = res);
+
+    this.eventsService.getAll().subscribe({
+
+      next: (res) => this.events = res,
+      error: (err) => console.error(err)
+
+    });
+
   }
 
   loadPayments() {
-    this.http.get<any[]>(`${this.api}/payments`)
-      .subscribe(res => {
+
+    this.paymentsService.getAll().subscribe({
+
+      next: (res) => {
+
         this.payments = res;
 
         this.usgPayments = res.filter(p => p.type === 'USG');
         this.eventPayments = res.filter(p => p.type === 'Event');
-      });
+
+      },
+
+      error: (err) => console.error(err)
+
+    });
+
   }
 
   addPayment() {
+
     if (!this.newPayment.studentId ||
         !this.newPayment.name ||
         !this.newPayment.amount) {
+
       alert("Please complete required fields");
       return;
+
     }
 
-    this.http.post(`${this.api}/payments`, this.newPayment)
-      .subscribe(() => {
+    const payment = {
+      ...this.newPayment,
+      paymentDate: new Date().toISOString()
+    };
+
+    this.paymentsService.create(payment)
+      .then(() => {
+
         this.loadPayments();
         this.resetForm();
-      });
+
+      })
+      .catch(err => console.error(err));
+
   }
 
-  deletePayment(id: number) {
+  editPayment(payment:any) {
+
+    this.editingId = payment.id;
+
+  }
+
+  savePayment(payment:any) {
+
+    this.paymentsService.update(payment.id, payment)
+      .then(() => {
+
+        this.editingId = null;
+        this.loadPayments();
+
+      })
+      .catch(err => console.error(err));
+
+  }
+
+  cancelEdit() {
+
+    this.editingId = null;
+    this.loadPayments();
+
+  }
+
+  deletePayment(id:string) {
+
     const confirmDelete = confirm("Delete this payment?");
     if (!confirmDelete) return;
 
-    this.http.delete(`${this.api}/payments/${id}`)
-      .subscribe(() => {
-        this.loadPayments();
-      });
+    this.paymentsService.delete(id)
+      .then(() => this.loadPayments())
+      .catch(err => console.error(err));
+
   }
 
-  getEventName(eventId: number): string {
+  getEventName(eventId: string): string {
+
     const event = this.events.find(e => e.id === eventId);
+
     return event ? event.name : '-';
+
   }
 
   resetForm() {
+
     this.newPayment = {
+
       type: 'USG',
       eventId: null,
       studentId: '',
@@ -89,7 +157,9 @@ export class PaymentsComponent {
       amount: null,
       paymentMethod: 'Cash',
       paymentDate: ''
+
     };
+
   }
 
 }

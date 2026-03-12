@@ -3,7 +3,8 @@
   <div class="top-header">
 
     <div class="title-section">
-      <span class="back-btn" (click)="goBack()">Back</span>
+
+      <span class="back-btn" (click)="goBack()">←</span>
 
       <div>
         <h1>{{ organization.name }}</h1>
@@ -11,6 +12,7 @@
           {{ organization.description }}
         </p>
       </div>
+
     </div>
 
     <button class="primary-btn"
@@ -19,6 +21,7 @@
     </button>
 
   </div>
+
 
   <div class="card officers-card">
 
@@ -33,6 +36,7 @@
     </div>
 
   </div>
+
 
   <div class="info-grid">
 
@@ -55,6 +59,7 @@
 
   </div>
 
+
   <div class="info-grid">
 
     <div class="card">
@@ -69,58 +74,4 @@
 
   </div>
 
-</div>
-
-<div class="modal-backdrop"
-     *ngIf="showOfficerModal">
-
-  <div class="modal-card">
-
-    <div class="modal-header">
-      <h3>Manage Officers</h3>
-      <span class="close-btn"
-            (click)="showOfficerModal = false">✕</span>
-    </div>
-
-    <div class="modal-body">
-
-      <div *ngFor="let m of members"
-           class="officer-row">
-        <strong>{{ m.position }}</strong>
-        <span>{{ m.name }}</span>
-      </div>
-
-      <hr>
-
-      <div class="form-grid">
-
-        <div>
-          <label>Position</label>
-          <input [(ngModel)]="newMember.position">
-        </div>
-
-        <div>
-          <label>Name</label>
-          <input [(ngModel)]="newMember.name">
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="modal-footer">
-
-      <button class="cancel-btn"
-              (click)="showOfficerModal = false">
-        Cancel
-      </button>
-
-      <button class="save-btn"
-              (click)="addMember()">
-        Add Officer
-      </button>
-
-    </div>
-
-  </div>
 </div>

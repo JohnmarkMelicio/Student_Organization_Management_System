@@ -1,8 +1,18 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
+import {
+Firestore,
+doc,
+docData,
+collection,
+collectionData,
+addDoc,
+query,
+where
+} from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-organization-details',
@@ -14,6 +24,7 @@ import { FormsModule } from '@angular/forms';
 export class OrganizationDetailsComponent {
 
   organization: any;
+
   members: any[] = [];
 
   showOfficerModal = false;
@@ -21,42 +32,74 @@ export class OrganizationDetailsComponent {
   newMember: any = {
     name: '',
     position: '',
-    organizationId: null
+    organizationId: ''
   };
 
   constructor(
     private route: ActivatedRoute,
-    private http: HttpClient
+    private firestore: Firestore
   ) {
+
     const id = this.route.snapshot.params['id'];
+
     this.loadOrganization(id);
     this.loadMembers(id);
+
   }
 
-  loadOrganization(id: number) {
-    this.http.get<any>(`http://localhost:3000/organizations/${id}`)
-      .subscribe(res => this.organization = res);
+  loadOrganization(id: string) {
+
+    const ref = doc(this.firestore, `organizations/${id}`);
+
+    docData(ref, { idField: 'id' }).subscribe(res => {
+
+      this.organization = res;
+
+    });
+
   }
 
-  loadMembers(id: number) {
-    this.http.get<any[]>(`http://localhost:3000/members?organizationId=${id}`)
-      .subscribe(res => this.members = res);
+  loadMembers(orgId: string) {
+
+    const ref = collection(this.firestore, 'members');
+
+    const q = query(ref, where('organizationId', '==', orgId));
+
+    collectionData(q, { idField: 'id' }).subscribe(res => {
+
+      this.members = res;
+
+    });
+
   }
 
+ 
   addMember() {
+
     if (!this.newMember.name || !this.newMember.position) return;
+
+    const ref = collection(this.firestore, 'members');
 
     this.newMember.organizationId = this.organization.id;
 
-    this.http.post(`http://localhost:3000/members`, this.newMember)
-      .subscribe(() => {
-        this.loadMembers(this.organization.id);
-        this.showOfficerModal = false;
-        this.newMember = { name: '', position: '', organizationId: null };
-      });
+    addDoc(ref, this.newMember).then(() => {
+
+      this.newMember = {
+        name: '',
+        position: '',
+        organizationId: ''
+      };
+
+      this.showOfficerModal = false;
+
+    });
+
   }
 
   goBack() {
+
     history.back();
+
   }
+
 }

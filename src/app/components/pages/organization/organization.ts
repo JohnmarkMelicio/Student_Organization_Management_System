@@ -16,7 +16,9 @@ import { Organization, EMPTY_ORGANIZATION } from '../../../models/organization.m
 export class OrganizationComponent implements OnInit {
 
   organizations: Organization[] = [];
+
   showModal = false;
+  editingId: string | null = null;
 
   newOrg: Organization = { ...EMPTY_ORGANIZATION };
 
@@ -30,38 +32,89 @@ export class OrganizationComponent implements OnInit {
   }
 
   loadOrganizations(): void {
+
     this.orgService.getAll().subscribe({
+
       next: (res) => this.organizations = res,
-      error: (err) => console.error('Failed to load organizations', err)
+      error: (err) => console.error(err)
+
     });
+
   }
 
   openModal(): void {
+
     this.showModal = true;
+
   }
 
   closeModal(): void {
+
     this.showModal = false;
     this.resetForm();
+
   }
 
   addOrganization(): void {
+
     if (!this.newOrg.name.trim()) return;
 
-    this.orgService.create(this.newOrg).subscribe({
-      next: () => {
+    this.orgService.create(this.newOrg)
+      .then(() => {
+
         this.loadOrganizations();
         this.closeModal();
-      },
-      error: (err) => console.error('Failed to add organization', err)
-    });
+
+      })
+      .catch(err => console.error(err));
+
   }
 
-  openOrganization(id: number): void {
-    this.router.navigate(['/home/organization', id]);
+  editOrganization(org: Organization) {
+
+    this.editingId = org.id!;
+
   }
+
+  saveOrganization(org: Organization) {
+
+    this.orgService.update(org.id!, org)
+      .then(() => {
+
+        this.editingId = null;
+        this.loadOrganizations();
+
+      })
+      .catch(err => console.error(err));
+
+  }
+
+  cancelEdit() {
+
+    this.editingId = null;
+    this.loadOrganizations();
+
+  }
+
+  deleteOrganization(id: string) {
+
+    const confirmDelete = confirm("Delete this organization?");
+    if (!confirmDelete) return;
+
+    this.orgService.delete(id)
+      .then(() => this.loadOrganizations())
+      .catch(err => console.error(err));
+
+  }
+
+  openOrganization(id: string): void {
+  this.router.navigate(['/home/organization', id]);
+}
 
   private resetForm(): void {
+
     this.newOrg = { ...EMPTY_ORGANIZATION };
+
   }
+
 }

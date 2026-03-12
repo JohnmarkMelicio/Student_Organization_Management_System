@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Firestore, collection, collectionData, addDoc, doc, updateDoc, deleteDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Event } from '../models/event.model';
 
@@ -8,27 +8,26 @@ import { Event } from '../models/event.model';
 })
 export class EventsService {
 
-  private api = 'http://localhost:3000/events';
-
-  constructor(private http: HttpClient) {}
+  constructor(private firestore: Firestore) {}
 
   getAll(): Observable<Event[]> {
-    return this.http.get<Event[]>(this.api);
+    const ref = collection(this.firestore, 'events');
+    return collectionData(ref, { idField: 'id' }) as Observable<Event[]>;
   }
 
-  getById(id: number): Observable<Event> {
-    return this.http.get<Event>(`${this.api}/${id}`);
+  create(data: Event) {
+    const ref = collection(this.firestore, 'events');
+    return addDoc(ref, data as any);
   }
 
-  create(data: Event): Observable<Event> {
-    return this.http.post<Event>(this.api, data);
+  update(id: string, data: Event) {
+    const ref = doc(this.firestore, `events/${id}`);
+    return updateDoc(ref, data as any);
   }
 
-  update(id: number, data: Event): Observable<Event> {
-    return this.http.put<Event>(`${this.api}/${id}`, data);
+  delete(id: string) {
+    const ref = doc(this.firestore, `events/${id}`);
+    return deleteDoc(ref);
   }
 
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.api}/${id}`);
-  }
 }
