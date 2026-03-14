@@ -1,0 +1,70 @@
+<div class="create-student-container">
+
+  <h2>Create Student Account</h2>
+
+  <form #studentForm="ngForm" (ngSubmit)="createStudent(studentForm)">
+
+    <label>Student ID</label>
+    <input
+      type="text"
+      name="studentID"
+      [(ngModel)]="studentID"
+      required
+      pattern="[0-9]*"
+      inputmode="numeric"
+      placeholder="Enter Student ID"
+    >
+
+    <label>First Name</label>
+    <input
+      type="text"
+      name="firstName"
+      [(ngModel)]="firstName"
+      required
+      placeholder="Enter First Name"
+    >
+
+    <label>Middle Name</label>
+    <input
+      type="text"
+      name="middleName"
+      [(ngModel)]="middleName"
+      required
+      placeholder="Enter Middle Name"
+    >
+
+    <label>Last Name</label>
+    <input
+      type="text"
+      name="lastName"
+      [(ngModel)]="lastName"
+      required
+      placeholder="Enter Last Name"
+    >
+
+    <label>Email</label>
+    <input
+      type="email"
+      name="email"
+      [(ngModel)]="email"
+      required
+      placeholder="Enter Email"
+    >
+
+    <label>Password</label>
+    <input
+      type="password"
+      name="password"
+      [(ngModel)]="password"
+      required
+      minlength="6"
+      placeholder="Enter Password"
+    >
+
+    <button type="submit">
+      Create Account
+    </button>
+
+  </form>
+
+</div>

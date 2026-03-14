@@ -7,6 +7,7 @@ import { PaymentsComponent } from './components/pages/payments/payments';
 import { EventsComponent } from './components/pages/events/events';
 import { AttendanceComponent } from './components/pages/attendance/attendance';
 import { OrganizationDetailsComponent } from './components/pages/organization-details/organization-details';
+import { AdminCreateAccount} from './components/pages/admin-create-account/admin-create-account';
 
 export const routes: Routes = [
 
@@ -29,10 +30,10 @@ export const routes: Routes = [
 
       { path: 'payments', component: PaymentsComponent },
 
-      // IMPORTANT: Details route FIRST
+      { path: 'admin-create-account', component: AdminCreateAccount },
+      
       { path: 'organization/:id', component: OrganizationDetailsComponent },
 
-      // Organization list AFTER
       { path: 'organization', component: OrganizationComponent }
 
     ]

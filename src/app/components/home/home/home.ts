@@ -3,6 +3,7 @@ import { Sidebar } from '../sidebar/sidebar';
 import { Topbar } from '../topbar/topbar';
 import { Content } from '../content/content';
 
+
 @Component({
   selector: 'app-home',
   imports: [Sidebar, Topbar, Content],

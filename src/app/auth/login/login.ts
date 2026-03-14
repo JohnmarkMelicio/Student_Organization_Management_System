@@ -14,7 +14,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class Login {
 
-  email = '';
+  studentID = '';
   password = '';
   rememberMe = false;
 
@@ -24,11 +24,12 @@ export class Login {
   ) {}
 
   login() {
-    this.authService.login(this.email, this.password)
+
+    this.authService.login(this.studentID, this.password)
       .then(() => {
 
         if (this.rememberMe) {
-          localStorage.setItem('rememberUser', this.email);
+          localStorage.setItem('rememberUser', this.studentID);
         }
 
         Swal.fire({
@@ -40,11 +41,14 @@ export class Login {
 
       })
       .catch(error => {
+
         Swal.fire({
           title: 'Login Failed',
           text: error.message,
           icon: 'error'
         });
+
       });
+
   }
 }
