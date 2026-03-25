@@ -14,6 +14,8 @@ query,
 where
 } from '@angular/fire/firestore';
 
+import { AuthService } from '../../../services/auth.service'; // ✅ ADDED
+
 @Component({
   selector: 'app-organization-details',
   standalone: true,
@@ -24,10 +26,11 @@ where
 export class OrganizationDetailsComponent {
 
   organization: any;
-
   members: any[] = [];
 
   showOfficerModal = false;
+
+  isAdmin: boolean = false; // ✅ ADDED
 
   newMember: any = {
     name: '',
@@ -37,14 +40,24 @@ export class OrganizationDetailsComponent {
 
   constructor(
     private route: ActivatedRoute,
-    private firestore: Firestore
+    private firestore: Firestore,
+    private authService: AuthService // ✅ ADDED
   ) {
 
     const id = this.route.snapshot.params['id'];
 
     this.loadOrganization(id);
     this.loadMembers(id);
+    this.checkRole(); // ✅ ADDED
+  }
 
+  async checkRole() {
+
+    const user: any = await this.authService.getCurrentUserData();
+
+    if (user) {
+      this.isAdmin = user['role'] === 'admin';
+    }
   }
 
   loadOrganization(id: string) {
@@ -52,9 +65,7 @@ export class OrganizationDetailsComponent {
     const ref = doc(this.firestore, `organizations/${id}`);
 
     docData(ref, { idField: 'id' }).subscribe(res => {
-
       this.organization = res;
-
     });
 
   }
@@ -66,14 +77,11 @@ export class OrganizationDetailsComponent {
     const q = query(ref, where('organizationId', '==', orgId));
 
     collectionData(q, { idField: 'id' }).subscribe(res => {
-
       this.members = res;
-
     });
 
   }
 
- 
   addMember() {
 
     if (!this.newMember.name || !this.newMember.position) return;
@@ -97,9 +105,7 @@ export class OrganizationDetailsComponent {
   }
 
   goBack() {
-
     history.back();
-
   }
 
 }

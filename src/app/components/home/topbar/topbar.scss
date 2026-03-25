@@ -1,105 +1,114 @@
 .topbar {
+  height: 70px;
+  background: #f4b400;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding: 1rem 2rem;
-  background-color: #FDB913;
-  color: white;
-  position: relative;
+  padding: 0 20px;
 }
+
+/* Wrapper */
 .profile-wrapper {
   position: relative;
-  cursor: pointer;
 }
+
+/* WHITE CONTAINER (THIS IS WHAT YOU ARE MISSING) */
 .profile-trigger {
   display: flex;
   align-items: center;
-  gap: 12px;
-  background: white;
-  padding: 6px 14px;
+  gap: 10px;
+  background: #fff;
+  padding: 6px 12px;
   border-radius: 30px;
-  transition: 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  cursor: pointer;
 }
 
-.profile-trigger:hover {
-  background: #f3f4f6;
-}
+/* Avatar */
 .avatar {
-  width: 38px;
-  height: 38px;
-  background: #061634;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
+  background: #0b1f3a;
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
-  color: white;
+  font-weight: bold;
 }
 
+/* User info */
 .user-info {
   display: flex;
   flex-direction: column;
+  line-height: 1.1;
+
+  .name {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  /* 🔥 YELLOW ROLE BADGE */
+  .role {
+    font-size: 11px;
+    background: #f4b400;
+    color: #000;
+    padding: 2px 8px;
+    border-radius: 10px;
+    width: fit-content;
+    margin-top: 2px;
+  }
 }
 
-.name {
-  font-size: 14px;
-  font-weight: 600;
-  color: #061634;
+/* Arrow */
+.arrow {
+  font-size: 12px;
 }
 
-.role {
-  font-size: 11px;
-  background: #FDB913;
-  color: #061634;
-  padding: 2px 8px;
-  border-radius: 20px;
-  width: fit-content;
-}
-
+/* DROPDOWN */
 .dropdown {
   position: absolute;
   top: 60px;
   right: 0;
-  width: 260px;
-  background: white;
+  width: 230px;
+  background: #fff;
   border-radius: 12px;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
-  padding: 15px;
-  animation: fadeIn 0.2s ease;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
   z-index: 1000;
 }
 
+/* Header */
 .dropdown-header {
-  border-bottom: 1px solid #eee;
-  padding-bottom: 12px;
-  margin-bottom: 12px;
-}
+  padding: 12px 15px;
+  background: #fafafa;
 
-.dropdown-header p {
-  font-size: 12px;
-  color: #6b7280;
-}
-.arrow{
-  color: black;
-}
-
-.logout-item {
-  color: #ef4444;
-  font-weight: 500;
-  cursor: pointer;
-}
-
-.logout-item:hover {
-  opacity: 0.8;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
+  strong {
+    display: block;
+    font-size: 14px;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+
+  p {
+    font-size: 12px;
+    color: #777;
+    margin-top: 3px;
+  }
+}
+
+/* Divider */
+.dropdown-divider {
+  height: 1px;
+  background: #eee;
+}
+
+/* Logout */
+.logout-item {
+  padding: 12px 15px;
+  font-size: 14px;
+  color: #e74c3c;
+  cursor: pointer;
+
+  &:hover {
+    background: #f5f5f5;
   }
 }

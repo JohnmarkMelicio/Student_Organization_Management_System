@@ -1,7 +1,10 @@
 <div class="event-container">
 
   <div class="top-toggle">
+
+    <!-- 🔥 ADMIN ONLY -->
     <button
+      *ngIf="isAdmin"
       [class.active]="viewMode === 'create'"
       (click)="viewMode='create'">
       Create Event
@@ -12,20 +15,17 @@
       (click)="viewMode='list'">
       Event List
     </button>
+
   </div>
 
-  <div *ngIf="viewMode === 'create'" class="create-card">
+  <!-- 🔥 CREATE FORM (ADMIN ONLY) -->
+  <div *ngIf="viewMode === 'create' && isAdmin" class="create-card">
 
     <h2>Create Event</h2>
 
-    <input placeholder="Event Name"
-           [(ngModel)]="newEvent.name">
-
-    <input type="date"
-           [(ngModel)]="newEvent.date">
-
-    <input placeholder="Location"
-           [(ngModel)]="newEvent.location">
+    <input placeholder="Event Name" [(ngModel)]="newEvent.name">
+    <input type="date" [(ngModel)]="newEvent.date">
+    <input placeholder="Location" [(ngModel)]="newEvent.location">
 
     <select [(ngModel)]="newEvent.status">
       <option value="">Select Status</option>
@@ -37,8 +37,7 @@
     <input placeholder="Organization In-Charge"
            [(ngModel)]="newEvent.organization">
 
-    <button class="save-btn"
-            (click)="addEvent()">
+    <button class="save-btn" (click)="addEvent()">
       Save Event
     </button>
 
@@ -48,10 +47,6 @@
 
     <div class="list-header">
       <h2>Event List</h2>
-
-      <button (click)="viewMode='create'">
-        + Create Event
-      </button>
     </div>
 
     <input class="search"
@@ -60,6 +55,7 @@
            (input)="searchEvents()">
 
     <table *ngIf="filteredEvents.length">
+
       <thead>
         <tr>
           <th>Event Name</th>
@@ -67,38 +63,34 @@
           <th>Location</th>
           <th>Status</th>
           <th>Organization</th>
-          <th>Action</th>
+
+          <!-- 🔥 ADMIN ONLY -->
+          <th *ngIf="isAdmin">Action</th>
         </tr>
       </thead>
 
       <tbody>
+
         <tr *ngFor="let event of filteredEvents">
 
           <td>
-            <input *ngIf="editingId === event.id"
-                   [(ngModel)]="event.name">
-            <span *ngIf="editingId !== event.id">
-              {{ event.name }}
-            </span>
+            <input *ngIf="editingId === event.id" [(ngModel)]="event.name">
+            <span *ngIf="editingId !== event.id">{{ event.name }}</span>
           </td>
 
           <td>
             <input type="date"
                    *ngIf="editingId === event.id"
                    [(ngModel)]="event.date">
-            <span *ngIf="editingId !== event.id">
-              {{ event.date }}
-            </span>
+            <span *ngIf="editingId !== event.id">{{ event.date }}</span>
           </td>
-         
+
           <td>
             <input *ngIf="editingId === event.id"
                    [(ngModel)]="event.location">
-            <span *ngIf="editingId !== event.id">
-              {{ event.location }}
-            </span>
+            <span *ngIf="editingId !== event.id">{{ event.location }}</span>
           </td>
-         
+
           <td>
             <select *ngIf="editingId === event.id"
                     [(ngModel)]="event.status">
@@ -112,7 +104,7 @@
               {{ event.status }}
             </span>
           </td>
-        
+
           <td>
             <input *ngIf="editingId === event.id"
                    [(ngModel)]="event.organization">
@@ -120,8 +112,10 @@
               {{ event.organization }}
             </span>
           </td>
-         
-          <td>
+
+          <!-- 🔥 ADMIN ONLY -->
+          <td *ngIf="isAdmin">
+
             <button *ngIf="editingId !== event.id"
                     (click)="editEvent(event)">
               Edit
@@ -136,10 +130,13 @@
                     (click)="deleteEvent(event.id)">
               Delete
             </button>
+
           </td>
 
         </tr>
+
       </tbody>
+
     </table>
 
   </div>

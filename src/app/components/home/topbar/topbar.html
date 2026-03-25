@@ -3,22 +3,32 @@
   <div class="profile-wrapper" (click)="toggleDropdown()">
 
     <div class="profile-trigger">
-      <div class="avatar">J</div>
+
+      <div class="avatar">
+        {{ user?.firstName?.charAt(0) }}
+      </div>
 
       <div class="user-info">
-        <div class="name">Johnmark Melicio</div>
-        <div class="role">Admin</div>
+        <div class="name">
+          {{ user?.firstName }} {{ user?.lastName }}
+        </div>
+        <div class="role">
+          {{ user?.role }}
+        </div>
       </div>
 
       <span class="arrow">▼</span>
+
     </div>
 
     <div class="dropdown" *ngIf="showDropdown">
 
       <div class="dropdown-header">
-        <strong>Johnmark Melicio</strong>
-        <p>johnmarkmelicio@gmail.com</p>
+        <strong>{{ user?.firstName }} {{ user?.lastName }}</strong>
+        <p>{{ user?.email }}</p>
       </div>
+
+      <div class="dropdown-divider"></div>
 
       <div class="logout-item" (click)="logout(); $event.stopPropagation()">
         ⎋ Logout

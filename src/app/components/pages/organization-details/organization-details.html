@@ -15,13 +15,14 @@
 
     </div>
 
-    <button class="primary-btn"
-            (click)="showOfficerModal = true">
-      Manage Officers
-    </button>
+    <!-- ✅ HIDDEN FOR STUDENT -->
+    <button *ngIf="isAdmin"
+        class="primary-btn"
+        (click)="showOfficerModal = true; $event.stopPropagation()">
+  Manage Officers
+</button>
 
   </div>
-
 
   <div class="card officers-card">
 
@@ -36,7 +37,6 @@
     </div>
 
   </div>
-
 
   <div class="info-grid">
 
@@ -58,7 +58,6 @@
     </div>
 
   </div>
-
 
   <div class="info-grid">
 

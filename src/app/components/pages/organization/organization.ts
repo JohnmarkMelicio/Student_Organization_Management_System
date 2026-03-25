@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 
 import { OrganizationService } from '../../../services/organization.service';
 import { Organization, EMPTY_ORGANIZATION } from '../../../models/organization.model';
+import { AuthService } from '../../../services/auth.service'; // ✅ ADDED
 
 @Component({
   selector: 'app-organization',
@@ -22,12 +23,22 @@ export class OrganizationComponent implements OnInit {
 
   newOrg: Organization = { ...EMPTY_ORGANIZATION };
 
+  isAdmin: boolean = false; // ✅ ADDED
+
   constructor(
     private orgService: OrganizationService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService // ✅ ADDED
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+
+    const user: any = await this.authService.getCurrentUserData();
+
+    if (user) {
+      this.isAdmin = user['role'] === 'admin';
+    }
+
     this.loadOrganizations();
   }
 
@@ -43,16 +54,12 @@ export class OrganizationComponent implements OnInit {
   }
 
   openModal(): void {
-
     this.showModal = true;
-
   }
 
   closeModal(): void {
-
     this.showModal = false;
     this.resetForm();
-
   }
 
   addOrganization(): void {
@@ -71,9 +78,7 @@ export class OrganizationComponent implements OnInit {
   }
 
   editOrganization(org: Organization) {
-
     this.editingId = org.id!;
-
   }
 
   saveOrganization(org: Organization) {
@@ -108,13 +113,11 @@ export class OrganizationComponent implements OnInit {
   }
 
   openOrganization(id: string): void {
-  this.router.navigate(['/home/organization', id]);
-}
+    this.router.navigate(['/home/organization', id]);
+  }
 
   private resetForm(): void {
-
     this.newOrg = { ...EMPTY_ORGANIZATION };
-
   }
 
 }

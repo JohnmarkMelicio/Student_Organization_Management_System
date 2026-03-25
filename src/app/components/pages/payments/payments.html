@@ -2,7 +2,8 @@
 
   <h2>Payment Management</h2>
 
-  <div class="payment-form">
+  <!-- ✅ ADMIN ONLY -->
+  <div class="payment-form" *ngIf="isAdmin">
 
     <label>Payment Type</label>
     <select [(ngModel)]="newPayment.type">
@@ -58,17 +59,13 @@
   <table *ngIf="usgPayments.length">
 
     <thead>
-
       <tr>
-
         <th>Student ID</th>
         <th>Name</th>
         <th>Amount</th>
         <th>Method</th>
-        <th>Action</th>
-
+        <th *ngIf="isAdmin">Action</th>
       </tr>
-
     </thead>
 
     <tbody>
@@ -76,57 +73,44 @@
       <tr *ngFor="let pay of usgPayments">
 
         <td>
-
           <input *ngIf="editingId === pay.id"
                  [(ngModel)]="pay.studentId">
-
           <span *ngIf="editingId !== pay.id">
             {{ pay.studentId }}
           </span>
-
         </td>
 
         <td>
-
           <input *ngIf="editingId === pay.id"
                  [(ngModel)]="pay.name">
-
           <span *ngIf="editingId !== pay.id">
             {{ pay.name }}
           </span>
-
         </td>
 
         <td>
-
           <input *ngIf="editingId === pay.id"
                  type="number"
                  [(ngModel)]="pay.amount">
-
           <span *ngIf="editingId !== pay.id">
             ₱{{ pay.amount }}
           </span>
-
         </td>
 
         <td>
-
           <select *ngIf="editingId === pay.id"
                   [(ngModel)]="pay.paymentMethod">
-
             <option value="Cash">Cash</option>
             <option value="GCash">GCash</option>
             <option value="Bank Transfer">Bank Transfer</option>
-
           </select>
-
           <span *ngIf="editingId !== pay.id">
             {{ pay.paymentMethod }}
           </span>
-
         </td>
 
-        <td>
+        <!-- ✅ ADMIN ONLY -->
+        <td *ngIf="isAdmin">
 
           <button *ngIf="editingId !== pay.id"
                   (click)="editPayment(pay)">
@@ -162,18 +146,14 @@
   <table *ngIf="eventPayments.length">
 
     <thead>
-
       <tr>
-
         <th>Event</th>
         <th>Student ID</th>
         <th>Name</th>
         <th>Amount</th>
         <th>Method</th>
-        <th>Action</th>
-
+        <th *ngIf="isAdmin">Action</th>
       </tr>
-
     </thead>
 
     <tbody>
@@ -183,57 +163,44 @@
         <td>{{ getEventName(pay.eventId) }}</td>
 
         <td>
-
           <input *ngIf="editingId === pay.id"
                  [(ngModel)]="pay.studentId">
-
           <span *ngIf="editingId !== pay.id">
             {{ pay.studentId }}
           </span>
-
         </td>
 
         <td>
-
           <input *ngIf="editingId === pay.id"
                  [(ngModel)]="pay.name">
-
           <span *ngIf="editingId !== pay.id">
             {{ pay.name }}
           </span>
-
         </td>
 
         <td>
-
           <input *ngIf="editingId === pay.id"
                  type="number"
                  [(ngModel)]="pay.amount">
-
           <span *ngIf="editingId !== pay.id">
             ₱{{ pay.amount }}
           </span>
-
         </td>
 
         <td>
-
           <select *ngIf="editingId === pay.id"
                   [(ngModel)]="pay.paymentMethod">
-
             <option value="Cash">Cash</option>
             <option value="GCash">GCash</option>
             <option value="Bank Transfer">Bank Transfer</option>
-
           </select>
-
           <span *ngIf="editingId !== pay.id">
             {{ pay.paymentMethod }}
           </span>
-
         </td>
 
-        <td>
+        <!-- ✅ ADMIN ONLY -->
+        <td *ngIf="isAdmin">
 
           <button *ngIf="editingId !== pay.id"
                   (click)="editPayment(pay)">

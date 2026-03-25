@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EventsService } from '../../../services/events.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-events',
@@ -20,6 +21,8 @@ export class EventsComponent implements OnInit {
 
   editingId: string | null = null;
 
+  isAdmin = false;
+
   newEvent: any = {
     name: '',
     date: '',
@@ -28,9 +31,24 @@ export class EventsComponent implements OnInit {
     organization: ''
   };
 
-  constructor(private eventsService: EventsService) {}
+  constructor(
+    private eventsService: EventsService,
+    private authService: AuthService
+  ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+
+    const user = await this.authService.getCurrentUserData();
+
+    if (user) {
+      this.isAdmin = user['role'] === 'admin';
+    }
+
+    // student = list only
+    if (!this.isAdmin) {
+      this.viewMode = 'list';
+    }
+
     this.loadEvents();
   }
 
@@ -48,7 +66,7 @@ export class EventsComponent implements OnInit {
 
   addEvent(): void {
 
-    console.log("SAVE BUTTON CLICKED");
+    if (!this.isAdmin) return;
 
     if (!this.newEvent.name || !this.newEvent.date) {
       alert("Please complete required fields");
@@ -57,13 +75,10 @@ export class EventsComponent implements OnInit {
 
     this.eventsService.create(this.newEvent)
       .then(() => {
-
         alert("Event added successfully");
-
         this.loadEvents();
         this.resetForm();
         this.viewMode = 'list';
-
       })
       .catch((err:any) => {
         console.error("Failed to add event", err);
@@ -73,10 +88,13 @@ export class EventsComponent implements OnInit {
   }
 
   editEvent(event:any): void {
+    if (!this.isAdmin) return;
     this.editingId = event.id;
   }
 
   saveEvent(event:any): void {
+
+    if (!this.isAdmin) return;
 
     this.eventsService.update(event.id, event)
       .then(() => {
@@ -88,6 +106,8 @@ export class EventsComponent implements OnInit {
   }
 
   deleteEvent(id:string): void {
+
+    if (!this.isAdmin) return;
 
     const confirmDelete = confirm("Delete this event?");
     if (!confirmDelete) return;

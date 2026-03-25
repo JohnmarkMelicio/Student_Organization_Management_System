@@ -9,9 +9,7 @@
 
     <option *ngFor="let event of events"
             [ngValue]="event.id">
-
       {{ event.name }} ({{ event.date }})
-
     </option>
 
   </select>
@@ -25,7 +23,7 @@
         <th>Program</th>
         <th>Status</th>
         <th>Date & Time</th>
-        <th>Action</th>
+        <th *ngIf="isAdmin">Action</th> <!-- ✅ HIDDEN FOR STUDENT -->
       </tr>
     </thead>
 
@@ -33,58 +31,56 @@
 
       <tr *ngFor="let record of attendanceList">
 
+        <!-- Student ID -->
         <td>
-
-          <input *ngIf="editingId === record.id"
+          <input *ngIf="editingId === record.id && isAdmin"
                  [(ngModel)]="record.studentId">
 
-          <span *ngIf="editingId !== record.id">
+          <span *ngIf="editingId !== record.id || !isAdmin">
             {{ record.studentId }}
           </span>
-
         </td>
 
+        <!-- Name -->
         <td>
-
-          <input *ngIf="editingId === record.id"
+          <input *ngIf="editingId === record.id && isAdmin"
                  [(ngModel)]="record.name">
 
-          <span *ngIf="editingId !== record.id">
+          <span *ngIf="editingId !== record.id || !isAdmin">
             {{ record.name }}
           </span>
-
         </td>
 
+        <!-- Program -->
         <td>
-
-          <input *ngIf="editingId === record.id"
+          <input *ngIf="editingId === record.id && isAdmin"
                  [(ngModel)]="record.program">
 
-          <span *ngIf="editingId !== record.id">
+          <span *ngIf="editingId !== record.id || !isAdmin">
             {{ record.program }}
           </span>
-
         </td>
 
+        <!-- Status -->
         <td>
-
-          <select *ngIf="editingId === record.id"
+          <select *ngIf="editingId === record.id && isAdmin"
                   [(ngModel)]="record.status">
-
             <option value="Present">Present</option>
             <option value="Absent">Absent</option>
-
           </select>
 
-          <span *ngIf="editingId !== record.id">
+          <span *ngIf="editingId !== record.id || !isAdmin">
             {{ record.status }}
           </span>
-
         </td>
 
-        <td>{{ record.datetime | date:'MMM d, y, h:mm a' }}</td>
-
+        <!-- Date -->
         <td>
+          {{ record.datetime | date:'MMM d, y, h:mm a' }}
+        </td>
+
+        <!-- ACTIONS (ADMIN ONLY) -->
+        <td *ngIf="isAdmin">
 
           <button *ngIf="editingId !== record.id"
                   (click)="editRecord(record)">
@@ -114,24 +110,29 @@
 
   </table>
 
-  <h3>Add Attendance</h3>
+  <!-- ADD ATTENDANCE (ADMIN ONLY) -->
+  <div *ngIf="isAdmin">
 
-  <input placeholder="Student ID"
-         [(ngModel)]="newRecord.studentId">
+    <h3>Add Attendance</h3>
 
-  <input placeholder="Name"
-         [(ngModel)]="newRecord.name">
+    <input placeholder="Student ID"
+           [(ngModel)]="newRecord.studentId">
 
-  <input placeholder="Program"
-         [(ngModel)]="newRecord.program">
+    <input placeholder="Name"
+           [(ngModel)]="newRecord.name">
 
-  <select [(ngModel)]="newRecord.status">
-    <option value="Present">Present</option>
-    <option value="Absent">Absent</option>
-  </select>
+    <input placeholder="Program"
+           [(ngModel)]="newRecord.program">
 
-  <button (click)="addAttendance()">
-    Add
-  </button>
+    <select [(ngModel)]="newRecord.status">
+      <option value="Present">Present</option>
+      <option value="Absent">Absent</option>
+    </select>
+
+    <button (click)="addAttendance()">
+      Add
+    </button>
+
+  </div>
 
 </div>

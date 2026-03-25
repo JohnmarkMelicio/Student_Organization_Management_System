@@ -6,7 +6,8 @@
       <p class="sub">Manage student organizations</p>
     </div>
 
-    <button class="add-btn" (click)="openModal()">
+    <!-- ✅ HIDDEN FOR STUDENT -->
+    <button *ngIf="isAdmin" class="add-btn" (click)="openModal()">
       + Add Organization
     </button>
   </div>
@@ -33,7 +34,6 @@
     </div>
 
   </div>
-
 
   <div class="modal-backdrop" *ngIf="showModal">
 

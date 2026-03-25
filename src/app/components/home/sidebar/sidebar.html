@@ -50,12 +50,13 @@
       Organization
     </a>
 
-    <a routerLink="/home/admin-create-account"
-       routerLinkActive="active"
-       class="menu-item">
-      <span class="icon">👤</span>
-      Create Account
-    </a>
+    <a *ngIf="isAdmin"
+   routerLink="/home/admin-create-account"
+   routerLinkActive="active"
+   class="menu-item">
+  <span class="icon">👤</span>
+  Create Account
+</a>
 
   </nav>
 

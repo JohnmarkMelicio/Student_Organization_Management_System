@@ -12,30 +12,48 @@ export class AuthService {
     private firestore: Firestore
   ) {}
 
-  async login(studentID: string, password: string) {
+  async getCurrentUserData() {
 
-  const id = studentID.trim();
+    const currentUser = this.auth.currentUser;
 
-  const usersRef = collection(this.firestore, 'users');
+    if (!currentUser) return null;
 
-  const q = query(usersRef, where('studentID', '==', id));
+    const email = currentUser.email;
 
-  const querySnapshot = await getDocs(q);
+    const usersRef = collection(this.firestore, 'users');
+    const q = query(usersRef, where('email', '==', email));
+    const querySnapshot = await getDocs(q);
 
-  if (querySnapshot.empty) {
-    throw new Error('Student ID not found');
+    if (querySnapshot.empty) return null;
+
+    return querySnapshot.docs[0].data();
   }
 
-  const docData: any = querySnapshot.docs[0].data();
+  async login(studentID: string, password: string) {
 
-  console.log("Firestore Data:", docData);
+    const id = studentID.trim();
 
-  const email: string = docData.email;
+    const usersRef = collection(this.firestore, 'users');
+    const q = query(usersRef, where('studentID', '==', id));
 
-  console.log("Email extracted:", email);
+    const querySnapshot = await getDocs(q);
 
-  // directly login
-  return signInWithEmailAndPassword(this.auth, email, password);
-}
+    if (querySnapshot.empty) {
+      throw new Error('Student ID not found');
+    }
 
+    const docData: any = querySnapshot.docs[0].data();
+
+    const email: string = docData.email;
+
+    if (!email) {
+      throw new Error('Email not found');
+    }
+
+    return signInWithEmailAndPassword(this.auth, email, password);
+  }
+
+  logout() {
+    return signOut(this.auth);
+  }
 }

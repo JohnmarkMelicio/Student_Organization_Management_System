@@ -6,6 +6,7 @@ import { AttendanceService } from '../../../services/attendance.service';
 import { Organization } from '../../../models/organization.model';
 import { Event } from '../../../models/event.model';
 import Swal from 'sweetalert2';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -23,34 +24,28 @@ export class DashboardComponent implements OnInit {
 
   upcomingEvents: Event[] = [];
 
+  user: any;
+
   constructor(
     private orgService: OrganizationService,
     private eventService: EventsService,
-    private attendanceService: AttendanceService
+    private attendanceService: AttendanceService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
+
+    // 🔥 GET USER FROM FIREBASE
+    this.authService.getCurrentUserData().then((data: any) => {
+      this.user = data;
+    });
 
     const justLoggedIn = sessionStorage.getItem('justLoggedIn');
 
     if (justLoggedIn) {
 
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
-
-      let title = '';
-
-      if (user.role === 'admin') {
-        title = 'Welcome Admin!';
-      } 
-      else if (user.role === 'student') {
-        title = 'Welcome Student!';
-      } 
-      else {
-        title = `Welcome ${user.username}!`;
-      }
-
       Swal.fire({
-        title: title,
+        title: 'Welcome!',
         text: 'You are now in the Dashboard.',
         icon: 'success',
         timer: 2000,

@@ -19,6 +19,27 @@
   border: 1px solid #ccc;
 }
 
+
+td input,
+td select {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 13px;
+  width: auto;           
+  min-width: 120px;
+  max-width: 160px;
+  background: #fff;
+}
+
+
+td input:focus,
+td select:focus {
+  border-color: #0d2c6c;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(13, 44, 108, 0.1);
+}
+
 button {
   padding: 8px 15px;
   border-radius: 6px;
