@@ -1,7 +1,7 @@
 ## 🔐 Login Credentials
 
 ### Admin
-- Student ID: 1111111111
+- Email: admin@gmail.com
 - Password: 123456
 
 ### Student
