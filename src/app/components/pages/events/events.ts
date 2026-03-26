@@ -44,7 +44,6 @@ export class EventsComponent implements OnInit {
       this.isAdmin = user['role'] === 'admin';
     }
 
-    // student = list only
     if (!this.isAdmin) {
       this.viewMode = 'list';
     }

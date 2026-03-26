@@ -7,13 +7,14 @@
 
       <form (ngSubmit)="login()">
 
-        <label>Student ID</label>
+        <label>Login (Admin: Email | Student: ID)</label>
+
         <input
-          type="text"
-          placeholder="Enter your Student ID"
-          [(ngModel)]="studentID"
-          name="studentID"
-          required
+        type="text"
+        placeholder="Enter Email (Admin) or Student ID"
+        [(ngModel)]="studentID"
+        name="studentID"
+        required
         >
 
         <label>Password</label>

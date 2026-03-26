@@ -14,7 +14,7 @@ query,
 where
 } from '@angular/fire/firestore';
 
-import { AuthService } from '../../../services/auth.service'; // ✅ ADDED
+import { AuthService } from '../../../services/auth.service'; 
 
 @Component({
   selector: 'app-organization-details',
@@ -30,7 +30,7 @@ export class OrganizationDetailsComponent {
 
   showOfficerModal = false;
 
-  isAdmin: boolean = false; // ✅ ADDED
+  isAdmin: boolean = false; 
 
   newMember: any = {
     name: '',
@@ -41,14 +41,14 @@ export class OrganizationDetailsComponent {
   constructor(
     private route: ActivatedRoute,
     private firestore: Firestore,
-    private authService: AuthService // ✅ ADDED
+    private authService: AuthService 
   ) {
 
     const id = this.route.snapshot.params['id'];
 
     this.loadOrganization(id);
     this.loadMembers(id);
-    this.checkRole(); // ✅ ADDED
+    this.checkRole(); 
   }
 
   async checkRole() {

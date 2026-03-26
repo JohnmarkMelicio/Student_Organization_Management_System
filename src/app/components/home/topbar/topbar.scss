@@ -2,17 +2,33 @@
   height: 70px;
   background: #f4b400;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between; 
   align-items: center;
   padding: 0 20px;
 }
 
-/* Wrapper */
+.system-name {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+
+  h2 {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 700;
+    color: #000;
+  }
+
+  span {
+    font-size: 15px;
+    color: #333;
+  }
+}
+
 .profile-wrapper {
   position: relative;
 }
 
-/* WHITE CONTAINER (THIS IS WHAT YOU ARE MISSING) */
 .profile-trigger {
   display: flex;
   align-items: center;
@@ -24,7 +40,6 @@
   cursor: pointer;
 }
 
-/* Avatar */
 .avatar {
   width: 36px;
   height: 36px;
@@ -37,7 +52,6 @@
   font-weight: bold;
 }
 
-/* User info */
 .user-info {
   display: flex;
   flex-direction: column;
@@ -48,7 +62,6 @@
     font-weight: 600;
   }
 
-  /* 🔥 YELLOW ROLE BADGE */
   .role {
     font-size: 11px;
     background: #f4b400;
@@ -60,12 +73,10 @@
   }
 }
 
-/* Arrow */
 .arrow {
   font-size: 12px;
 }
 
-/* DROPDOWN */
 .dropdown {
   position: absolute;
   top: 60px;
@@ -78,7 +89,6 @@
   z-index: 1000;
 }
 
-/* Header */
 .dropdown-header {
   padding: 12px 15px;
   background: #fafafa;
@@ -95,13 +105,11 @@
   }
 }
 
-/* Divider */
 .dropdown-divider {
   height: 1px;
   background: #eee;
 }
 
-/* Logout */
 .logout-item {
   padding: 12px 15px;
   font-size: 14px;

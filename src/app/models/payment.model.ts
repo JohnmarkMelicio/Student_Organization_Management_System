@@ -10,6 +10,8 @@ export interface Payment {
 
   name: string;
 
+  program: string; 
+
   amount: number;
 
   paymentMethod: string;

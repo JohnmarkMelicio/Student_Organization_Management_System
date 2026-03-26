@@ -1,24 +1,127 @@
 .payment-container {
   background: #ffffff;
   padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  border-radius: 14px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+}
+.payment-container h2 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #0d2c6c;
+  margin-bottom: 15px;
 }
 
 .payment-form {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
   margin-bottom: 25px;
+  background: #f9fbff;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid #eef2f7;
 }
 
 .payment-form input,
 .payment-form select {
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  font-size: 14px;
+  min-width: 140px;
+  transition: all 0.2s ease;
 }
 
+.payment-form input:focus,
+.payment-form select:focus {
+  border-color: #0d2c6c;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(13, 44, 108, 0.1);
+}
+
+button {
+  padding: 9px 16px;
+  border-radius: 8px;
+  border: none;
+  background: #0d2c6c;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.25s ease;
+}
+
+button:hover {
+  background: #123d8c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(13, 44, 108, 0.2);
+}
+
+.payment-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.payment-filter button {
+  background: #eef2ff;
+  color: #0d2c6c;
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-weight: 500;
+  transition: all 0.25s ease;
+}
+
+.payment-filter button:hover {
+  background: #dbe4ff;
+  transform: translateY(-1px);
+}
+
+.payment-filter button.active {
+  background: linear-gradient(135deg, #0d2c6c, #123d8c);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(13, 44, 108, 0.25);
+}
+
+.payment-filter select {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  font-size: 14px;
+}
+
+.payment-filter select:focus {
+  border-color: #0d2c6c;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(13, 44, 108, 0.15);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+th {
+  background: #f1f5f9;
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+tr:hover {
+  background: #f9fbff;
+}
 
 td input,
 td select {
@@ -26,12 +129,10 @@ td select {
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 13px;
-  width: auto;           
   min-width: 120px;
   max-width: 160px;
   background: #fff;
 }
-
 
 td input:focus,
 td select:focus {
@@ -40,43 +141,60 @@ td select:focus {
   box-shadow: 0 0 0 2px rgba(13, 44, 108, 0.1);
 }
 
-button {
-  padding: 8px 15px;
-  border-radius: 6px;
-  border: none;
-  background: #0d2c6c;
-  color: white;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #123d8c;
-}
-
-.delete-btn {
-  background: #dc3545;
-}
-
-.delete-btn:hover {
-  background: #b02a37;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th {
-  background: #f4f6f9;
-  padding: 10px;
-  text-align: left;
-}
-
-td {
-  padding: 10px;
-  border-bottom: 1px solid #eee;
-}
 h3 {
   margin-top: 30px;
   margin-bottom: 10px;
+  font-size: 18px;
+  color: #0d2c6c;
+}
+
+
+.btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+  margin-right: 5px;
+  transition: all 0.2s ease;
+}
+
+
+.edit-btn {
+  background: #0d6efd;
+  color: #fff;
+}
+.edit-btn:hover {
+  background: #0b5ed7;
+  transform: translateY(-1px);
+}
+
+
+.save-btn {
+  background: #198754;
+  color: #fff;
+}
+.save-btn:hover {
+  background: #157347;
+  transform: translateY(-1px);
+}
+
+
+.cancel-btn {
+  background: #6c757d;
+  color: #fff;
+}
+.cancel-btn:hover {
+  background: #5c636a;
+  transform: translateY(-1px);
+}
+
+
+.delete-btn {
+  background: #dc3545;
+  color: #fff;
+}
+.delete-btn:hover {
+  background: #b02a37;
+  transform: translateY(-1px);
 }

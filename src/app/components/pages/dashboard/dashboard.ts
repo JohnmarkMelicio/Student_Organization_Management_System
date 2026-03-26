@@ -23,6 +23,7 @@ export class DashboardComponent implements OnInit {
   membersCount = 0;
 
   upcomingEvents: Event[] = [];
+  completedEvents: Event[] = [];
 
   user: any;
 
@@ -35,7 +36,6 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
 
-    // 🔥 GET USER FROM FIREBASE
     this.authService.getCurrentUserData().then((data: any) => {
       this.user = data;
     });
@@ -43,7 +43,6 @@ export class DashboardComponent implements OnInit {
     const justLoggedIn = sessionStorage.getItem('justLoggedIn');
 
     if (justLoggedIn) {
-
       Swal.fire({
         title: 'Welcome!',
         text: 'You are now in the Dashboard.',
@@ -65,8 +64,31 @@ export class DashboardComponent implements OnInit {
     });
 
     this.eventService.getAll().subscribe(res => {
+
       this.eventsCount = res.length;
-      this.upcomingEvents = res.slice(0, 3);
+
+      const today = new Date();
+      today.setHours(0,0,0,0); 
+
+      this.completedEvents = res
+        .filter((e: any) => {
+          const eventDate = new Date(e.date);
+          const isCompletedStatus = e.status?.toLowerCase() === 'completed';
+          const isPastDate = eventDate < today;
+
+          return isCompletedStatus || isPastDate;
+        })
+        .slice(0, 5);
+
+      this.upcomingEvents = res
+        .filter((e: any) => {
+          const eventDate = new Date(e.date);
+          const isCompletedStatus = e.status?.toLowerCase() === 'completed';
+
+          return !isCompletedStatus && eventDate >= today;
+        })
+        .slice(0, 3);
+
     });
 
     this.attendanceService.getAll().subscribe(res => {

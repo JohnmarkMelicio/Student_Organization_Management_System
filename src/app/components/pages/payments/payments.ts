@@ -6,6 +6,8 @@ import { PaymentsService } from '../../../services/payments.service';
 import { EventsService } from '../../../services/events.service';
 import { AuthService } from '../../../services/auth.service';
 
+import { Firestore, collection, query, where, getDocs } from '@angular/fire/firestore';
+
 @Component({
   selector: 'app-payments',
   standalone: true,
@@ -21,6 +23,11 @@ export class PaymentsComponent implements OnInit {
   usgPayments: any[] = [];
   eventPayments: any[] = [];
 
+
+  viewMode: string = '';
+  selectedEventId: string | null = null;
+  filteredEventPayments: any[] = [];
+
   editingId: string | null = null;
 
   isAdmin = false;
@@ -30,6 +37,7 @@ export class PaymentsComponent implements OnInit {
     eventId: null,
     studentId: '',
     name: '',
+    program: '',
     amount: null,
     paymentMethod: 'Cash',
     paymentDate: ''
@@ -38,7 +46,8 @@ export class PaymentsComponent implements OnInit {
   constructor(
     private paymentsService: PaymentsService,
     private eventsService: EventsService,
-    private authService: AuthService
+    private authService: AuthService,
+    private firestore: Firestore
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -63,9 +72,57 @@ export class PaymentsComponent implements OnInit {
         this.payments = res;
         this.usgPayments = res.filter(p => p.type === 'USG');
         this.eventPayments = res.filter(p => p.type === 'Event');
+
+        this.applyEventFilter(); 
       },
       error: (err) => console.error(err)
     });
+  }
+
+  applyEventFilter() {
+    if (!this.selectedEventId) {
+      this.filteredEventPayments = [];
+      return;
+    }
+
+    this.filteredEventPayments =
+      this.eventPayments.filter(p => p.eventId === this.selectedEventId);
+  }
+
+  onEventChange() {
+    this.applyEventFilter();
+  }
+
+
+  async fetchStudent() {
+
+    if (!this.newPayment.studentId) return;
+
+    try {
+
+      const usersRef = collection(this.firestore, 'users');
+      const q = query(usersRef, where('studentID', '==', this.newPayment.studentId));
+      const snapshot = await getDocs(q);
+
+      if (snapshot.empty) {
+        this.newPayment.name = '';
+        this.newPayment.program = '';
+        alert('Student not found');
+        return;
+      }
+
+      const userData: any = snapshot.docs[0].data();
+
+      this.newPayment.name =
+        userData.firstName + ' ' + userData.lastName;
+
+      this.newPayment.program =
+        userData.program || '';
+
+    } catch (err) {
+      console.error(err);
+    }
+
   }
 
   addPayment() {
@@ -129,6 +186,7 @@ export class PaymentsComponent implements OnInit {
       eventId: null,
       studentId: '',
       name: '',
+      program: '',
       amount: null,
       paymentMethod: 'Cash',
       paymentDate: ''

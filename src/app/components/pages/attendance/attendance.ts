@@ -4,7 +4,9 @@ import { FormsModule } from '@angular/forms';
 
 import { AttendanceService } from '../../../services/attendance.service';
 import { EventsService } from '../../../services/events.service';
-import { AuthService } from '../../../services/auth.service'; // ✅ ADD
+import { AuthService } from '../../../services/auth.service';
+
+import { Firestore, collection, query, where, getDocs } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-attendance',
@@ -22,7 +24,7 @@ export class AttendanceComponent implements OnInit {
 
   editingId: string | null = null;
 
-  isAdmin = false; // ✅ ADD
+  isAdmin = false;
 
   newRecord: any = {
     studentId: '',
@@ -35,7 +37,8 @@ export class AttendanceComponent implements OnInit {
   constructor(
     private attendanceService: AttendanceService,
     private eventsService: EventsService,
-    private authService: AuthService // ✅ ADD
+    private authService: AuthService,
+    private firestore: Firestore
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -70,37 +73,68 @@ export class AttendanceComponent implements OnInit {
 
   }
 
-  addAttendance() {
+  async addAttendance() {
 
-    if (!this.isAdmin) return; // ✅ PROTECT
+    if (!this.isAdmin) return;
 
-    if (!this.selectedEventId) return;
+    if (!this.selectedEventId) {
+      alert('Please select an event');
+      return;
+    }
 
-    const record = {
-      ...this.newRecord,
-      eventId: this.selectedEventId,
-      datetime: new Date().toLocaleString()
-    };
+    if (!this.newRecord.studentId) {
+      alert('Please enter Student ID');
+      return;
+    }
 
-    this.attendanceService.create(record)
-      .then(() => {
-        this.loadAttendance();
-        this.resetForm();
-      })
-      .catch((err:any) => console.error(err));
+    try {
+
+      
+      const usersRef = collection(this.firestore, 'users');
+      const q = query(usersRef, where('studentID', '==', this.newRecord.studentId));
+      const snapshot = await getDocs(q);
+
+      if (snapshot.empty) {
+        alert('Student not found');
+        return;
+      }
+
+      const userData: any = snapshot.docs[0].data();
+
+      const fullName = `${userData.firstName} ${userData.lastName}`;
+      const program = userData.program;
+
+      const record = {
+        studentId: this.newRecord.studentId,
+        name: fullName,
+        program: program,
+        status: this.newRecord.status,
+        eventId: this.selectedEventId,
+        datetime: new Date().toLocaleString()
+      };
+
+      await this.attendanceService.create(record);
+
+      this.loadAttendance();
+      this.resetForm();
+
+    } catch (error) {
+      console.error(error);
+      alert('Error adding attendance');
+    }
 
   }
 
   editRecord(record: any) {
 
-    if (!this.isAdmin) return; // ✅ PROTECT
+    if (!this.isAdmin) return;
     this.editingId = record.id;
 
   }
 
   saveRecord(record: any) {
 
-    if (!this.isAdmin) return; // ✅ PROTECT
+    if (!this.isAdmin) return;
 
     this.attendanceService.update(record.id, record)
       .then(() => {
@@ -120,7 +154,7 @@ export class AttendanceComponent implements OnInit {
 
   deleteRecord(id: string) {
 
-    if (!this.isAdmin) return; // ✅ PROTECT
+    if (!this.isAdmin) return;
 
     const confirmDelete = confirm("Delete this record?");
     if (!confirmDelete) return;

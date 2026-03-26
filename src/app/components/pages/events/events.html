@@ -2,7 +2,6 @@
 
   <div class="top-toggle">
 
-    <!-- 🔥 ADMIN ONLY -->
     <button
       *ngIf="isAdmin"
       [class.active]="viewMode === 'create'"
@@ -18,7 +17,6 @@
 
   </div>
 
-  <!-- 🔥 CREATE FORM (ADMIN ONLY) -->
   <div *ngIf="viewMode === 'create' && isAdmin" class="create-card">
 
     <h2>Create Event</h2>
@@ -64,7 +62,6 @@
           <th>Status</th>
           <th>Organization</th>
 
-          <!-- 🔥 ADMIN ONLY -->
           <th *ngIf="isAdmin">Action</th>
         </tr>
       </thead>
@@ -113,7 +110,6 @@
             </span>
           </td>
 
-          <!-- 🔥 ADMIN ONLY -->
           <td *ngIf="isAdmin">
 
             <button *ngIf="editingId !== event.id"

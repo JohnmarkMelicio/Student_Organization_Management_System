@@ -78,7 +78,7 @@
         <h3>Recent Activity</h3>
       </div>
 
-      <div *ngFor="let act of upcomingEvents.slice(0,5)" class="activity-item">
+      <div *ngFor="let act of completedEvents" class="activity-item">
 
         <div>
           <strong>{{ act.name }}</strong>
@@ -90,7 +90,7 @@
 
       </div>
 
-      <div *ngIf="upcomingEvents.length === 0" class="empty">
+      <div *ngIf="completedEvents.length === 0" class="empty">
         No recent activity.
       </div>
 

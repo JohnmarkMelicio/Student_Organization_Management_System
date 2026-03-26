@@ -29,31 +29,51 @@ export class AuthService {
     return querySnapshot.docs[0].data();
   }
 
-  async login(studentID: string, password: string) {
+    async login(input: string, password: string) {
 
-    const id = studentID.trim();
+    const value = input.trim();
 
     const usersRef = collection(this.firestore, 'users');
-    const q = query(usersRef, where('studentID', '==', id));
 
-    const querySnapshot = await getDocs(q);
+    // =========================
+    // 🔥 IF EMAIL → ADMIN ONLY
+    // =========================
+    if (value.includes('@')) {
 
-    if (querySnapshot.empty) {
+      const q = query(usersRef, where('email', '==', value));
+      const snapshot = await getDocs(q);
+
+      if (snapshot.empty) {
+        throw new Error('Account not found');
+      }
+
+      const userData: any = snapshot.docs[0].data();
+
+      if (userData.role !== 'admin') {
+        throw new Error('Students must login using Student ID');
+      }
+
+      return signInWithEmailAndPassword(this.auth, value, password);
+    }
+
+    // =========================
+    // 🔥 IF STUDENT ID → STUDENT ONLY
+    // =========================
+    const q = query(usersRef, where('studentID', '==', value));
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
       throw new Error('Student ID not found');
     }
 
-    const docData: any = querySnapshot.docs[0].data();
+    const userData: any = snapshot.docs[0].data();
 
-    const email: string = docData.email;
-
-    if (!email) {
-      throw new Error('Email not found');
+    if (userData.role !== 'student') {
+      throw new Error('Admin must login using Email');
     }
 
-    return signInWithEmailAndPassword(this.auth, email, password);
-  }
+    const email = userData.email;
 
-  logout() {
-    return signOut(this.auth);
+    return signInWithEmailAndPassword(this.auth, email, password);
   }
 }

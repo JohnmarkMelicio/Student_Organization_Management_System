@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 
 import { OrganizationService } from '../../../services/organization.service';
 import { Organization, EMPTY_ORGANIZATION } from '../../../models/organization.model';
-import { AuthService } from '../../../services/auth.service'; // ✅ ADDED
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-organization',
@@ -23,12 +23,12 @@ export class OrganizationComponent implements OnInit {
 
   newOrg: Organization = { ...EMPTY_ORGANIZATION };
 
-  isAdmin: boolean = false; // ✅ ADDED
+  isAdmin: boolean = false; 
 
   constructor(
     private orgService: OrganizationService,
     private router: Router,
-    private authService: AuthService // ✅ ADDED
+    private authService: AuthService 
   ) {}
 
   async ngOnInit(): Promise<void> {

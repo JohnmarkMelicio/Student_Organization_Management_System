@@ -18,6 +18,7 @@ export class AdminCreateAccount {
   firstName = '';
   middleName = '';
   lastName = '';
+  program = ''; 
   email = '';
   password = '';
 
@@ -54,6 +55,7 @@ export class AdminCreateAccount {
         firstName: this.firstName,
         middleName: this.middleName,
         lastName: this.lastName,
+        program: this.program, 
         email: this.email,
         role: 'student'
       });
