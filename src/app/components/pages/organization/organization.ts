@@ -20,6 +20,7 @@ export class OrganizationComponent implements OnInit {
 
   showModal = false;
   editingId: string | null = null;
+  activeMenu: string | null = null;
 
   newOrg: Organization = { ...EMPTY_ORGANIZATION };
 
@@ -61,6 +62,9 @@ export class OrganizationComponent implements OnInit {
     this.showModal = false;
     this.resetForm();
   }
+  toggleMenu(id: string) {
+  this.activeMenu = this.activeMenu === id ? null : id;
+}
 
   addOrganization(): void {
 
@@ -103,21 +107,36 @@ export class OrganizationComponent implements OnInit {
 
   deleteOrganization(id: string) {
 
-    const confirmDelete = confirm("Delete this organization?");
-    if (!confirmDelete) return;
+  const confirmDelete = confirm("Are you sure you want to delete this organization?");
+  if (!confirmDelete) return;
 
-    this.orgService.delete(id)
-      .then(() => this.loadOrganizations())
-      .catch(err => console.error(err));
-
-  }
+  this.orgService.delete(id)
+    .then(() => {
+      this.activeMenu = null;
+      this.loadOrganizations();
+    })
+    .catch(err => console.error(err));
+}
 
   openOrganization(id: string): void {
     this.router.navigate(['/home/organization', id]);
   }
 
   private resetForm(): void {
-    this.newOrg = { ...EMPTY_ORGANIZATION };
-  }
+  this.newOrg = {
+    name: '',
+    shortName: '',
+    description: '',
+    email: '',
+    phone: '',
+    location: '',
+    mission: '',
+    vision: '',
+    social: {
+      facebook: '',
+      instagram: ''
+    }
+  };
+}
 
 }

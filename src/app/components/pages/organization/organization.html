@@ -11,29 +11,49 @@
     </button>
   </div>
 
-  <div class="org-grid">
+  <div class="org-grid" *ngIf="organizations.length; else emptyState">
 
     <div class="org-card"
-         *ngFor="let org of organizations"
-         (click)="openOrganization(org.id!)">
+     *ngFor="let org of organizations"
+     (click)="openOrganization(org.id!)">
+
+      <!-- 3 DOT MENU -->
+      <div *ngIf="isAdmin"
+        class="menu-wrapper"
+        (click)="$event.stopPropagation()">
+
+        <span class="menu-btn" (click)="toggleMenu(org.id!)">⋮</span>
+
+        <div class="dropdown" *ngIf="activeMenu === org.id">
+          <div class="dropdown-item delete"
+              (click)="deleteOrganization(org.id!)">
+            Delete Organization
+          </div>
+        </div>
+
+      </div>
 
       <div class="org-icon">🏢</div>
 
       <div class="org-info">
-
         <h3>
           {{ org.name }}
           <span class="badge">{{ org.shortName }}</span>
         </h3>
 
-        <p>{{ org.description }}</p>
-
+        <p>{{ org.description || 'No description available' }}</p>
       </div>
 
     </div>
-
   </div>
 
+  <ng-template #emptyState>
+    <div class="empty">
+      No organizations found.
+    </div>
+  </ng-template>
+
+  <!-- MODAL -->
   <div class="modal-backdrop" *ngIf="showModal">
 
     <div class="modal-card">
@@ -85,6 +105,17 @@
           <div class="form-group full">
             <label>Vision</label>
             <textarea [(ngModel)]="newOrg.vision"></textarea>
+          </div>
+
+          <!-- ✅ SOCIAL LINKS -->
+          <div class="form-group">
+            <label>Facebook</label>
+            <input [(ngModel)]="newOrg.social.facebook">
+          </div>
+
+          <div class="form-group">
+            <label>Instagram</label>
+            <input [(ngModel)]="newOrg.social.instagram">
           </div>
 
         </div>

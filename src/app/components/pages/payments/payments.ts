@@ -23,14 +23,18 @@ export class PaymentsComponent implements OnInit {
   usgPayments: any[] = [];
   eventPayments: any[] = [];
 
-
-  viewMode: string = '';
-  selectedEventId: string | null = null;
+  filteredUSGPayments: any[] = [];
   filteredEventPayments: any[] = [];
+
+  viewMode: string = 'USG';
+  selectedEventId: string | null = null;
 
   editingId: string | null = null;
 
   isAdmin = false;
+
+  // ✅ SEARCH
+  searchText: string = '';
 
   newPayment:any = {
     type: 'USG',
@@ -69,30 +73,52 @@ export class PaymentsComponent implements OnInit {
   loadPayments() {
     this.paymentsService.getAll().subscribe({
       next: (res) => {
+
         this.payments = res;
+
         this.usgPayments = res.filter(p => p.type === 'USG');
         this.eventPayments = res.filter(p => p.type === 'Event');
 
-        this.applyEventFilter(); 
+        this.applyFilters();
+
       },
       error: (err) => console.error(err)
     });
   }
 
-  applyEventFilter() {
-    if (!this.selectedEventId) {
-      this.filteredEventPayments = [];
-      return;
+  // 🔥 SEARCH LOGIC
+  applyFilters() {
+
+    const search = this.searchText.toLowerCase();
+
+    // USG FILTER
+    this.filteredUSGPayments = this.usgPayments.filter(p =>
+      p.studentId?.toLowerCase().includes(search) ||
+      p.name?.toLowerCase().includes(search) ||
+      p.program?.toLowerCase().includes(search)
+    );
+
+    // EVENT FILTER
+    let eventData = this.eventPayments;
+
+    if (this.selectedEventId) {
+      eventData = eventData.filter(p => p.eventId === this.selectedEventId);
     }
 
-    this.filteredEventPayments =
-      this.eventPayments.filter(p => p.eventId === this.selectedEventId);
+    this.filteredEventPayments = eventData.filter(p =>
+      p.studentId?.toLowerCase().includes(search) ||
+      p.name?.toLowerCase().includes(search) ||
+      p.program?.toLowerCase().includes(search)
+    );
+  }
+
+  searchPayments() {
+    this.applyFilters();
   }
 
   onEventChange() {
-    this.applyEventFilter();
+    this.applyFilters();
   }
-
 
   async fetchStudent() {
 

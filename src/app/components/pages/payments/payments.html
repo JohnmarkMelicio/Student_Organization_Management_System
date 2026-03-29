@@ -2,6 +2,7 @@
 
   <h2>Payment Management</h2>
 
+  <!-- FORM -->
   <div class="payment-form" *ngIf="isAdmin">
 
     <label>Payment Type</label>
@@ -13,48 +14,43 @@
     <div *ngIf="newPayment.type === 'Event'">
 
       <label>Select Event</label>
-
       <select [(ngModel)]="newPayment.eventId">
         <option [ngValue]="null">Select Event</option>
-        <option *ngFor="let event of events"
-                [ngValue]="event.id">
+        <option *ngFor="let event of events" [ngValue]="event.id">
           {{ event.name }}
         </option>
       </select>
 
     </div>
 
-    <input placeholder="Student ID"
-           [(ngModel)]="newPayment.studentId"
+    <label>Student ID</label>
+    <input [(ngModel)]="newPayment.studentId"
            (blur)="fetchStudent()">
 
-    <input type="number"
-           placeholder="Amount"
-           [(ngModel)]="newPayment.amount">
+    <label>Amount</label>
+    <input type="number" [(ngModel)]="newPayment.amount">
 
+    <label>Method</label>
     <select [(ngModel)]="newPayment.paymentMethod">
       <option value="Cash">Cash</option>
       <option value="GCash">GCash</option>
       <option value="Bank Transfer">Bank Transfer</option>
     </select>
 
-    <button (click)="addPayment()">
-      Add Payment
-    </button>
+    <button (click)="addPayment()">Add Payment</button>
 
   </div>
 
+  <!-- FILTER -->
   <div class="payment-filter">
 
-    <button 
-      (click)="viewMode = 'USG'"
-      [class.active]="viewMode === 'USG'">
+    <button (click)="viewMode = 'USG'; applyFilters()"
+            [class.active]="viewMode === 'USG'">
       USG
     </button>
 
-    <button 
-      (click)="viewMode = 'Event'"
-      [class.active]="viewMode === 'Event'">
+    <button (click)="viewMode = 'Event'; applyFilters()"
+            [class.active]="viewMode === 'Event'">
       Event
     </button>
 
@@ -73,9 +69,14 @@
 
   </div>
 
-  <h3 *ngIf="viewMode === 'USG'">USG Payments</h3>
+  <!-- SEARCH -->
+  <input class="search"
+         placeholder="Search payments..."
+         [(ngModel)]="searchText"
+         (input)="searchPayments()">
 
-  <table *ngIf="viewMode === 'USG' && usgPayments.length">
+  <!-- USG TABLE -->
+  <table *ngIf="viewMode === 'USG' && filteredUSGPayments.length">
 
     <thead>
       <tr>
@@ -90,7 +91,7 @@
 
     <tbody>
 
-      <tr *ngFor="let pay of usgPayments">
+      <tr *ngFor="let pay of filteredUSGPayments">
 
         <td>
           <input *ngIf="editingId === pay.id" [(ngModel)]="pay.studentId">
@@ -114,35 +115,35 @@
 
         <td>
           <select *ngIf="editingId === pay.id" [(ngModel)]="pay.paymentMethod">
-            <option value="Cash">Cash</option>
-            <option value="GCash">GCash</option>
-            <option value="Bank Transfer">Bank Transfer</option>
+            <option>Cash</option>
+            <option>GCash</option>
+            <option>Bank Transfer</option>
           </select>
           <span *ngIf="editingId !== pay.id">{{ pay.paymentMethod }}</span>
         </td>
 
         <td *ngIf="isAdmin">
 
-          <button class="btn edit-btn"
-                  *ngIf="editingId !== pay.id"
+          <button *ngIf="editingId !== pay.id"
+                  class="btn edit-btn"
                   (click)="editPayment(pay)">
             Edit
           </button>
 
-          <button class="btn save-btn"
-                  *ngIf="editingId === pay.id"
+          <button *ngIf="editingId === pay.id"
+                  class="btn save-btn"
                   (click)="savePayment(pay)">
             Save
           </button>
 
-          <button class="btn cancel-btn"
-                  *ngIf="editingId === pay.id"
+          <button *ngIf="editingId === pay.id"
+                  class="btn cancel-btn"
                   (click)="cancelEdit()">
             Cancel
           </button>
 
-          <button class="btn delete-btn"
-                  *ngIf="editingId !== pay.id"
+          <button *ngIf="editingId !== pay.id"
+                  class="btn delete-btn"
                   (click)="deletePayment(pay.id)">
             Delete
           </button>
@@ -155,8 +156,7 @@
 
   </table>
 
-  <h3 *ngIf="viewMode === 'Event'">Event Payments</h3>
-
+  <!-- EVENT TABLE -->
   <table *ngIf="viewMode === 'Event' && filteredEventPayments.length">
 
     <thead>
@@ -199,36 +199,35 @@
 
         <td>
           <select *ngIf="editingId === pay.id" [(ngModel)]="pay.paymentMethod">
-            <option value="Cash">Cash</option>
-            <option value="GCash">GCash</option>
-            <option value="Bank Transfer">Bank Transfer</option>
+            <option>Cash</option>
+            <option>GCash</option>
+            <option>Bank Transfer</option>
           </select>
           <span *ngIf="editingId !== pay.id">{{ pay.paymentMethod }}</span>
         </td>
 
-        
         <td *ngIf="isAdmin">
 
-          <button class="btn edit-btn"
-                  *ngIf="editingId !== pay.id"
+          <button *ngIf="editingId !== pay.id"
+                  class="btn edit-btn"
                   (click)="editPayment(pay)">
             Edit
           </button>
 
-          <button class="btn save-btn"
-                  *ngIf="editingId === pay.id"
+          <button *ngIf="editingId === pay.id"
+                  class="btn save-btn"
                   (click)="savePayment(pay)">
             Save
           </button>
 
-          <button class="btn cancel-btn"
-                  *ngIf="editingId === pay.id"
+          <button *ngIf="editingId === pay.id"
+                  class="btn cancel-btn"
                   (click)="cancelEdit()">
             Cancel
           </button>
 
-          <button class="btn delete-btn"
-                  *ngIf="editingId !== pay.id"
+          <button *ngIf="editingId !== pay.id"
+                  class="btn delete-btn"
                   (click)="deletePayment(pay.id)">
             Delete
           </button>

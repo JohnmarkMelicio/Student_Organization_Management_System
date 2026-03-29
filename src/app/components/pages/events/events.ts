@@ -27,8 +27,8 @@ export class EventsComponent implements OnInit {
     name: '',
     date: '',
     location: '',
-    status: '',
-    organization: ''
+    organization: '',
+    status: ''
   };
 
   constructor(
@@ -72,6 +72,9 @@ export class EventsComponent implements OnInit {
       return;
     }
 
+    // ✅ AUTO SET STATUS
+    this.newEvent.status = this.getEventStatus(this.newEvent.date);
+
     this.eventsService.create(this.newEvent)
       .then(() => {
         alert("Event added successfully");
@@ -94,6 +97,9 @@ export class EventsComponent implements OnInit {
   saveEvent(event:any): void {
 
     if (!this.isAdmin) return;
+
+    // ✅ AUTO FIX STATUS ON SAVE
+    event.status = this.getEventStatus(event.date, event.status);
 
     this.eventsService.update(event.id, event)
       .then(() => {
@@ -126,15 +132,41 @@ export class EventsComponent implements OnInit {
   }
 
   resetForm(): void {
-
     this.newEvent = {
       name: '',
       date: '',
       location: '',
-      status: '',
-      organization: ''
+      organization: '',
+      status: ''
     };
+  }
+  cancelEdit(): void {
+  this.editingId = null;
+  this.loadEvents(); // 🔥 restores original data
+}
 
+  // ✅ AUTO STATUS LOGIC
+  getEventStatus(date: string, manualStatus?: string): string {
+
+    const today = new Date();
+    const eventDate = new Date(date);
+
+    today.setHours(0,0,0,0);
+    eventDate.setHours(0,0,0,0);
+
+    if (eventDate.getTime() === today.getTime()) {
+      return 'Ongoing';
+    }
+
+    if (eventDate > today) {
+      return 'Upcoming';
+    }
+
+    if (eventDate < today) {
+      return 'Completed';
+    }
+
+    return manualStatus || 'Upcoming';
   }
 
 }

@@ -2,15 +2,8 @@
 
   <h2>Event Attendance</h2>
 
-  
-  <div class="attendance-container">
-
-  <h2>Event Attendance</h2>
-
-  
   <div class="attendance-form">
 
-    
     <label>Event</label>
     <select [(ngModel)]="selectedEventId"
             (change)="loadAttendance()">
@@ -21,7 +14,6 @@
       </option>
     </select>
 
-    
     <ng-container *ngIf="isAdmin">
 
       <label>Student ID</label>
@@ -43,55 +35,53 @@
 
   </div>
 
-  
+  <!-- 🔍 SEARCH -->
+  <input class="search"
+         placeholder="Search attendance..."
+         [(ngModel)]="searchText"
+         (input)="searchAttendance()">
+
   <table *ngIf="selectedEventId">
 
     <thead>
       <tr>
-        <th>Student ID</th>
-        <th>Name</th>
-        <th>Program</th>
+        <th (click)="sortBy('studentId')">Student ID</th>
+        <th (click)="sortBy('name')">Name</th>
+        <th (click)="sortBy('program')">Program</th>
         <th>Status</th>
-        <th>Date & Time</th>
+        <th (click)="sortBy('datetime')">Date & Time</th>
         <th *ngIf="isAdmin">Action</th>
       </tr>
     </thead>
 
     <tbody>
 
-      <tr *ngFor="let record of attendanceList">
+      <tr *ngFor="let record of filteredAttendance">
 
-        
         <td>
           <input *ngIf="editingId === record.id && isAdmin"
                  [(ngModel)]="record.studentId">
-
           <span *ngIf="editingId !== record.id || !isAdmin">
             {{ record.studentId }}
           </span>
         </td>
 
-       
         <td>
           <input *ngIf="editingId === record.id && isAdmin"
                  [(ngModel)]="record.name">
-
           <span *ngIf="editingId !== record.id || !isAdmin">
             {{ record.name }}
           </span>
         </td>
 
-        
         <td>
           <input *ngIf="editingId === record.id && isAdmin"
                  [(ngModel)]="record.program">
-
           <span *ngIf="editingId !== record.id || !isAdmin">
             {{ record.program }}
           </span>
         </td>
 
-        
         <td>
           <select *ngIf="editingId === record.id && isAdmin"
                   [(ngModel)]="record.status">
@@ -105,12 +95,10 @@
           </span>
         </td>
 
-        
         <td>
           {{ record.datetime | date:'MMM d, y, h:mm a' }}
         </td>
 
-        
         <td *ngIf="isAdmin">
 
           <button class="btn edit-btn"

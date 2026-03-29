@@ -1,19 +1,24 @@
 .event-container {
+  background: #ffffff;
   padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.06);
 }
 
+/* TOGGLE */
 .top-toggle {
   display: flex;
-  gap: 15px;
+  gap: 12px;
   margin-bottom: 20px;
 }
 
 .top-toggle button {
-  padding: 10px 20px;
-  border-radius: 20px;
+  padding: 8px 18px;
+  border-radius: 999px;
   border: none;
-  background: #e0e0e0;
+  background: #eef2ff;
   cursor: pointer;
+  font-weight: 500;
 }
 
 .top-toggle button.active {
@@ -21,68 +26,174 @@
   color: white;
 }
 
-.create-card, .list-card {
-  background: white;
-  padding: 25px;
-  border-radius: 14px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+/* FORM (MATCH ATTENDANCE) */
+.event-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+
+  background: #f9fbff;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid #eef2f7;
+  margin-bottom: 20px;
 }
 
-input, select {
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  margin-bottom: 10px;
-  width: 100%;
+.event-form label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #555;
 }
 
-.save-btn {
-  margin-top: 10px;
+.event-form input,
+.event-form select {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  font-size: 14px;
+  min-width: 140px;
+}
+
+.event-form input:focus,
+.event-form select:focus {
+  border-color: #0d2c6c;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(13, 44, 108, 0.1);
+}
+
+.event-form button {
+  height: 42px;
+  padding: 0 18px;
+  border-radius: 8px;
+  border: none;
   background: #0d2c6c;
   color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 6px;
+  cursor: pointer;
 }
 
-.list-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
+/* LIST CARD */
+.list-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #eef2f7;
 }
 
+/* SEARCH */
 .search {
-  margin-bottom: 15px;
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
 }
 
+/* TABLE */
 table {
   width: 100%;
   border-collapse: collapse;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 th {
-  background: #f4f6f9;
-  padding: 10px;
+  background: #f1f5f9;
+  padding: 12px;
   text-align: left;
+  font-weight: 600;
 }
 
 td {
-  padding: 10px;
+  padding: 12px;
   border-bottom: 1px solid #eee;
 }
 
-button {
-  padding: 6px 10px;
+tr:hover {
+  background: #f9fbff;
+}
+
+/* ✅ FIX: INPUT STYLE INSIDE TABLE (EDIT MODE) */
+td input,
+td select {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  font-size: 14px;
+  min-width: 140px;
+  transition: all 0.2s ease;
+}
+
+td input:focus,
+td select:focus {
+  border-color: #0d2c6c;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(13, 44, 108, 0.1);
+}
+
+/* STATUS */
+.upcoming {
+  background: #3b82f6;
+  color: white;
+  padding: 4px 10px;
   border-radius: 6px;
+}
+
+.completed {
+  background: #16a34a;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.ongoing {
+  background: #f59e0b;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+/* BUTTON SYSTEM (MATCH ATTENDANCE) */
+.btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin-right: 5px;
+  transition: all 0.2s ease;
   border: none;
   cursor: pointer;
 }
 
-.delete-btn {
-  background: #dc3545;
-  color: white;
+.edit-btn {
+  background: #0d6efd;
+  color: #fff;
+}
+.edit-btn:hover {
+  background: #0b5ed7;
 }
 
-.upcoming { background: #3b82f6; color: white; padding: 4px 8px; border-radius: 6px; }
-.completed { background: #16a34a; color: white; padding: 4px 8px; border-radius: 6px; }
-.ongoing { background: #f59e0b; color: white; padding: 4px 8px; border-radius: 6px; }
+.save-btn {
+  background: #198754;
+  color: #fff;
+}
+.save-btn:hover {
+  background: #157347;
+}
+
+.cancel-btn {
+  background: #6c757d;
+  color: #fff;
+}
+.cancel-btn:hover {
+  background: #5c636a;
+}
+
+.delete-btn {
+  background: #dc3545;
+  color: #fff;
+}
+.delete-btn:hover {
+  background: #b02a37;
+}

@@ -160,3 +160,18 @@ button:hover {
 .delete-btn:hover {
   background: #b02a37;
 }
+.search {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0 15px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+th {
+  cursor: pointer;
+}
+
+th:hover {
+  color: #0d2c6c;
+}

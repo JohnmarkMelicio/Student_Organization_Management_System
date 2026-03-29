@@ -19,12 +19,20 @@ export class AttendanceComponent implements OnInit {
 
   events: any[] = [];
   attendanceList: any[] = [];
+  filteredAttendance: any[] = [];
 
   selectedEventId: string | null = null;
 
   editingId: string | null = null;
 
   isAdmin = false;
+
+  // 🔍 SEARCH
+  searchText: string = '';
+
+  // 🔃 SORT
+  sortField: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
 
   newRecord: any = {
     studentId: '',
@@ -53,12 +61,10 @@ export class AttendanceComponent implements OnInit {
   }
 
   loadEvents() {
-
     this.eventsService.getAll().subscribe({
       next: (res) => this.events = res,
       error: (err) => console.error(err)
     });
-
   }
 
   loadAttendance() {
@@ -67,10 +73,65 @@ export class AttendanceComponent implements OnInit {
 
     this.attendanceService.getByEvent(this.selectedEventId)
       .subscribe({
-        next: (res) => this.attendanceList = res,
+        next: (res) => {
+          this.attendanceList = res;
+          this.applyFilters();
+        },
         error: (err) => console.error(err)
       });
+  }
 
+  // 🔥 FILTER + SORT
+  applyFilters(): void {
+
+    let data = [...this.attendanceList];
+
+    // SEARCH
+    if (this.searchText.trim()) {
+      const search = this.searchText.toLowerCase();
+
+      data = data.filter(r =>
+        r.studentId?.toLowerCase().includes(search) ||
+        r.name?.toLowerCase().includes(search) ||
+        r.program?.toLowerCase().includes(search)
+      );
+    }
+
+    // SORT
+    if (this.sortField) {
+      data.sort((a, b) => {
+
+        let valueA = a[this.sortField];
+        let valueB = b[this.sortField];
+
+        if (this.sortField === 'datetime') {
+          valueA = new Date(valueA);
+          valueB = new Date(valueB);
+        }
+
+        if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
+        if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+
+    this.filteredAttendance = data;
+  }
+
+  searchAttendance(): void {
+    this.applyFilters();
+  }
+
+  sortBy(field: string): void {
+
+    if (this.sortField === field) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = field;
+      this.sortDirection = 'asc';
+    }
+
+    this.applyFilters();
   }
 
   async addAttendance() {
@@ -89,7 +150,6 @@ export class AttendanceComponent implements OnInit {
 
     try {
 
-      
       const usersRef = collection(this.firestore, 'users');
       const q = query(usersRef, where('studentID', '==', this.newRecord.studentId));
       const snapshot = await getDocs(q);
@@ -122,18 +182,14 @@ export class AttendanceComponent implements OnInit {
       console.error(error);
       alert('Error adding attendance');
     }
-
   }
 
   editRecord(record: any) {
-
     if (!this.isAdmin) return;
     this.editingId = record.id;
-
   }
 
   saveRecord(record: any) {
-
     if (!this.isAdmin) return;
 
     this.attendanceService.update(record.id, record)
@@ -142,14 +198,11 @@ export class AttendanceComponent implements OnInit {
         this.loadAttendance();
       })
       .catch((err:any) => console.error(err));
-
   }
 
   cancelEdit() {
-
     this.editingId = null;
     this.loadAttendance();
-
   }
 
   deleteRecord(id: string) {
@@ -162,11 +215,9 @@ export class AttendanceComponent implements OnInit {
     this.attendanceService.delete(id)
       .then(() => this.loadAttendance())
       .catch((err:any) => console.error(err));
-
   }
 
   resetForm() {
-
     this.newRecord = {
       studentId: '',
       name: '',
@@ -174,7 +225,6 @@ export class AttendanceComponent implements OnInit {
       status: 'Present',
       datetime: ''
     };
-
   }
 
 }

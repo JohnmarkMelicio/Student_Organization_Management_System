@@ -2,6 +2,7 @@
   padding: 25px;
 }
 
+/* HEADER */
 .dashboard-header h1 {
   font-size: 26px;
   font-weight: 700;
@@ -16,6 +17,7 @@
   margin-bottom: 20px;
 }
 
+/* STATS */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -67,71 +69,94 @@
 
 .stat-card .positive {
   color: #16a34a;
-  font-weight: 500;
 }
 
 .stat-card .negative {
   color: #f59e0b;
-  font-weight: 500;
 }
 
+/* 🔥 BALANCED GRID */
 .content-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 18px;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 20px;
+  align-items: stretch;
 }
 
+/* CARD */
 .card {
   background: #ffffff;
-  border-radius: 14px;
-  padding: 18px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
+/* HEADER */
 .card-header h3 {
   font-size: 18px;
   color: #0d2c6c;
-  margin-bottom: 12px;
+  margin-bottom: 15px;
 }
 
+/* EVENT ITEM */
 .event-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px;
-  border-radius: 10px;
+  padding: 14px;
+  border-radius: 12px;
   background: #f9fbff;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   transition: all 0.2s ease;
 }
 
 .event-item:hover {
   background: #eef4ff;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 
 .event-details strong {
-  font-size: 14px;
+  font-size: 15px;
   color: #222;
 }
 
 .event-meta {
   font-size: 12px;
   color: #777;
-  margin-top: 2px;
+  margin-top: 3px;
 }
 
+/* STATUS TAG */
 .tag {
-  background: #fde68a;
-  color: #92400e;
   font-size: 11px;
-  padding: 4px 10px;
+  padding: 5px 12px;
   border-radius: 999px;
   font-weight: 500;
 }
 
+/* STATUS COLORS */
+.tag.upcoming {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.tag.ongoing {
+  background: #fde68a;
+  color: #92400e;
+}
+
+.tag.completed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+/* ACTIVITY */
 .activity-item {
-  padding: 10px 0;
+  padding: 12px 0;
   border-bottom: 1px solid #eee;
 }
 
@@ -149,13 +174,15 @@
   color: #777;
 }
 
+/* EMPTY */
 .empty {
   text-align: center;
-  padding: 15px;
+  padding: 20px;
   font-size: 13px;
   color: #999;
 }
 
+/* 📱 RESPONSIVE */
 @media (max-width: 900px) {
   .content-grid {
     grid-template-columns: 1fr;

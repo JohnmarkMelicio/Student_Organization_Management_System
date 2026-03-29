@@ -3,48 +3,61 @@
   <div class="top-header">
 
     <div class="title-section">
-
       <span class="back-btn" (click)="goBack()">←</span>
 
       <div>
         <h1>{{ organization.name }}</h1>
         <p class="subtitle">
-          {{ organization.description }}
+          {{ organization.description || 'No description available' }}
         </p>
       </div>
-
     </div>
 
-    
     <button *ngIf="isAdmin"
-        class="primary-btn"
-        (click)="showOfficerModal = true; $event.stopPropagation()">
-  Manage Officers
-</button>
+            class="primary-btn"
+            (click)="openEditModal()">
+      Edit
+    </button>
 
   </div>
 
+  <!-- OFFICERS -->
   <div class="card officers-card">
 
-    <h3>OFFICERS</h3>
+    <div class="card-header">
+      <h3>OFFICERS</h3>
 
-    <div class="officer-grid">
+      <button *ngIf="isAdmin"
+              class="mini-btn"
+              (click)="openOfficerModal()">
+        Manage
+      </button>
+    </div>
+
+    <div class="officer-grid" *ngIf="members.length; else noOfficers">
+
       <div class="officer" *ngFor="let m of members">
         <div class="avatar">👤</div>
-        <strong>{{ m.position }}</strong>
-        <span>{{ m.name }}</span>
+        <p class="role">{{ m.position }}</p>
+        <span class="name">{{ m.name }}</span>
       </div>
+
     </div>
+
+    <ng-template #noOfficers>
+      <p class="empty">No officers yet</p>
+    </ng-template>
 
   </div>
 
+  <!-- CONTACT + SOCIAL -->
   <div class="info-grid">
 
     <div class="card">
       <h3>Contact Information</h3>
-      <p>📧 {{ organization.email }}</p>
-      <p>📞 {{ organization.phone }}</p>
-      <p>📍 {{ organization.location }}</p>
+      <p>📧 {{ organization.email || '-' }}</p>
+      <p>📞 {{ organization.phone || '-' }}</p>
+      <p>📍 {{ organization.location || '-' }}</p>
     </div>
 
     <div class="card">
@@ -55,20 +68,102 @@
       <p *ngIf="organization.social?.instagram">
         📸 {{ organization.social.instagram }}
       </p>
+      <p *ngIf="!organization.social?.facebook && !organization.social?.instagram">
+        No social links available
+      </p>
     </div>
 
   </div>
 
+  <!-- MISSION / VISION -->
   <div class="info-grid">
 
     <div class="card">
       <h3>Mission</h3>
-      <p>{{ organization.mission }}</p>
+      <p>{{ organization.mission || 'No mission provided' }}</p>
     </div>
 
     <div class="card">
       <h3>Vision</h3>
-      <p>{{ organization.vision }}</p>
+      <p>{{ organization.vision || 'No vision provided' }}</p>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ✅ OFFICER MODAL -->
+<div class="modal-backdrop" *ngIf="showOfficerModal">
+
+  <div class="modal-card">
+
+    <div class="modal-header">
+      <h3>Manage Officers</h3>
+      <span class="close-btn" (click)="closeOfficerModal()">✕</span>
+    </div>
+
+    <div class="modal-body">
+
+      <div class="form-grid">
+        <input placeholder="Name" [(ngModel)]="newMember.name">
+        <input placeholder="Position" [(ngModel)]="newMember.position">
+      </div>
+
+      <button class="save-btn" (click)="addMember()">Add Officer</button>
+
+      <hr>
+
+      <div class="officer-row" *ngFor="let m of members">
+        <span>{{ m.position }} - {{ m.name }}</span>
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <button class="cancel-btn" (click)="closeOfficerModal()">Close</button>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ✅ EDIT MODAL -->
+<div class="modal-backdrop" *ngIf="showEditModal">
+
+  <div class="modal-card">
+
+    <div class="modal-header">
+      <h3>Edit Organization</h3>
+      <span class="close-btn" (click)="closeEditModal()">✕</span>
+    </div>
+
+    <div class="modal-body">
+
+      <div class="form-grid">
+
+      <input [(ngModel)]="editOrg.name" placeholder="Organization Name">
+      <input [(ngModel)]="editOrg.shortName" placeholder="Acronym">
+
+      <textarea [(ngModel)]="editOrg.description" placeholder="Description"></textarea>
+
+      <input [(ngModel)]="editOrg.email" placeholder="Email">
+      <input [(ngModel)]="editOrg.phone" placeholder="Phone">
+      <input [(ngModel)]="editOrg.location" placeholder="Location">
+
+      <textarea [(ngModel)]="editOrg.mission" placeholder="Mission"></textarea>
+      <textarea [(ngModel)]="editOrg.vision" placeholder="Vision"></textarea>
+
+      <!-- ✅ NEW: SOCIAL LINKS -->
+      <input [(ngModel)]="editOrg.social.facebook" placeholder="Facebook Link">
+      <input [(ngModel)]="editOrg.social.instagram" placeholder="Instagram Link">
+
+    </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <button class="cancel-btn" (click)="closeEditModal()">Cancel</button>
+      <button class="save-btn" (click)="updateOrganization()">Save Changes</button>
     </div>
 
   </div>

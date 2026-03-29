@@ -5,6 +5,7 @@
     <h2>Welcome back, {{ user?.firstName }} {{ user?.lastName }}!</h2>
   </div>
 
+  <!-- STATS -->
   <div class="stats-grid">
 
     <div class="stat-card">
@@ -41,8 +42,10 @@
 
   </div>
 
+  <!-- CONTENT -->
   <div class="content-grid">
 
+    <!-- UPCOMING EVENTS -->
     <div class="card">
 
       <div class="card-header">
@@ -60,8 +63,13 @@
           </div>
         </div>
 
-        <span class="tag">
-          {{ event.status || 'event' }}
+        <span class="tag"
+              [ngClass]="{
+                'upcoming': event.status === 'Upcoming',
+                'ongoing': event.status === 'Ongoing',
+                'completed': event.status === 'Completed'
+              }">
+          {{ event.status || 'Event' }}
         </span>
 
       </div>
@@ -72,6 +80,7 @@
 
     </div>
 
+    <!-- RECENT ACTIVITY -->
     <div class="card">
 
       <div class="card-header">

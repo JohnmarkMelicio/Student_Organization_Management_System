@@ -17,30 +17,34 @@
 
   </div>
 
-  <div *ngIf="viewMode === 'create' && isAdmin" class="create-card">
+  <!-- ✅ CREATE FORM (NOW MATCHES ATTENDANCE STYLE) -->
+  <div *ngIf="viewMode === 'create' && isAdmin" class="event-form">
 
-    <h2>Create Event</h2>
+    <label>Event Name</label>
+    <input [(ngModel)]="newEvent.name">
 
-    <input placeholder="Event Name" [(ngModel)]="newEvent.name">
+    <label>Date</label>
     <input type="date" [(ngModel)]="newEvent.date">
-    <input placeholder="Location" [(ngModel)]="newEvent.location">
 
+    <label>Location</label>
+    <input [(ngModel)]="newEvent.location">
+
+    <label>Status</label>
     <select [(ngModel)]="newEvent.status">
-      <option value="">Select Status</option>
+      <option value="">Select</option>
       <option value="Upcoming">Upcoming</option>
       <option value="Ongoing">Ongoing</option>
       <option value="Completed">Completed</option>
     </select>
 
-    <input placeholder="Organization In-Charge"
-           [(ngModel)]="newEvent.organization">
+    <label>Organization</label>
+    <input [(ngModel)]="newEvent.organization">
 
-    <button class="save-btn" (click)="addEvent()">
-      Save Event
-    </button>
+    <button (click)="addEvent()">Add Event</button>
 
   </div>
 
+  <!-- ✅ LIST -->
   <div *ngIf="viewMode === 'list'" class="list-card">
 
     <div class="list-header">
@@ -61,7 +65,6 @@
           <th>Location</th>
           <th>Status</th>
           <th>Organization</th>
-
           <th *ngIf="isAdmin">Action</th>
         </tr>
       </thead>
@@ -97,8 +100,15 @@
             </select>
 
             <span *ngIf="editingId !== event.id"
-                  [ngClass]="event.status.toLowerCase()">
-              {{ event.status }}
+              class="status"
+              [ngClass]="{
+                'upcoming': getEventStatus(event.date, event.status) === 'Upcoming',
+                'ongoing': getEventStatus(event.date, event.status) === 'Ongoing',
+                'completed': getEventStatus(event.date, event.status) === 'Completed'
+              }">
+
+              {{ getEventStatus(event.date, event.status) }}
+
             </span>
           </td>
 
@@ -112,22 +122,31 @@
 
           <td *ngIf="isAdmin">
 
-            <button *ngIf="editingId !== event.id"
-                    (click)="editEvent(event)">
-              Edit
-            </button>
+          <button class="btn edit-btn"
+                  *ngIf="editingId !== event.id"
+                  (click)="editEvent(event)">
+            Edit
+          </button>
 
-            <button *ngIf="editingId === event.id"
-                    (click)="saveEvent(event)">
-              Save
-            </button>
+          <button class="btn save-btn"
+                  *ngIf="editingId === event.id"
+                  (click)="saveEvent(event)">
+            Save
+          </button>
 
-            <button class="delete-btn"
-                    (click)="deleteEvent(event.id)">
-              Delete
-            </button>
+          <button class="btn delete-btn"
+                  *ngIf="editingId !== event.id"
+                  (click)="deleteEvent(event.id)">
+            Delete
+          </button>
 
-          </td>
+          <button class="btn cancel-btn"
+          *ngIf="editingId === event.id"
+          (click)="cancelEdit()">
+            Cancel
+          </button>
+
+        </td>
 
         </tr>
 

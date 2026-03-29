@@ -20,6 +20,7 @@
   padding: 15px;
   border-radius: 12px;
   border: 1px solid #eef2f7;
+  align-items: center;
 }
 
 .payment-form input,
@@ -197,4 +198,11 @@ h3 {
 .delete-btn:hover {
   background: #b02a37;
   transform: translateY(-1px);
+}
+.search {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0 15px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
 }
