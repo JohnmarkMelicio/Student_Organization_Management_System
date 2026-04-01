@@ -12,9 +12,11 @@ import {
   addDoc,
   query,
   where,
-  updateDoc
+  updateDoc,
+  deleteDoc
 } from '@angular/fire/firestore';
 
+import Swal from 'sweetalert2';
 import { AuthService } from '../../../services/auth.service';
 
 @Component({
@@ -31,12 +33,14 @@ export class OrganizationDetailsComponent {
 
   showOfficerModal = false;
   showEditModal = false;
-
-  isAdmin: boolean = false;
+  isAdmin = false;
 
   newMember: any = {
     name: '',
     position: '',
+    age: '',
+    course: '',
+    year: '',
     organizationId: ''
   };
 
@@ -48,7 +52,6 @@ export class OrganizationDetailsComponent {
     private authService: AuthService
   ) {
     const id = this.route.snapshot.params['id'];
-
     this.loadOrganization(id);
     this.loadMembers(id);
     this.checkRole();
@@ -56,7 +59,7 @@ export class OrganizationDetailsComponent {
 
   async checkRole() {
     const user: any = await this.authService.getCurrentUserData();
-    if (user) this.isAdmin = user['role'] === 'admin';
+    if (user) this.isAdmin = user.role === 'admin';
   }
 
   loadOrganization(id: string) {
@@ -76,14 +79,55 @@ export class OrganizationDetailsComponent {
   }
 
   addMember() {
-    if (!this.newMember.name || !this.newMember.position) return;
+    if (!this.newMember.name || !this.newMember.position) {
+      Swal.fire('Error', 'Name & Position required', 'error');
+      return;
+    }
 
     const ref = collection(this.firestore, 'members');
     this.newMember.organizationId = this.organization.id;
 
     addDoc(ref, this.newMember).then(() => {
-      this.newMember = { name: '', position: '', organizationId: '' };
-      this.showOfficerModal = false;
+      Swal.fire('Success', 'Officer added!', 'success');
+      this.newMember = { name: '', position: '', age: '', course: '', year: '', organizationId: '' };
+    });
+  }
+
+  deleteMember(member: any) {
+    Swal.fire({
+      title: 'Delete officer?',
+      icon: 'warning',
+      showCancelButton: true
+    }).then(res => {
+      if (res.isConfirmed) {
+        const ref = doc(this.firestore, `members/${member.id}`);
+        deleteDoc(ref).then(() => {
+          Swal.fire('Deleted!', '', 'success');
+        });
+      }
+    });
+  }
+
+  editMember(member: any) {
+    Swal.fire({
+      title: 'Edit Officer',
+      html: `
+        <input id="name" class="swal2-input" value="${member.name}">
+        <input id="position" class="swal2-input" value="${member.position}">
+      `,
+      preConfirm: () => {
+        return {
+          name: (document.getElementById('name') as HTMLInputElement).value,
+          position: (document.getElementById('position') as HTMLInputElement).value
+        };
+      }
+    }).then(result => {
+      if (result.isConfirmed) {
+        const ref = doc(this.firestore, `members/${member.id}`);
+        updateDoc(ref, result.value).then(() => {
+          Swal.fire('Updated!', '', 'success');
+        });
+      }
     });
   }
 
@@ -96,30 +140,26 @@ export class OrganizationDetailsComponent {
   }
 
   openEditModal() {
-
-  this.editOrg = {
-    ...this.organization,
-    social: {
-      facebook: this.organization.social?.facebook || '',
-      instagram: this.organization.social?.instagram || ''
-    }
-  };
-
-  this.showEditModal = true;
-}
+    this.editOrg = {
+      ...this.organization,
+      social: {
+        facebook: this.organization.social?.facebook || '',
+        instagram: this.organization.social?.instagram || ''
+      }
+    };
+    this.showEditModal = true;
+  }
 
   closeEditModal() {
     this.showEditModal = false;
   }
 
   updateOrganization() {
-    if (!this.organization?.id) return;
-
     const ref = doc(this.firestore, `organizations/${this.organization.id}`);
-
-    updateDoc(ref, this.editOrg)
-      .then(() => this.showEditModal = false)
-      .catch(err => console.error(err));
+    updateDoc(ref, this.editOrg).then(() => {
+      Swal.fire('Updated!', '', 'success');
+      this.showEditModal = false;
+    });
   }
 
   goBack() {

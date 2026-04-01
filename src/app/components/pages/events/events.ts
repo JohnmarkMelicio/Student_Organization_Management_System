@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EventsService } from '../../../services/events.service';
 import { AuthService } from '../../../services/auth.service';
+import Swal from 'sweetalert2'; // ✅ ADDED
 
 @Component({
   selector: 'app-events',
@@ -68,23 +69,48 @@ export class EventsComponent implements OnInit {
     if (!this.isAdmin) return;
 
     if (!this.newEvent.name || !this.newEvent.date) {
-      alert("Please complete required fields");
+
+      Swal.fire({
+        icon: 'warning',
+        title: 'Missing Fields',
+        text: 'Please complete required fields'
+      });
+
       return;
     }
 
-    // ✅ AUTO SET STATUS
+    // ✅ AUTO STATUS
     this.newEvent.status = this.getEventStatus(this.newEvent.date);
+
+    Swal.fire({
+      title: 'Adding event...',
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading()
+    });
 
     this.eventsService.create(this.newEvent)
       .then(() => {
-        alert("Event added successfully");
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Event Added!',
+          timer: 1200,
+          showConfirmButton: false
+        });
+
         this.loadEvents();
         this.resetForm();
         this.viewMode = 'list';
+
       })
       .catch((err:any) => {
         console.error("Failed to add event", err);
-        alert("Error saving event");
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to save event'
+        });
       });
 
   }
@@ -98,15 +124,36 @@ export class EventsComponent implements OnInit {
 
     if (!this.isAdmin) return;
 
-    // ✅ AUTO FIX STATUS ON SAVE
     event.status = this.getEventStatus(event.date, event.status);
+
+    Swal.fire({
+      title: 'Saving...',
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading()
+    });
 
     this.eventsService.update(event.id, event)
       .then(() => {
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Updated!',
+          timer: 1000,
+          showConfirmButton: false
+        });
+
         this.editingId = null;
         this.loadEvents();
+
       })
-      .catch((err:any) => console.error("Failed to update event", err));
+      .catch((err:any) => {
+        console.error("Failed to update event", err);
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Update Failed'
+        });
+      });
 
   }
 
@@ -114,12 +161,51 @@ export class EventsComponent implements OnInit {
 
     if (!this.isAdmin) return;
 
-    const confirmDelete = confirm("Delete this event?");
-    if (!confirmDelete) return;
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This event will be permanently deleted!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
 
-    this.eventsService.delete(id)
-      .then(() => this.loadEvents())
-      .catch((err:any) => console.error("Failed to delete event", err));
+      if (result.isConfirmed) {
+
+        Swal.fire({
+          title: 'Deleting...',
+          allowOutsideClick: false,
+          didOpen: () => Swal.showLoading()
+        });
+
+        this.eventsService.delete(id)
+          .then(() => {
+
+            Swal.fire({
+              icon: 'success',
+              title: 'Deleted!',
+              text: 'Event has been removed.',
+              timer: 1200,
+              showConfirmButton: false
+            });
+
+            this.loadEvents();
+
+          })
+          .catch((err:any) => {
+            console.error("Failed to delete event", err);
+
+            Swal.fire({
+              icon: 'error',
+              title: 'Delete Failed'
+            });
+          });
+
+      }
+
+    });
 
   }
 
@@ -140,10 +226,11 @@ export class EventsComponent implements OnInit {
       status: ''
     };
   }
+
   cancelEdit(): void {
-  this.editingId = null;
-  this.loadEvents(); // 🔥 restores original data
-}
+    this.editingId = null;
+    this.loadEvents();
+  }
 
   // ✅ AUTO STATUS LOGIC
   getEventStatus(date: string, manualStatus?: string): string {
@@ -154,17 +241,9 @@ export class EventsComponent implements OnInit {
     today.setHours(0,0,0,0);
     eventDate.setHours(0,0,0,0);
 
-    if (eventDate.getTime() === today.getTime()) {
-      return 'Ongoing';
-    }
-
-    if (eventDate > today) {
-      return 'Upcoming';
-    }
-
-    if (eventDate < today) {
-      return 'Completed';
-    }
+    if (eventDate.getTime() === today.getTime()) return 'Ongoing';
+    if (eventDate > today) return 'Upcoming';
+    if (eventDate < today) return 'Completed';
 
     return manualStatus || 'Upcoming';
   }

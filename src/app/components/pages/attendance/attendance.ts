@@ -8,6 +8,8 @@ import { AuthService } from '../../../services/auth.service';
 
 import { Firestore, collection, query, where, getDocs } from '@angular/fire/firestore';
 
+import Swal from 'sweetalert2'; // ✅ ADDED
+
 @Component({
   selector: 'app-attendance',
   standalone: true,
@@ -27,10 +29,8 @@ export class AttendanceComponent implements OnInit {
 
   isAdmin = false;
 
-  // 🔍 SEARCH
   searchText: string = '';
 
-  // 🔃 SORT
   sortField: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';
 
@@ -86,7 +86,6 @@ export class AttendanceComponent implements OnInit {
 
     let data = [...this.attendanceList];
 
-    // SEARCH
     if (this.searchText.trim()) {
       const search = this.searchText.toLowerCase();
 
@@ -97,7 +96,6 @@ export class AttendanceComponent implements OnInit {
       );
     }
 
-    // SORT
     if (this.sortField) {
       data.sort((a, b) => {
 
@@ -139,35 +137,50 @@ export class AttendanceComponent implements OnInit {
     if (!this.isAdmin) return;
 
     if (!this.selectedEventId) {
-      alert('Please select an event');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Select Event',
+        text: 'Please select an event'
+      });
       return;
     }
 
     if (!this.newRecord.studentId) {
-      alert('Please enter Student ID');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Missing Student ID',
+        text: 'Please enter Student ID'
+      });
       return;
     }
 
     try {
+
+      Swal.fire({
+        title: 'Checking student...',
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading()
+      });
 
       const usersRef = collection(this.firestore, 'users');
       const q = query(usersRef, where('studentID', '==', this.newRecord.studentId));
       const snapshot = await getDocs(q);
 
       if (snapshot.empty) {
-        alert('Student not found');
+        Swal.fire({
+          icon: 'error',
+          title: 'Not Found',
+          text: 'Student not found'
+        });
         return;
       }
 
       const userData: any = snapshot.docs[0].data();
 
-      const fullName = `${userData.firstName} ${userData.lastName}`;
-      const program = userData.program;
-
       const record = {
         studentId: this.newRecord.studentId,
-        name: fullName,
-        program: program,
+        name: `${userData.firstName} ${userData.lastName}`,
+        program: userData.program,
         status: this.newRecord.status,
         eventId: this.selectedEventId,
         datetime: new Date().toLocaleString()
@@ -175,12 +188,24 @@ export class AttendanceComponent implements OnInit {
 
       await this.attendanceService.create(record);
 
+      Swal.fire({
+        icon: 'success',
+        title: 'Attendance Added!',
+        timer: 1200,
+        showConfirmButton: false
+      });
+
       this.loadAttendance();
       this.resetForm();
 
     } catch (error) {
       console.error(error);
-      alert('Error adding attendance');
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Failed to add attendance'
+      });
     }
   }
 
@@ -192,12 +217,33 @@ export class AttendanceComponent implements OnInit {
   saveRecord(record: any) {
     if (!this.isAdmin) return;
 
+    Swal.fire({
+      title: 'Saving...',
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading()
+    });
+
     this.attendanceService.update(record.id, record)
       .then(() => {
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Updated!',
+          timer: 1000,
+          showConfirmButton: false
+        });
+
         this.editingId = null;
         this.loadAttendance();
       })
-      .catch((err:any) => console.error(err));
+      .catch((err:any) => {
+        console.error(err);
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Update Failed'
+        });
+      });
   }
 
   cancelEdit() {
@@ -209,12 +255,47 @@ export class AttendanceComponent implements OnInit {
 
     if (!this.isAdmin) return;
 
-    const confirmDelete = confirm("Delete this record?");
-    if (!confirmDelete) return;
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This record will be deleted!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
 
-    this.attendanceService.delete(id)
-      .then(() => this.loadAttendance())
-      .catch((err:any) => console.error(err));
+      if (result.isConfirmed) {
+
+        Swal.fire({
+          title: 'Deleting...',
+          allowOutsideClick: false,
+          didOpen: () => Swal.showLoading()
+        });
+
+        this.attendanceService.delete(id)
+          .then(() => {
+
+            Swal.fire({
+              icon: 'success',
+              title: 'Deleted!',
+              timer: 1200,
+              showConfirmButton: false
+            });
+
+            this.loadAttendance();
+          })
+          .catch((err:any) => {
+            console.error(err);
+
+            Swal.fire({
+              icon: 'error',
+              title: 'Delete Failed'
+            });
+          });
+      }
+    });
   }
 
   resetForm() {

@@ -8,6 +8,8 @@ import { AuthService } from '../../../services/auth.service';
 
 import { Firestore, collection, query, where, getDocs } from '@angular/fire/firestore';
 
+import Swal from 'sweetalert2'; // ✅ ADDED
+
 @Component({
   selector: 'app-payments',
   standalone: true,
@@ -33,7 +35,6 @@ export class PaymentsComponent implements OnInit {
 
   isAdmin = false;
 
-  // ✅ SEARCH
   searchText: string = '';
 
   newPayment:any = {
@@ -86,19 +87,17 @@ export class PaymentsComponent implements OnInit {
     });
   }
 
-  // 🔥 SEARCH LOGIC
+  // 🔥 FILTER
   applyFilters() {
 
     const search = this.searchText.toLowerCase();
 
-    // USG FILTER
     this.filteredUSGPayments = this.usgPayments.filter(p =>
       p.studentId?.toLowerCase().includes(search) ||
       p.name?.toLowerCase().includes(search) ||
       p.program?.toLowerCase().includes(search)
     );
 
-    // EVENT FILTER
     let eventData = this.eventPayments;
 
     if (this.selectedEventId) {
@@ -126,14 +125,27 @@ export class PaymentsComponent implements OnInit {
 
     try {
 
+      Swal.fire({
+        title: 'Fetching student...',
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading()
+      });
+
       const usersRef = collection(this.firestore, 'users');
       const q = query(usersRef, where('studentID', '==', this.newPayment.studentId));
       const snapshot = await getDocs(q);
 
       if (snapshot.empty) {
+
         this.newPayment.name = '';
         this.newPayment.program = '';
-        alert('Student not found');
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Not Found',
+          text: 'Student not found'
+        });
+
         return;
       }
 
@@ -145,10 +157,16 @@ export class PaymentsComponent implements OnInit {
       this.newPayment.program =
         userData.program || '';
 
+      Swal.close();
+
     } catch (err) {
       console.error(err);
-    }
 
+      Swal.fire({
+        icon: 'error',
+        title: 'Error fetching student'
+      });
+    }
   }
 
   addPayment() {
@@ -157,7 +175,12 @@ export class PaymentsComponent implements OnInit {
         !this.newPayment.name ||
         !this.newPayment.amount) {
 
-      alert("Please complete required fields");
+      Swal.fire({
+        icon: 'warning',
+        title: 'Missing Fields',
+        text: 'Please complete required fields'
+      });
+
       return;
     }
 
@@ -166,12 +189,33 @@ export class PaymentsComponent implements OnInit {
       paymentDate: new Date().toISOString()
     };
 
+    Swal.fire({
+      title: 'Processing payment...',
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading()
+    });
+
     this.paymentsService.create(payment)
       .then(() => {
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Payment Added!',
+          timer: 1200,
+          showConfirmButton: false
+        });
+
         this.loadPayments();
         this.resetForm();
       })
-      .catch(err => console.error(err));
+      .catch(err => {
+        console.error(err);
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed to save payment'
+        });
+      });
   }
 
   editPayment(payment:any) {
@@ -179,12 +223,34 @@ export class PaymentsComponent implements OnInit {
   }
 
   savePayment(payment:any) {
+
+    Swal.fire({
+      title: 'Saving...',
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading()
+    });
+
     this.paymentsService.update(payment.id, payment)
       .then(() => {
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Updated!',
+          timer: 1000,
+          showConfirmButton: false
+        });
+
         this.editingId = null;
         this.loadPayments();
       })
-      .catch(err => console.error(err));
+      .catch(err => {
+        console.error(err);
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Update Failed'
+        });
+      });
   }
 
   cancelEdit() {
@@ -193,12 +259,48 @@ export class PaymentsComponent implements OnInit {
   }
 
   deletePayment(id:string) {
-    const confirmDelete = confirm("Delete this payment?");
-    if (!confirmDelete) return;
 
-    this.paymentsService.delete(id)
-      .then(() => this.loadPayments())
-      .catch(err => console.error(err));
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This payment will be deleted!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+
+      if (result.isConfirmed) {
+
+        Swal.fire({
+          title: 'Deleting...',
+          allowOutsideClick: false,
+          didOpen: () => Swal.showLoading()
+        });
+
+        this.paymentsService.delete(id)
+          .then(() => {
+
+            Swal.fire({
+              icon: 'success',
+              title: 'Deleted!',
+              timer: 1200,
+              showConfirmButton: false
+            });
+
+            this.loadPayments();
+          })
+          .catch(err => {
+            console.error(err);
+
+            Swal.fire({
+              icon: 'error',
+              title: 'Delete Failed'
+            });
+          });
+      }
+    });
   }
 
   getEventName(eventId: string): string {

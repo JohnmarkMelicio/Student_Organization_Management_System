@@ -4,75 +4,107 @@
 
   <form #studentForm="ngForm" (ngSubmit)="createStudent(studentForm)">
 
-    <label>Student ID</label>
-    <input
-      type="text"
-      name="studentID"
-      [(ngModel)]="studentID"
-      required
-      pattern="[0-9]*"
-      inputmode="numeric"
-      placeholder="Enter Student ID"
-    >
+    <!-- STUDENT ID -->
+    <div class="form-group">
+      <label>Student ID</label>
+      <input
+        type="text"
+        name="studentID"
+        [(ngModel)]="studentID"
+        required
+        pattern="[0-9]*"
+        inputmode="numeric"
+        placeholder="Enter Student ID"
+      >
+    </div>
 
-    <label>First Name</label>
-    <input
-      type="text"
-      name="firstName"
-      [(ngModel)]="firstName"
-      required
-      placeholder="Enter First Name"
-    >
+    <!-- NAME ROW -->
+    <div class="form-row">
 
-    <label>Middle Name</label>
-    <input
-      type="text"
-      name="middleName"
-      [(ngModel)]="middleName"
-      required
-      placeholder="Enter Middle Name"
-    >
+      <div class="form-group">
+        <label>First Name</label>
+        <input
+          type="text"
+          name="firstName"
+          [(ngModel)]="firstName"
+          required
+          placeholder="Enter First Name"
+        >
+      </div>
 
-    <label>Last Name</label>
-    <input
-      type="text"
-      name="lastName"
-      [(ngModel)]="lastName"
-      required
-      placeholder="Enter Last Name"
-    >
+      <div class="form-group">
+        <label>Middle Name</label>
+        <input
+          type="text"
+          name="middleName"
+          [(ngModel)]="middleName"
+          placeholder="Enter Middle Name"
+        >
+      </div>
 
-    <label>Program</label>
-    <input
-      type="text"
-      name="program"
-      [(ngModel)]="program"
-      required
-      placeholder="Enter Program (e.g. BSIT)"
-    >
+    </div>
 
-    <label>Email</label>
-    <input
-      type="email"
-      name="email"
-      [(ngModel)]="email"
-      required
-      placeholder="Enter Email"
-    >
+    <!-- LAST NAME -->
+    <div class="form-group">
+      <label>Last Name</label>
+      <input
+        type="text"
+        name="lastName"
+        [(ngModel)]="lastName"
+        required
+        placeholder="Enter Last Name"
+      >
+    </div>
 
-    <label>Password</label>
-    <input
-      type="password"
-      name="password"
-      [(ngModel)]="password"
-      required
-      minlength="6"
-      placeholder="Enter Password"
-    >
+    <!-- PROGRAM -->
+    <div class="form-group">
+      <label>Program</label>
+      <input
+        type="text"
+        name="program"
+        [(ngModel)]="program"
+        required
+        placeholder="Enter Program (e.g. BSIT)"
+      >
+    </div>
 
-    <button type="submit">
-      Create Account
-    </button>
+    <!-- EMAIL -->
+    <div class="form-group">
+      <label>Email</label>
+      <input
+        type="email"
+        name="email"
+        [(ngModel)]="email"
+        required
+        placeholder="Enter Email"
+      >
+    </div>
+
+    <!-- PASSWORD -->
+    <div class="form-group">
+      <label>Password</label>
+      <input
+        type="password"
+        name="password"
+        [(ngModel)]="password"
+        required
+        minlength="6"
+        placeholder="Enter Password"
+      >
+    </div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="form-actions">
+
+      <button type="submit" class="btn primary">
+        Create Account
+      </button>
+
+      <button type="button" class="btn secondary" (click)="cancel(studentForm)">
+        Cancel
+      </button>
+
+    </div>
 
   </form>
 

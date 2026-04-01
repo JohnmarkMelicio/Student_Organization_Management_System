@@ -18,7 +18,7 @@ export class AdminCreateAccount {
   firstName = '';
   middleName = '';
   lastName = '';
-  program = ''; 
+  program = '';
   email = '';
   password = '';
 
@@ -30,13 +30,11 @@ export class AdminCreateAccount {
   async createStudent(form: NgForm) {
 
     if (form.invalid) {
-
       Swal.fire({
         title: 'Incomplete Form',
         text: 'Please fill in all fields correctly.',
         icon: 'warning'
       });
-
       return;
     }
 
@@ -55,7 +53,7 @@ export class AdminCreateAccount {
         firstName: this.firstName,
         middleName: this.middleName,
         lastName: this.lastName,
-        program: this.program, 
+        program: this.program,
         email: this.email,
         role: 'student'
       });
@@ -77,6 +75,32 @@ export class AdminCreateAccount {
       });
 
     }
+
+  }
+
+  cancel(form: NgForm) {
+
+    Swal.fire({
+      title: 'Cancel?',
+      text: 'All entered data will be cleared.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, cancel',
+      cancelButtonText: 'Keep editing'
+    }).then((result) => {
+
+      if (result.isConfirmed) {
+        form.reset();
+
+        Swal.fire({
+          icon: 'info',
+          title: 'Cancelled',
+          timer: 1000,
+          showConfirmButton: false
+        });
+      }
+
+    });
 
   }
 

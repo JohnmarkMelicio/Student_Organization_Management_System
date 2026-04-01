@@ -59,42 +59,50 @@ export class DashboardComponent implements OnInit {
 
   loadStats(): void {
 
-    this.orgService.getAll().subscribe(res => {
-      this.organizationsCount = res.length;
-    });
+  // ORGANIZATIONS
+  this.orgService.getAll().subscribe(res => {
+    this.organizationsCount = res.length;
+  });
 
-    this.eventService.getAll().subscribe(res => {
+  // EVENTS
+  this.eventService.getAll().subscribe((res: any[]) => {
 
-      this.eventsCount = res.length;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-      const today = new Date();
-      today.setHours(0,0,0,0); 
+    // ✅ COMPLETED EVENTS
+    this.completedEvents = res
+      .filter(e => {
+        const eventDate = new Date(e.date);
+        const status = e.status?.toLowerCase();
 
-      this.completedEvents = res
-        .filter((e: any) => {
-          const eventDate = new Date(e.date);
-          const isCompletedStatus = e.status?.toLowerCase() === 'completed';
-          const isPastDate = eventDate < today;
+        return status === 'completed' || eventDate < today;
+      })
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .slice(0, 5);
 
-          return isCompletedStatus || isPastDate;
-        })
-        .slice(0, 5);
+    // ✅ UPCOMING EVENTS (FIXED)
+    this.upcomingEvents = res
+      .filter(e => {
+        const eventDate = new Date(e.date);
+        const status = e.status?.toLowerCase();
 
-      this.upcomingEvents = res
-        .filter((e: any) => {
-          const eventDate = new Date(e.date);
-          const isCompletedStatus = e.status?.toLowerCase() === 'completed';
+        return status !== 'completed' && eventDate >= today;
+      })
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+      .slice(0, 3);
 
-          return !isCompletedStatus && eventDate >= today;
-        })
-        .slice(0, 3);
+    // ✅ COUNT ONLY UPCOMING (FIX)
+    this.eventsCount = this.upcomingEvents.length;
 
-    });
+  });
 
-    this.attendanceService.getAll().subscribe(res => {
-      this.attendanceCount = res.length;
-    });
+  // ATTENDANCE
+  this.attendanceService.getAll().subscribe(res => {
+    this.attendanceCount = res.length;
+  });
 
-    this.membersCount = 0;
-  }
+  // MEMBERS (placeholder for now)
+  this.membersCount = 0;
+}
 }
