@@ -52,13 +52,13 @@
         <h3>Upcoming Events</h3>
       </div>
 
-      <div *ngFor="let event of upcomingEvents" class="event-item">
+      <div *ngFor="let event of upcomingEvents; trackBy: trackByEvent" class="event-item">
 
         <div class="event-details">
           <strong>{{ event.name }}</strong>
 
           <div class="event-meta">
-            {{ event.date }}
+            {{ event.date | date:'mediumDate' }}
             <span *ngIf="event.location">• {{ event.location }}</span>
           </div>
         </div>
@@ -87,13 +87,13 @@
         <h3>Recent Activity</h3>
       </div>
 
-      <div *ngFor="let act of completedEvents" class="activity-item">
+      <div *ngFor="let act of completedEvents; trackBy: trackByEvent" class="activity-item">
 
         <div>
           <strong>{{ act.name }}</strong>
 
           <div class="activity-meta">
-            Scheduled on {{ act.date }}
+            Scheduled on {{ act.date | date:'mediumDate' }}
           </div>
         </div>
 

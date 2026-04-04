@@ -75,12 +75,11 @@
   color: #f59e0b;
 }
 
-/* 🔥 BALANCED GRID */
+/* GRID */
 .content-grid {
   display: grid;
   grid-template-columns: 1.5fr 1fr;
   gap: 20px;
-  align-items: stretch;
 }
 
 /* CARD */
@@ -89,10 +88,8 @@
   border-radius: 16px;
   padding: 20px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.06);
-
   display: flex;
   flex-direction: column;
-  height: 100%;
 }
 
 /* HEADER */
@@ -130,7 +127,7 @@
   margin-top: 3px;
 }
 
-/* STATUS TAG */
+/* TAG */
 .tag {
   font-size: 11px;
   padding: 5px 12px;
@@ -138,7 +135,6 @@
   font-weight: 500;
 }
 
-/* STATUS COLORS */
 .tag.upcoming {
   background: #dbeafe;
   color: #1d4ed8;
@@ -164,16 +160,6 @@
   border-bottom: none;
 }
 
-.activity-item strong {
-  font-size: 14px;
-  color: #222;
-}
-
-.activity-meta {
-  font-size: 12px;
-  color: #777;
-}
-
 /* EMPTY */
 .empty {
   text-align: center;
@@ -182,7 +168,7 @@
   color: #999;
 }
 
-/* 📱 RESPONSIVE */
+/* RESPONSIVE */
 @media (max-width: 900px) {
   .content-grid {
     grid-template-columns: 1fr;

@@ -3,8 +3,7 @@ import { CommonModule } from '@angular/common';
 import { OrganizationService } from '../../../services/organization.service';
 import { EventsService } from '../../../services/events.service';
 import { AttendanceService } from '../../../services/attendance.service';
-import { Organization } from '../../../models/organization.model';
-import { Event } from '../../../models/event.model';
+import { MembersService } from '../../../services/members.service';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../../services/auth.service';
 
@@ -22,8 +21,9 @@ export class DashboardComponent implements OnInit {
   attendanceCount = 0;
   membersCount = 0;
 
-  upcomingEvents: Event[] = [];
-  completedEvents: Event[] = [];
+  upcomingEvents: any[] = [];
+  ongoingEvents: any[] = [];
+  completedEvents: any[] = [];
 
   user: any;
 
@@ -31,7 +31,8 @@ export class DashboardComponent implements OnInit {
     private orgService: OrganizationService,
     private eventService: EventsService,
     private attendanceService: AttendanceService,
-    private authService: AuthService
+    private authService: AuthService,
+    private membersService: MembersService
   ) {}
 
   ngOnInit(): void {
@@ -59,50 +60,60 @@ export class DashboardComponent implements OnInit {
 
   loadStats(): void {
 
-  // ORGANIZATIONS
-  this.orgService.getAll().subscribe(res => {
-    this.organizationsCount = res.length;
-  });
+    this.orgService.getAll().subscribe(res => {
+      this.organizationsCount = res.length;
+    });
 
-  // EVENTS
-  this.eventService.getAll().subscribe((res: any[]) => {
+    this.eventService.getAll().subscribe((res: any[]) => {
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
 
-    // ✅ COMPLETED EVENTS
-    this.completedEvents = res
-      .filter(e => {
+      this.upcomingEvents = [];
+      this.ongoingEvents = [];
+      this.completedEvents = [];
+
+      res.forEach(e => {
+
         const eventDate = new Date(e.date);
-        const status = e.status?.toLowerCase();
+        eventDate.setHours(0, 0, 0, 0);
 
-        return status === 'completed' || eventDate < today;
-      })
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-      .slice(0, 5);
+        if (eventDate.getTime() === today.getTime()) {
+          this.ongoingEvents.push(e);
+        } 
+        else if (eventDate > today) {
+          this.upcomingEvents.push(e);
+        } 
+        else {
+          this.completedEvents.push(e);
+        }
 
-    // ✅ UPCOMING EVENTS (FIXED)
-    this.upcomingEvents = res
-      .filter(e => {
-        const eventDate = new Date(e.date);
-        const status = e.status?.toLowerCase();
+      });
 
-        return status !== 'completed' && eventDate >= today;
-      })
-      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-      .slice(0, 3);
+      this.upcomingEvents.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      this.ongoingEvents.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      this.completedEvents.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-    // ✅ COUNT ONLY UPCOMING (FIX)
-    this.eventsCount = this.upcomingEvents.length;
+      this.upcomingEvents = this.upcomingEvents.slice(0, 3);
+      this.ongoingEvents = this.ongoingEvents.slice(0, 3);
+      this.completedEvents = this.completedEvents.slice(0, 5);
 
-  });
+      this.eventsCount = this.upcomingEvents.length;
 
-  // ATTENDANCE
-  this.attendanceService.getAll().subscribe(res => {
-    this.attendanceCount = res.length;
-  });
+    });
 
-  // MEMBERS (placeholder for now)
-  this.membersCount = 0;
-}
+    this.attendanceService.getAll().subscribe(res => {
+      this.attendanceCount = res.length;
+    });
+
+    this.membersService.getAll().subscribe(members => {
+      this.membersCount = members.length;
+    });
+
+  }
+
+  trackByEvent(index: number, item: any) {
+    return item.id || index;
+  }
+
 }
