@@ -17,13 +17,24 @@ export class Login {
   studentID = '';
   password = '';
   rememberMe = false;
+  loading = false;
 
   constructor(
     private router: Router,
     private authService: AuthService
   ) {}
 
+  showPassword = false;
+
+  togglePassword() {
+  this.showPassword = !this.showPassword;
+}
+
   login() {
+
+    if (this.loading) return;
+
+    this.loading = true;
 
     this.authService.login(this.studentID, this.password)
       .then(() => {
@@ -39,6 +50,8 @@ export class Login {
           this.router.navigate(['/home/dashboard']);
         });
 
+        this.loading = false;
+
       })
       .catch(error => {
 
@@ -47,6 +60,8 @@ export class Login {
           text: error.message,
           icon: 'error'
         });
+
+        this.loading = false;
 
       });
 

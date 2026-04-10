@@ -5,7 +5,6 @@
     <h2>Welcome back, {{ user?.firstName }} {{ user?.lastName }}!</h2>
   </div>
 
-  <!-- STATS -->
   <div class="stats-grid">
 
     <div class="stat-card">
@@ -42,7 +41,6 @@
 
   </div>
 
-  <!-- CONTENT -->
   <div class="content-grid">
 
     <!-- UPCOMING EVENTS -->
@@ -87,15 +85,19 @@
         <h3>Recent Activity</h3>
       </div>
 
-      <div *ngFor="let act of completedEvents; trackBy: trackByEvent" class="activity-item">
+      <div *ngFor="let act of completedEvents; trackBy: trackByEvent" class="event-item">
 
-        <div>
+        <div class="event-details">
           <strong>{{ act.name }}</strong>
 
-          <div class="activity-meta">
+          <div class="event-meta">
             Scheduled on {{ act.date | date:'mediumDate' }}
           </div>
         </div>
+
+        <span class="tag completed">
+          Completed
+        </span>
 
       </div>
 

@@ -8,6 +8,7 @@ import { EventsComponent } from './components/pages/events/events';
 import { AttendanceComponent } from './components/pages/attendance/attendance';
 import { OrganizationDetailsComponent } from './components/pages/organization-details/organization-details';
 import { AdminCreateAccount} from './components/pages/admin-create-account/admin-create-account';
+import { ProfileComponent } from './components/pages/profile/profile';
 
 export const routes: Routes = [
 
@@ -34,7 +35,9 @@ export const routes: Routes = [
       
       { path: 'organization/:id', component: OrganizationDetailsComponent },
 
-      { path: 'organization', component: OrganizationComponent }
+      { path: 'organization', component: OrganizationComponent },
+
+      { path: 'profile', component: ProfileComponent },
 
     ]
   }

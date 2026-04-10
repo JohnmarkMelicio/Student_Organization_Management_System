@@ -1,0 +1,92 @@
+<div class="profile-container">
+
+  <!-- LEFT -->
+  <div class="profile-card">
+    <div class="avatar">
+      {{ user?.firstName?.charAt(0) }}
+    </div>
+
+    <h3>{{ user?.firstName }} {{ user?.lastName }}</h3>
+    <p class="role-badge">{{ user?.role }}</p>
+    <small class="email">{{ user?.email }}</small>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="profile-form">
+
+    <!-- BACK BUTTON -->
+    <button class="back-btn" (click)="goBack()">
+      <span class="arrow">←</span>
+      Back to Dashboard
+    </button>
+
+    <h2>Student / User Information</h2>
+
+    <div class="form-grid">
+
+      <div class="input-group">
+        <label>First Name</label>
+        <input [(ngModel)]="user.firstName"
+               [readonly]="!isAdmin && user.firstName">
+      </div>
+
+      <div class="input-group">
+        <label>Middle Name</label>
+        <input [(ngModel)]="user.middleName"
+               [readonly]="!isAdmin && user.middleName">
+      </div>
+
+      <div class="input-group">
+        <label>Last Name</label>
+        <input [(ngModel)]="user.lastName"
+               [readonly]="!isAdmin && user.lastName">
+      </div>
+
+      <div class="input-group">
+        <label>Email</label>
+        <input [(ngModel)]="user.email"
+               [readonly]="!isAdmin">
+      </div>
+
+      <div class="input-group">
+        <label>Student ID</label>
+        <input [(ngModel)]="user.studentID"
+               [readonly]="!isAdmin && user.studentID">
+      </div>
+
+      <div class="input-group">
+        <label>Course</label>
+        <input [(ngModel)]="user.program"
+               [readonly]="!isAdmin && user.program">
+      </div>
+
+      <div class="input-group">
+        <label>Year Level</label>
+        <select [(ngModel)]="user.year">
+          <option value="">Select Year Level</option>
+          <option value="1st Year">1st Year</option>
+          <option value="2nd Year">2nd Year</option>
+          <option value="3rd Year">3rd Year</option>
+          <option value="4th Year">4th Year</option>
+        </select>
+      </div>
+
+      <div class="input-group full">
+        <label>Contact Number</label>
+        <input [(ngModel)]="user.contact">
+      </div>
+
+    </div>
+
+    <!-- 🔥 IMPORTANT: OUTSIDE GRID -->
+    <div class="btn-group">
+      <button class="save-btn"
+        [disabled]="!isChanged()"
+        (click)="updateProfile()">
+        Save Changes
+      </button>
+    </div>
+
+  </div>
+
+</div>

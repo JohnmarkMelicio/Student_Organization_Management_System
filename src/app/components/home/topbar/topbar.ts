@@ -30,6 +30,10 @@ export class Topbar implements OnInit {
   toggleDropdown() {
     this.showDropdown = !this.showDropdown;
   }
+  goToProfile() {
+  this.showDropdown = false;
+  this.router.navigate(['/home/profile']);
+}
 
   logout() {
 
