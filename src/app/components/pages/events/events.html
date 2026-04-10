@@ -38,7 +38,12 @@
     </select>
 
     <label>Organization</label>
-    <input [(ngModel)]="newEvent.organization">
+    <select (change)="selectOrganization($event)">
+    <option value="">Select Organization</option>
+    <option *ngFor="let org of organizations" [value]="org.name">
+      {{ org.name }}
+    </option>
+  </select>
 
     <button (click)="addEvent()">Add Event</button>
 

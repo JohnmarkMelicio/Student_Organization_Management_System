@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EventsService } from '../../../services/events.service';
 import { AuthService } from '../../../services/auth.service';
-import Swal from 'sweetalert2'; // ✅ ADDED
+import Swal from 'sweetalert2';
+import { Firestore, collection, collectionData } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-events',
@@ -20,6 +21,9 @@ export class EventsComponent implements OnInit {
   filteredEvents: any[] = [];
   searchText: string = '';
 
+  // ✅ ADDED
+  organizations: any[] = [];
+
   editingId: string | null = null;
 
   isAdmin = false;
@@ -34,7 +38,8 @@ export class EventsComponent implements OnInit {
 
   constructor(
     private eventsService: EventsService,
-    private authService: AuthService
+    private authService: AuthService,
+    private firestore: Firestore // ✅ ADDED
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -50,6 +55,9 @@ export class EventsComponent implements OnInit {
     }
 
     this.loadEvents();
+
+    // ✅ ADDED
+    this.loadOrganizations();
   }
 
   loadEvents(): void {
@@ -62,6 +70,20 @@ export class EventsComponent implements OnInit {
       error: (err) => console.error('Failed to load events', err)
     });
 
+  }
+
+  // ✅ ADDED FUNCTION
+  loadOrganizations(): void {
+    const ref = collection(this.firestore, 'organizations');
+
+    collectionData(ref, { idField: 'id' }).subscribe((res: any) => {
+      this.organizations = res;
+    });
+  }
+
+  // ✅ ADDED FUNCTION
+  selectOrganization(event: any) {
+    this.newEvent.organization = event.target.value;
   }
 
   addEvent(): void {

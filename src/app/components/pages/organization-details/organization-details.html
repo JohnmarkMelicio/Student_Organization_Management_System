@@ -38,7 +38,10 @@
 
     <div class="officer-grid" *ngIf="members.length; else noOfficers">
       <div class="officer" *ngFor="let m of members">
-        <div class="avatar">👤</div>
+        <div class="avatar">
+        <img *ngIf="m.imageUrl; else defaultAvatar" [src]="m.imageUrl" class="avatar-img">
+        <ng-template #defaultAvatar>👤</ng-template>
+      </div>
         <p class="role">{{ m.position }}</p>
         <span class="name">{{ m.name }}</span>
       </div>
@@ -104,6 +107,7 @@
         <input placeholder="Age" [(ngModel)]="newMember.age">
         <input placeholder="Course" [(ngModel)]="newMember.course">
         <input placeholder="Year" [(ngModel)]="newMember.year">
+        <input type="file" (change)="onFileSelected($event)">
       </div>
 
       <button class="save-btn" (click)="addMember()">Add Officer</button>

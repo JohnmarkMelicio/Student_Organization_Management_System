@@ -34,6 +34,7 @@ export class OrganizationDetailsComponent {
   showOfficerModal = false;
   showEditModal = false;
   isAdmin = false;
+  selectedFileBase64: string = '';
 
   newMember: any = {
     name: '',
@@ -87,11 +88,26 @@ export class OrganizationDetailsComponent {
     const ref = collection(this.firestore, 'members');
     this.newMember.organizationId = this.organization.id;
 
+    if (this.selectedFileBase64) {
+  this.newMember.imageUrl = this.selectedFileBase64;
+  }
+
     addDoc(ref, this.newMember).then(() => {
       Swal.fire('Success', 'Officer added!', 'success');
       this.newMember = { name: '', position: '', age: '', course: '', year: '', organizationId: '' };
     });
   }
+
+  onFileSelected(event: any) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    this.selectedFileBase64 = reader.result as string;
+  };
+  reader.readAsDataURL(file);
+}
 
   deleteMember(member: any) {
     Swal.fire({
@@ -109,27 +125,59 @@ export class OrganizationDetailsComponent {
   }
 
   editMember(member: any) {
-    Swal.fire({
-      title: 'Edit Officer',
-      html: `
-        <input id="name" class="swal2-input" value="${member.name}">
-        <input id="position" class="swal2-input" value="${member.position}">
-      `,
-      preConfirm: () => {
-        return {
-          name: (document.getElementById('name') as HTMLInputElement).value,
-          position: (document.getElementById('position') as HTMLInputElement).value
-        };
-      }
-    }).then(result => {
-      if (result.isConfirmed) {
-        const ref = doc(this.firestore, `members/${member.id}`);
-        updateDoc(ref, result.value).then(() => {
-          Swal.fire('Updated!', '', 'success');
-        });
-      }
-    });
-  }
+  Swal.fire({
+    title: '<strong style="font-size:20px;">Edit Officer</strong>',
+
+    html: `
+      <div style="display:flex; flex-direction:column; gap:12px; margin-top:10px;">
+        <input id="name" class="swal2-input" placeholder="Name" value="${member.name}">
+        <input id="position" class="swal2-input" placeholder="Position" value="${member.position}">
+        <input type="file" id="image" class="swal2-file">
+      </div>
+    `,
+
+    // ✅ ADDED BUTTONS
+    showCancelButton: true,
+    confirmButtonText: 'Save',
+    cancelButtonText: 'Cancel',
+    confirmButtonColor: '#3b82f6',
+    cancelButtonColor: '#ef4444',
+
+    width: 420,
+
+    preConfirm: () => {
+      const fileInput = document.getElementById('image') as HTMLInputElement;
+      const file = fileInput.files?.[0];
+
+      return new Promise((resolve) => {
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = () => {
+            resolve({
+              name: (document.getElementById('name') as HTMLInputElement).value,
+              position: (document.getElementById('position') as HTMLInputElement).value,
+              imageUrl: reader.result
+            });
+          };
+          reader.readAsDataURL(file);
+        } else {
+          resolve({
+            name: (document.getElementById('name') as HTMLInputElement).value,
+            position: (document.getElementById('position') as HTMLInputElement).value
+          });
+        }
+      });
+    }
+
+  }).then(result => {
+    if (result.isConfirmed) {
+      const ref = doc(this.firestore, `members/${member.id}`);
+      updateDoc(ref, result.value).then(() => {
+        Swal.fire('Updated!', '', 'success');
+      });
+    }
+  });
+}
 
   openOfficerModal() {
     this.showOfficerModal = true;
