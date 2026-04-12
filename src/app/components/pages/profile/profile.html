@@ -1,20 +1,17 @@
-<div class="profile-container">
+<div class="profile-container" *ngIf="user">
 
-  <!-- LEFT -->
   <div class="profile-card">
     <div class="avatar">
-      {{ user?.firstName?.charAt(0) }}
+      {{ user.firstName?.charAt(0) }}
     </div>
 
-    <h3>{{ user?.firstName }} {{ user?.lastName }}</h3>
-    <p class="role-badge">{{ user?.role }}</p>
-    <small class="email">{{ user?.email }}</small>
+    <h3>{{ user.firstName }} {{ user.lastName }}</h3>
+    <p class="role-badge">{{ user.role }}</p>
+    <small class="email">{{ user.email }}</small>
   </div>
 
-  <!-- RIGHT -->
   <div class="profile-form">
 
-    <!-- BACK BUTTON -->
     <button class="back-btn" (click)="goBack()">
       <span class="arrow">←</span>
       Back to Dashboard
@@ -78,7 +75,6 @@
 
     </div>
 
-    <!-- 🔥 IMPORTANT: OUTSIDE GRID -->
     <div class="btn-group">
       <button class="save-btn"
         [disabled]="!isChanged()"

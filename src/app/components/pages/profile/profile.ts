@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
-import { Firestore, collection, query, where, getDocs, updateDoc, doc } from '@angular/fire/firestore';
+import { Firestore, updateDoc, doc } from '@angular/fire/firestore';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 
@@ -24,27 +24,30 @@ export class ProfileComponent implements OnInit {
     private authService: AuthService,
     private firestore: Firestore,
     private router: Router,
+    private zone: NgZone
   ) {}
 
-  async ngOnInit() {
+  ngOnInit() {
+    this.zone.run(() => {
+      this.loadUser();
+    });
+  }
+
+  async loadUser() {
 
     const currentUser = await this.authService.getCurrentUserData();
-
     if (!currentUser) return;
 
     this.user = { ...currentUser };
-    this.originalUser = { ...currentUser }; 
+    this.originalUser = { ...currentUser };
 
-    if (this.user?.role === 'admin') {
+    if (this.user.role === 'admin') {
       this.isAdmin = true;
     }
 
-    const usersRef = collection(this.firestore, 'users');
-    const q = query(usersRef, where('email', '==', this.user.email));
-    const snapshot = await getDocs(q);
-
-    if (!snapshot.empty) {
-      this.userDocId = snapshot.docs[0].id;
+    const result = await this.authService.getUserDocByEmail(this.user.email);
+    if (result) {
+      this.userDocId = result.id;
     }
   }
 
@@ -53,8 +56,8 @@ export class ProfileComponent implements OnInit {
   }
 
   isChanged(): boolean {
-  return JSON.stringify(this.user) !== JSON.stringify(this.originalUser);
-}
+    return JSON.stringify(this.user) !== JSON.stringify(this.originalUser);
+  }
 
   async updateProfile() {
 

@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, signOut } from '@angular/fire/auth';
+import { Injectable, inject } from '@angular/core';
+import { Auth, signInWithEmailAndPassword } from '@angular/fire/auth';
 import { Firestore, collection, query, where, getDocs } from '@angular/fire/firestore';
 
 @Injectable({
@@ -7,37 +7,43 @@ import { Firestore, collection, query, where, getDocs } from '@angular/fire/fire
 })
 export class AuthService {
 
-  constructor(
-    private auth: Auth,
-    private firestore: Firestore
-  ) {}
+  private auth = inject(Auth);
+  private firestore = inject(Firestore);
 
   async getCurrentUserData() {
 
     const currentUser = this.auth.currentUser;
-
     if (!currentUser) return null;
 
     const email = currentUser.email;
 
     const usersRef = collection(this.firestore, 'users');
     const q = query(usersRef, where('email', '==', email));
-    const querySnapshot = await getDocs(q);
+    const snapshot = await getDocs(q);
 
-    if (querySnapshot.empty) return null;
+    if (snapshot.empty) return null;
 
-    return querySnapshot.docs[0].data();
+    return snapshot.docs[0].data();
   }
 
-    async login(input: string, password: string) {
+  async getUserDocByEmail(email: string) {
+    const usersRef = collection(this.firestore, 'users');
+    const q = query(usersRef, where('email', '==', email));
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) return null;
+
+    return {
+      id: snapshot.docs[0].id,
+      data: snapshot.docs[0].data()
+    };
+  }
+
+  async login(input: string, password: string) {
 
     const value = input.trim();
-
     const usersRef = collection(this.firestore, 'users');
 
-    // =========================
-    // 🔥 IF EMAIL → ADMIN ONLY
-    // =========================
     if (value.includes('@')) {
 
       const q = query(usersRef, where('email', '==', value));
@@ -56,9 +62,6 @@ export class AuthService {
       return signInWithEmailAndPassword(this.auth, value, password);
     }
 
-    // =========================
-    // 🔥 IF STUDENT ID → STUDENT ONLY
-    // =========================
     const q = query(usersRef, where('studentID', '==', value));
     const snapshot = await getDocs(q);
 
