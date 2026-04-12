@@ -31,12 +31,16 @@
     "@angular/platform-browser": "^20.3.0",
     "@angular/router": "^20.3.0",
     "@primeuix/themes": "^2.0.3",
+    "chart.js": "^4.5.1",
+    "file-saver": "^2.0.5",
     "firebase": "^11.10.0",
+    "jspdf": "^4.2.1",
     "primeicons": "^7.0.0",
     "primeng": "^20.4.0",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.26.20",
     "tslib": "^2.3.0",
+    "xlsx": "^0.18.5",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {

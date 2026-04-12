@@ -1,67 +1,91 @@
 <div class="login-container">
 
+  <!-- LEFT -->
   <div class="login-left">
 
-    <div class="logo-wrapper">
-      <img src="/images/USTPlogo.png" class="ustp-logo" alt="USTP Logo">
-    </div>
+    <div class="glass-card">
 
-    <div class="login-card">
-      <h2>Welcome Back!</h2>
+      <div class="logo-wrapper">
+        <img src="/images/USTPlogo.png" class="ustp-logo">
+      </div>
+
+      <h2>Welcome Back 👋</h2>
+      <p class="subtitle">Login to your account</p>
 
       <form (ngSubmit)="login()">
 
-        <label>Login (Admin: Email | Student: ID)</label>
+        <!-- EMAIL -->
+        <div class="field floating" [class.filled]="studentID">
+          <input
+            pInputText
+            type="text"
+            [(ngModel)]="studentID"
+            name="studentID"
+            required
+            placeholder=" "
+          />
+          <label>Admin Email or Student ID</label>
+        </div>
 
-        <input
-          type="text"
-          placeholder="Enter Email (Admin) or Student ID"
-          [(ngModel)]="studentID"
-          name="studentID"
-          required
-        >
-
-        <label>Password</label>
+        <!-- PASSWORD -->
+        <div class="field floating" [class.filled]="password">
 
         <div class="password-wrapper">
           <input
+            pInputText
             [type]="showPassword ? 'text' : 'password'"
-            placeholder="Password"
             [(ngModel)]="password"
             name="password"
+            placeholder=" "
             required
-          >
+          />
 
-          <button type="button" class="eye-btn" (click)="togglePassword()">
-          <i class="fa"
-            [class.fa-eye]="showPassword"
-            [class.fa-eye-slash]="!showPassword">
-          </i>
-        </button>
+          <i
+            class="pi"
+            [ngClass]="showPassword ? 'pi-eye' : 'pi-eye-slash'"
+            (click)="togglePassword()"
+          ></i>
         </div>
 
+        <label>Password</label>
+
+      </div>
+
+        <!-- OPTIONS -->
         <div class="options">
-          <label class="remember">
-            <input type="checkbox" [(ngModel)]="rememberMe" name="rememberMe">
-            <span>Remember me</span>
-          </label>
 
-          <a href="#">Forgot Password</a>
+          <div class="remember">
+            <p-checkbox [(ngModel)]="rememberMe" name="rememberMe" binary="true"></p-checkbox>
+            <span>Remember me</span>
+          </div>
+
+          <a href="#">Forgot?</a>
+
         </div>
 
-        <button class="login-btn" type="submit" [disabled]="loading">
-          
+        <!-- BUTTON -->
+        <button
+          pButton
+          type="submit"
+          class="login-btn"
+          [disabled]="loading"
+        >
           <span *ngIf="!loading">Login</span>
 
-          <span *ngIf="loading" class="spinner"></span>
-
+          <p-progressSpinner
+            *ngIf="loading"
+            strokeWidth="4"
+            styleClass="btn-spinner"
+          ></p-progressSpinner>
         </button>
 
       </form>
+
     </div>
 
   </div>
 
+  <!-- RIGHT -->
   <div class="login-right"></div>
 
 </div>

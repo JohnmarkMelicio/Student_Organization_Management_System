@@ -37,7 +37,6 @@
           },
 
           "configurations": {
-
             "production": {
               "fileReplacements": [
                 {
@@ -65,10 +64,9 @@
               "extractLicenses": false,
               "sourceMap": true
             }
-
           },
 
-          "defaultConfiguration": "production"
+          "defaultConfiguration": "development"
         },
 
         "serve": {
@@ -117,6 +115,6 @@
   },
 
   "cli": {
-    "analytics": "f1ff9346-3d26-496b-983e-aefba71b5b4e"
+    "analytics": false
   }
 }

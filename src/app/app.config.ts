@@ -6,6 +6,11 @@ import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 
+import { providePrimeNG } from 'primeng/config';
+
+// ✅ NEW THEME (correct package)
+import Aura from '@primeuix/themes/aura';
+
 import { environment } from '../environments/environment';
 import { routes } from './app.routes';
 
@@ -16,6 +21,13 @@ export const appConfig: ApplicationConfig = {
 
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
-    provideFirestore(() => getFirestore())
+    provideFirestore(() => getFirestore()),
+
+    // ✅ PRIME NG CONFIG (REQUIRED)
+    providePrimeNG({
+      theme: {
+        preset: Aura
+      }
+    })
   ]
 };

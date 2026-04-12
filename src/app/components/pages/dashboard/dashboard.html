@@ -1,111 +1,110 @@
 <div class="dashboard">
 
+  <!-- HEADER -->
   <div class="dashboard-header">
     <h1>Dashboard</h1>
-    <h2>Welcome back, {{ user?.firstName }} {{ user?.lastName }}!</h2>
+    <h2>Welcome back, {{ user?.firstName }} {{ user?.lastName }} 👋</h2>
   </div>
 
+  <!-- STATS -->
   <div class="stats-grid">
 
-    <div class="stat-card">
-      <div class="stat-top">
+    <p-card class="stat-card members">
+      <i class="pi pi-users"></i>
+      <div class="stat-content">
         <span>Active Members</span>
+        <h2>{{ membersCount }}</h2>
+        <p-tag value="Total members" severity="success"></p-tag>
       </div>
-      <h2>{{ membersCount }}</h2>
-      <small class="positive">↑ Total members</small>
-    </div>
+    </p-card>
 
-    <div class="stat-card">
-      <div class="stat-top">
+    <p-card class="stat-card events">
+      <i class="pi pi-calendar"></i>
+      <div class="stat-content">
         <span>Upcoming Events</span>
+        <h2>{{ eventsCount }}</h2>
+        <p-tag value="Scheduled" severity="info"></p-tag>
       </div>
-      <h2>{{ eventsCount }}</h2>
-      <small class="positive">↑ Scheduled events</small>
-    </div>
+    </p-card>
 
-    <div class="stat-card">
-      <div class="stat-top">
+    <p-card class="stat-card org">
+      <i class="pi pi-building"></i>
+      <div class="stat-content">
         <span>Total Organizations</span>
+        <h2>{{ organizationsCount }}</h2>
+        <p-tag value="Active" severity="warn"></p-tag>
       </div>
-      <h2>{{ organizationsCount }}</h2>
-      <small class="negative">Active</small>
-    </div>
+    </p-card>
 
-    <div class="stat-card">
-      <div class="stat-top">
+    <p-card class="stat-card attendance">
+      <i class="pi pi-chart-line"></i>
+      <div class="stat-content">
         <span>Attendance Records</span>
+        <h2>{{ attendanceCount }}</h2>
+        <p-tag value="Recorded" severity="secondary"></p-tag>
       </div>
-      <h2>{{ attendanceCount }}</h2>
-      <small>Recorded attendance</small>
-    </div>
+    </p-card>
 
   </div>
 
+  <!-- CHARTS -->
+  <div class="charts-grid">
+
+    <p-card>
+      <h3>Attendance Trend</h3>
+      <p-chart type="line" [data]="attendanceChartData"></p-chart>
+    </p-card>
+
+    <p-card>
+      <h3>Events Overview</h3>
+      <p-chart type="bar" [data]="eventsChartData"></p-chart>
+    </p-card>
+
+  </div>
+
+  <!-- CONTENT -->
   <div class="content-grid">
 
-    <!-- UPCOMING EVENTS -->
-    <div class="card">
+    <p-card>
+      <h3>Upcoming Events</h3>
 
-      <div class="card-header">
-        <h3>Upcoming Events</h3>
-      </div>
+      <p-table [value]="upcomingEvents" [paginator]="true" [rows]="3">
 
-      <div *ngFor="let event of upcomingEvents; trackBy: trackByEvent" class="event-item">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Event</th>
+            <th>Date</th>
+            <th>Status</th>
+          </tr>
+        </ng-template>
 
-        <div class="event-details">
+        <ng-template pTemplate="body" let-event>
+          <tr>
+            <td>{{ event.name }}</td>
+            <td>{{ event.date | date:'mediumDate' }}</td>
+            <td>
+              <p-tag value="Upcoming" severity="info"></p-tag>
+            </td>
+          </tr>
+        </ng-template>
+
+      </p-table>
+    </p-card>
+
+    <p-card>
+      <h3>Recent Activity</h3>
+
+      <p-timeline [value]="completedEvents">
+        <ng-template pTemplate="content" let-event>
           <strong>{{ event.name }}</strong>
-
           <div class="event-meta">
             {{ event.date | date:'mediumDate' }}
-            <span *ngIf="event.location">• {{ event.location }}</span>
           </div>
-        </div>
+          <p-tag value="Completed" severity="success"></p-tag>
+        </ng-template>
+      </p-timeline>
 
-        <span class="tag"
-              [ngClass]="{
-                'upcoming': event.status === 'Upcoming',
-                'ongoing': event.status === 'Ongoing',
-                'completed': event.status === 'Completed'
-              }">
-          {{ event.status || 'Event' }}
-        </span>
-
-      </div>
-
-      <div *ngIf="upcomingEvents.length === 0" class="empty">
-        No upcoming events.
-      </div>
-
-    </div>
-
-    <!-- RECENT ACTIVITY -->
-    <div class="card">
-
-      <div class="card-header">
-        <h3>Recent Activity</h3>
-      </div>
-
-      <div *ngFor="let act of completedEvents; trackBy: trackByEvent" class="event-item">
-
-        <div class="event-details">
-          <strong>{{ act.name }}</strong>
-
-          <div class="event-meta">
-            Scheduled on {{ act.date | date:'mediumDate' }}
-          </div>
-        </div>
-
-        <span class="tag completed">
-          Completed
-        </span>
-
-      </div>
-
-      <div *ngIf="completedEvents.length === 0" class="empty">
-        No recent activity.
-      </div>
-
-    </div>
+    </p-card>
 
   </div>
 

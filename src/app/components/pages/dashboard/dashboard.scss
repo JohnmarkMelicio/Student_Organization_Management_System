@@ -1,19 +1,17 @@
 .dashboard {
   padding: 25px;
+  background: #f5f7fb;
 }
 
 /* HEADER */
 .dashboard-header h1 {
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 700;
   color: #0d2c6c;
-  margin-bottom: 5px;
 }
 
 .dashboard-header h2 {
-  font-size: 16px;
-  color: #555;
-  font-weight: 400;
+  color: #64748b;
   margin-bottom: 20px;
 }
 
@@ -21,145 +19,66 @@
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 18px;
+  gap: 20px;
   margin-bottom: 25px;
 }
 
 .stat-card {
-  background: #ffffff;
-  padding: 18px;
-  border-radius: 14px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.05);
-  transition: all 0.25s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.stat-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 4px;
-  background: linear-gradient(90deg, #0d2c6c, #123d8c);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  transition: 0.3s;
 }
 
 .stat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  transform: translateY(-5px);
 }
 
-.stat-top span {
-  font-size: 13px;
-  color: #777;
-}
-
-.stat-card h2 {
+.stat-card i {
   font-size: 28px;
-  font-weight: 700;
-  color: #0d2c6c;
-  margin: 8px 0;
+  padding: 14px;
+  border-radius: 12px;
+  color: #fff;
 }
 
-.stat-card small {
-  font-size: 12px;
-  color: #888;
+/* COLORS */
+.members i { background: #22c55e; }
+.events i { background: #3b82f6; }
+.org i { background: #f59e0b; }
+.attendance i { background: #6366f1; }
+
+/* CHARTS */
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 25px;
 }
 
-.stat-card .positive {
-  color: #16a34a;
-}
-
-.stat-card .negative {
-  color: #f59e0b;
-}
-
-/* GRID */
+/* CONTENT */
 .content-grid {
   display: grid;
   grid-template-columns: 1.5fr 1fr;
   gap: 20px;
 }
 
-/* CARD */
-.card {
-  background: #ffffff;
+:host ::ng-deep .p-card {
   border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
-  display: flex;
-  flex-direction: column;
-}
-
-/* HEADER */
-.card-header h3 {
-  font-size: 18px;
-  color: #0d2c6c;
-  margin-bottom: 15px;
-}
-
-/* EVENT ITEM */
-.event-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px;
-  border-radius: 12px;
-  background: #f9fbff;
-  margin-bottom: 12px;
-  transition: all 0.2s ease;
-}
-
-.event-item:hover {
-  background: #eef4ff;
-  transform: translateY(-2px);
-}
-
-.event-details strong {
-  font-size: 15px;
-  color: #222;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
 }
 
 .event-meta {
   font-size: 12px;
   color: #777;
-  margin-top: 3px;
-}
-
-/* TAG */
-.tag {
-  font-size: 11px;
-  padding: 5px 12px;
-  border-radius: 999px;
-  font-weight: 500;
-}
-
-.tag.upcoming {
-  background: #dbeafe;
-  color: #1d4ed8;
-}
-
-.tag.ongoing {
-  background: #fde68a;
-  color: #92400e;
-}
-
-.tag.completed {
-  background: #dcfce7;
-  color: #166534;
-}
-
-/* EMPTY */
-.empty {
-  text-align: center;
-  padding: 20px;
-  font-size: 13px;
-  color: #999;
 }
 
 /* RESPONSIVE */
 @media (max-width: 900px) {
+  .charts-grid,
   .content-grid {
     grid-template-columns: 1fr;
   }

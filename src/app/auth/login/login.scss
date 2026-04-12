@@ -1,110 +1,98 @@
+/* CONTAINER */
 .login-container {
   display: flex;
-  width: 100%;
   height: 100vh;
+  width: 100%;
+  background: linear-gradient(135deg, #eef2ff, #f8fafc);
   overflow: hidden;
-  background: #f5f7fb;
 }
 
+/* LEFT */
 .login-left {
   width: 45%;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.logo-wrapper {
-  margin-bottom: 18px;
-}
-
-.ustp-logo {
-  width: 110px;
-  display: block;
-  margin: auto;
-  background: transparent;
-  mix-blend-mode: multiply;
-  object-fit: contain;
-}
-
-.login-card {
-  background: #ffffff;
-  padding: 35px;
+/* GLASS CARD */
+.glass-card {
   width: 360px;
-  border-radius: 18px;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
-}
+  padding: 40px 35px;
+  border-radius: 20px;
 
-.login-card h2 {
-  color: #0d2c6c;
-  margin-bottom: 15px;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
 
-.login-card label {
-  font-size: 13px;
-  font-weight: 600;
-  color: #555;
+/* LOGO */
+.logo-wrapper {
+  margin-bottom: 10px;
 }
 
-/* INPUT */
-.login-card input {
-  width: 100%;
-  height: 42px;
-  padding: 10px 12px;
-  margin: 6px 0 16px;
-  border-radius: 10px;
-  border: 1px solid #d1d5db;
-  font-size: 14px;
-  transition: all 0.2s ease;
+.ustp-logo {
+  width: 90px;
+  mix-blend-mode: multiply;
 }
 
-.login-card input:focus {
-  border-color: #0d2c6c;
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(13, 44, 108, 0.1);
-}
-
-/* PASSWORD */
-.password-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.password-wrapper input {
-  padding-right: 45px;
-}
-
-/* PERFECT CENTER ICON */
-.eye-btn {
-  position: absolute;
-  right: 12px;
-  top: 0;
-  bottom: 0;
-  margin: auto;
-
-  width: 28px;
-  height: 28px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background: transparent;
-  border: none;
-  cursor: pointer;
-}
-
-.eye-btn i {
-  font-size: 15px;
-  color: #555;
-  transition: 0.2s;
-  line-height: 1;
-}
-
-.eye-btn:hover i {
+/* TITLE */
+.glass-card h2 {
   color: #0d2c6c;
+  margin: 10px 0 5px;
+}
+
+.subtitle {
+  font-size: 13px;
+  color: #777;
+  margin-bottom: 20px;
+}
+
+/* FIELD */
+.field {
+  position: relative;
+  margin-bottom: 18px;
+}
+
+/* INPUT FIX */
+:host ::ng-deep .p-inputtext,
+:host ::ng-deep .p-password input {
+  width: 100% !important;
+  height: 48px !important;
+  border-radius: 12px !important;
+  padding: 0 12px !important;
+  font-size: 14px;
+}
+
+/* PASSWORD WIDTH FIX */
+:host ::ng-deep .p-password {
+  width: 100%;
+}
+
+/* FLOAT LABEL */
+.field label {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  color: #777;
+  pointer-events: none;
+  transition: 0.2s ease;
+}
+
+/* ACTIVE LABEL (FIXED) */
+.field:focus-within label,
+.field.filled label {
+  top: -8px;
+  font-size: 11px;
+  color: #0d2c6c;
+  background: white;
+  padding: 0 5px;
+  border-radius: 5px;
 }
 
 /* OPTIONS */
@@ -113,20 +101,7 @@
   justify-content: space-between;
   align-items: center;
   font-size: 12px;
-  margin-bottom: 18px;
-}
-
-.remember {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  white-space: nowrap;
-}
-
-.remember input {
-  margin: 0;
-  transform: scale(1.1);
-  cursor: pointer;
+  margin-bottom: 20px;
 }
 
 .options a {
@@ -138,54 +113,65 @@
   text-decoration: underline;
 }
 
+/* REMEMBER */
+.remember {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 /* BUTTON */
 .login-btn {
   width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 25px;
-  background: linear-gradient(135deg, #f4b400, #f59e0b);
-  color: #fff;
-  font-size: 15px;
+  height: 48px;
+  border-radius: 25px !important;
   font-weight: 600;
-  cursor: pointer;
-  transition: all 0.25s ease;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  border: none;
+
+  transition: 0.25s;
 }
 
 .login-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(244, 180, 0, 0.4);
-}
-
-.login-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
+  box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
 }
 
 /* SPINNER */
-.spinner {
-  width: 18px;
-  height: 18px;
-  border: 3px solid #fff;
-  border-top: 3px solid transparent;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+.btn-spinner {
+  width: 20px !important;
+  height: 20px !important;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* RIGHT SIDE */
+/* RIGHT IMAGE */
 .login-right {
   width: 100%;
   height: 100vh;
   background: url("/images/USTP.jpg") center/cover no-repeat;
   border-radius: 65% 0% 0% 69% / 100% 10% 10% 100%;
+  position: relative;
+}
+
+/* OVERLAY */
+
+/* PASSWORD WRAPPER */
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* ICON */
+.password-wrapper i {
+  position: absolute;
+  right: 12px;
+  cursor: pointer;
+  color: #777;
+  font-size: 16px;
+  transition: 0.2s;
+}
+
+.password-wrapper i:hover {
+  color: #0d2c6c;
 }

@@ -1,16 +1,34 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+// 🔥 PrimeNG
+import { CardModule } from 'primeng/card';
+import { TableModule } from 'primeng/table';
+import { TagModule } from 'primeng/tag';
+import { TimelineModule } from 'primeng/timeline';
+import { ChartModule } from 'primeng/chart';
+
+// Services
 import { OrganizationService } from '../../../services/organization.service';
 import { EventsService } from '../../../services/events.service';
 import { AttendanceService } from '../../../services/attendance.service';
 import { MembersService } from '../../../services/members.service';
-import Swal from 'sweetalert2';
 import { AuthService } from '../../../services/auth.service';
+
+// Alert
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    CardModule,
+    TableModule,
+    TagModule,
+    TimelineModule,
+    ChartModule
+  ],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss']
 })
@@ -22,10 +40,16 @@ export class DashboardComponent implements OnInit {
   membersCount = 0;
 
   upcomingEvents: any[] = [];
-  ongoingEvents: any[] = [];
   completedEvents: any[] = [];
 
   user: any;
+
+  // 📊 Charts
+  attendanceChartData: any;
+  attendanceChartOptions: any;
+
+  eventsChartData: any;
+  eventsChartOptions: any;
 
   constructor(
     private orgService: OrganizationService,
@@ -36,11 +60,17 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loadUser();
+    this.showWelcomeToast();
+    this.loadStats();
+    this.initCharts();
+  }
 
-    this.authService.getCurrentUserData().then((data: any) => {
-      this.user = data;
-    });
+  async loadUser() {
+    this.user = await this.authService.getCurrentUserData();
+  }
 
+  showWelcomeToast() {
     const justLoggedIn = sessionStorage.getItem('justLoggedIn');
 
     if (justLoggedIn) {
@@ -54,8 +84,6 @@ export class DashboardComponent implements OnInit {
 
       sessionStorage.removeItem('justLoggedIn');
     }
-
-    this.loadStats();
   }
 
   loadStats(): void {
@@ -70,50 +98,67 @@ export class DashboardComponent implements OnInit {
       today.setHours(0, 0, 0, 0);
 
       this.upcomingEvents = [];
-      this.ongoingEvents = [];
       this.completedEvents = [];
 
       res.forEach(e => {
-
         const eventDate = new Date(e.date);
         eventDate.setHours(0, 0, 0, 0);
 
-        if (eventDate.getTime() === today.getTime()) {
-          this.ongoingEvents.push(e);
-        } 
-        else if (eventDate > today) {
+        if (eventDate > today) {
           this.upcomingEvents.push(e);
-        } 
-        else {
+        } else {
           this.completedEvents.push(e);
         }
-
       });
 
-      this.upcomingEvents.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-      this.ongoingEvents.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-      this.completedEvents.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
-      this.upcomingEvents = this.upcomingEvents.slice(0, 3);
-      this.ongoingEvents = this.ongoingEvents.slice(0, 3);
+      this.upcomingEvents = this.upcomingEvents.slice(0, 5);
       this.completedEvents = this.completedEvents.slice(0, 5);
 
       this.eventsCount = this.upcomingEvents.length;
-
     });
 
     this.attendanceService.getAll().subscribe(res => {
       this.attendanceCount = res.length;
     });
 
-    this.membersService.getAll().subscribe(members => {
-      this.membersCount = members.length;
+    this.membersService.getAll().subscribe(res => {
+      this.membersCount = res.length;
     });
+  }
 
+  initCharts() {
+    this.attendanceChartData = {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+      datasets: [
+        {
+          label: 'Attendance',
+          data: [12, 19, 8, 15, 20],
+          fill: true,
+          tension: 0.4
+        }
+      ]
+    };
+
+    this.attendanceChartOptions = {
+      plugins: { legend: { display: false } }
+    };
+
+    this.eventsChartData = {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr'],
+      datasets: [
+        {
+          label: 'Events',
+          data: [2, 5, 3, 6]
+        }
+      ]
+    };
+
+    this.eventsChartOptions = {
+      plugins: { legend: { display: false } }
+    };
   }
 
   trackByEvent(index: number, item: any) {
     return item.id || index;
   }
-
 }

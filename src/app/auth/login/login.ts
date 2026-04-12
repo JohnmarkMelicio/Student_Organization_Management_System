@@ -5,10 +5,24 @@ import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../services/auth.service';
 
+import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
+import { ButtonModule } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [
+    FormsModule,
+    CommonModule,
+    InputTextModule,
+    PasswordModule,
+    ButtonModule,
+    CheckboxModule,
+    ProgressSpinnerModule
+  ],
   templateUrl: './login.html',
   styleUrls: ['./login.scss']
 })
@@ -27,8 +41,8 @@ export class Login {
   showPassword = false;
 
   togglePassword() {
-  this.showPassword = !this.showPassword;
-}
+    this.showPassword = !this.showPassword;
+  }
 
   login() {
 
