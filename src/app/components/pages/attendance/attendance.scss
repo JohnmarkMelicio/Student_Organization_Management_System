@@ -1,10 +1,10 @@
 .attendance-card {
   border-radius: 18px;
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.06);
-  padding: 10px;
+  padding: 15px;
+  background: #ffffff;
 }
 
-/* HEADER */
 .header {
   display: flex;
   justify-content: space-between;
@@ -23,7 +23,6 @@
   color: #6b7280;
 }
 
-/* TOOLBAR */
 .toolbar {
   display: flex;
   justify-content: space-between;
@@ -43,7 +42,6 @@
   display: flex;
 }
 
-/* INPUTS */
 .field {
   min-width: 180px;
 }
@@ -52,20 +50,17 @@
   min-width: 140px;
 }
 
-/* ADD BUTTON */
 .add-btn {
   background: linear-gradient(135deg, #0d2c6c, #123d8c);
   border: none;
+  border-radius: 10px;
+  transition: all 0.25s ease;
 }
 
 .add-btn:hover {
   transform: translateY(-1px);
   box-shadow: 0 6px 15px rgba(13, 44, 108, 0.25);
 }
-
-/* ========================= */
-/* 🔍 PREMIUM SEARCH */
-/* ========================= */
 
 .search-wrapper {
   position: relative;
@@ -79,25 +74,23 @@
   transform: translateY(-50%);
   color: #9ca3af;
   font-size: 14px;
-  transition: 0.2s;
+  pointer-events: none;
 }
 
 .search-wrapper input {
   width: 100%;
   padding: 10px 14px 10px 36px;
-  border-radius: 999px; /* 🔥 pill shape */
-  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
   background: #f9fafb;
   font-size: 14px;
   transition: all 0.25s ease;
 }
 
-/* HOVER */
 .search-wrapper input:hover {
-  border-color: #cbd5e1;
+  border-color: #9ca3af;
 }
 
-/* FOCUS */
 .search-wrapper input:focus {
   outline: none;
   background: #ffffff;
@@ -105,37 +98,59 @@
   box-shadow: 0 0 0 3px rgba(13, 44, 108, 0.08);
 }
 
-/* ICON ACTIVE */
 .search-wrapper:focus-within i {
   color: #0d2c6c;
 }
 
-/* ========================= */
-/* TABLE */
-/* ========================= */
-
-:host ::ng-deep .custom-table {
+:host ::ng-deep .p-datatable {
+  width: 100%;
   border-radius: 14px;
   overflow: hidden;
+  border: 1px solid #e5e7eb;
+}
+
+:host ::ng-deep .p-datatable-wrapper {
+  overflow-x: hidden !important;
+}
+
+:host ::ng-deep .p-datatable table {
+  width: 100% !important;
+  table-layout: auto !important;
 }
 
 :host ::ng-deep .p-datatable-thead > tr > th {
-  background: #f8fafc;
+  background: #f1f5f9;
   font-weight: 600;
-  font-size: 13px;
+  font-size: 13.5px;
+  color: #334155;
+  padding: 12px;
+  border-bottom: 1px solid #e2e8f0;
+  white-space: nowrap;
 }
 
 :host ::ng-deep .p-datatable-tbody > tr {
   transition: all 0.2s ease;
 }
 
-:host ::ng-deep .p-datatable-tbody > tr:hover {
-  background: #f9fbff;
+:host ::ng-deep .p-datatable-tbody > tr:nth-child(even) {
+  background: #f9fafb;
 }
 
-/* CELLS */
+:host ::ng-deep .p-datatable-tbody > tr:hover {
+  background: #eef2ff;
+}
+
+:host ::ng-deep .p-datatable-tbody > tr > td {
+  padding: 12px;
+  font-size: 14px;
+  color: #1e293b;
+  border-bottom: 1px solid #f1f5f9;
+  white-space: normal;
+  word-break: break-word;
+}
+
 .student-id {
-  font-weight: 500;
+  font-weight: 600;
   color: #111827;
 }
 
@@ -153,32 +168,38 @@
   color: #4b5563;
 }
 
-/* ACTIONS */
 .actions {
   display: flex;
-  gap: 6px;
+  gap: 8px;
+  align-items: center;
 }
 
 .edit-btn {
   color: #0d6efd;
+  transition: 0.2s;
+}
+
+.edit-btn:hover {
+  color: #084298;
+  transform: scale(1.1);
 }
 
 .delete-btn {
   color: #dc3545;
+  transition: 0.2s;
 }
 
-/* TAG */
+.delete-btn:hover {
+  color: #a71d2a;
+  transform: scale(1.1);
+}
+
 :host ::ng-deep .p-tag {
   font-weight: 500;
   border-radius: 6px;
 }
 
-/* ========================= */
-/* RESPONSIVE */
-/* ========================= */
-
 @media (max-width: 768px) {
-
   .search-wrapper {
     width: 100%;
   }
@@ -187,5 +208,4 @@
     flex-direction: column;
     align-items: flex-start;
   }
-
 }

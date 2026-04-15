@@ -1,14 +1,17 @@
 .create-student-container {
-  max-width: 650px;
+  max-width: 600px;
   margin: 40px auto;
-  padding: 25px;
-  border-radius: 18px;
-  box-shadow: 0 12px 35px rgba(0,0,0,0.06);
+  padding: 28px;
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+  border: 1px solid #e5e7eb;
 }
 
 /* HEADER */
 .header {
   text-align: center;
+  margin-bottom: 10px;
 
   h2 {
     margin: 0;
@@ -23,12 +26,27 @@
   }
 }
 
+/* SECTION */
+.section {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 14px;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+
+  h4 {
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #0d2c6c;
+    font-weight: 600;
+  }
+}
+
 /* FORM */
 form {
   display: flex;
   flex-direction: column;
   gap: 14px;
-  margin-top: 15px;
 }
 
 /* GROUP */
@@ -39,16 +57,9 @@ form {
   label {
     font-size: 13px;
     font-weight: 500;
-    color: #555;
+    color: #475569;
     margin-bottom: 5px;
   }
-}
-
-/* INPUT */
-:host ::ng-deep .p-inputtext,
-:host ::ng-deep .p-password input {
-  padding: 11px;
-  border-radius: 10px;
 }
 
 /* ROW */
@@ -59,6 +70,38 @@ form {
   .form-group {
     flex: 1;
   }
+}
+
+/* INPUT */
+:host ::ng-deep .p-inputtext,
+:host ::ng-deep .p-password input {
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  transition: all 0.25s ease;
+  background: #ffffff;
+}
+
+:host ::ng-deep .p-inputtext:hover,
+:host ::ng-deep .p-password input:hover {
+  border-color: #9ca3af;
+}
+
+:host ::ng-deep .p-inputtext:focus,
+:host ::ng-deep .p-password input:focus {
+  border-color: #0d2c6c;
+  box-shadow: 0 0 0 3px rgba(13,44,108,0.08);
+}
+
+/* ICON INPUT */
+:host ::ng-deep .p-input-icon-left > i {
+  color: #9ca3af;
+}
+
+/* PASSWORD */
+:host ::ng-deep .p-password {
+  width: 100%;
 }
 
 /* BUTTONS */
@@ -72,17 +115,22 @@ form {
   flex: 1;
   background: linear-gradient(135deg, #2563eb, #1d4ed8);
   border: none;
+  border-radius: 10px;
+  font-weight: 500;
+  transition: all 0.25s ease;
 }
 
 .primary-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
 }
 
 .secondary-btn {
   flex: 1;
   background: #f1f5f9;
-  color: #333;
+  color: #334155;
+  border: none;
+  border-radius: 10px;
 }
 
 .secondary-btn:hover {
@@ -98,4 +146,9 @@ form {
   .form-actions {
     flex-direction: column;
   }
+}
+.error {
+  color: #dc2626;
+  font-size: 12px;
+  margin-top: 4px;
 }

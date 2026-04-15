@@ -34,6 +34,7 @@ export class AdminCreateAccount {
   program = '';
   email = '';
   password = '';
+  loading = false;
 
   constructor(
     private auth: Auth,

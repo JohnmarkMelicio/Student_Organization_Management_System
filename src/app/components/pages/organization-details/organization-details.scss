@@ -637,3 +637,100 @@ textarea.p-inputtext {
 .officer-card-premium:hover::after {
   opacity: 1;
 }
+/* ============================= */
+/* 🔥 PRIME NG POLISH */
+/* ============================= */
+
+/* spacing fix */
+.field {
+  margin-bottom: 12px;
+}
+
+/* form card */
+.form-card {
+  background: #f9fafb;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+}
+
+/* upload spacing fix (IMPORTANT) */
+.upload-area {
+  margin-top: 16px;
+}
+
+/* placeholder */
+.placeholder {
+  border: 2px dashed #d1d5db;
+  padding: 14px;
+  border-radius: 12px;
+  color: #6b7280;
+}
+
+/* list card */
+.officer-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: white;
+  transition: 0.2s;
+}
+
+.officer-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+}
+
+/* text */
+.position {
+  font-weight: 600;
+}
+
+.name {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* dialog */
+:host ::ng-deep .ultra-dialog .p-dialog {
+  border-radius: 16px;
+}
+
+:host ::ng-deep .p-dialog-mask {
+  backdrop-filter: blur(6px);
+}
+
+/* input fix */
+:host ::ng-deep .p-inputtext {
+  border-radius: 10px;
+}
+
+/* avatar spacing */
+:host ::ng-deep .p-avatar {
+  width: 45px;
+  height: 45px;
+}
+.search-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: #94a3b8; /* soft gray */
+  font-size: 14px;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding-left: 38px; /* space for icon */
+  height: 42px;
+  border-radius: 10px;
+}

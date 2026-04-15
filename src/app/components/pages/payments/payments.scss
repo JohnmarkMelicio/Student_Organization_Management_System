@@ -1,10 +1,16 @@
+/* =========================
+   CONTAINER (SOFT CARD)
+========================= */
 .payment-container {
   border-radius: 18px;
   box-shadow: 0 12px 35px rgba(0,0,0,0.06);
-  padding: 15px;
+  padding: 18px;
+  background: #ffffff;
 }
 
-/* HEADER */
+/* =========================
+   HEADER
+========================= */
 .header h2 {
   font-size: 22px;
   font-weight: 600;
@@ -16,21 +22,34 @@
   color: #6b7280;
 }
 
-/* FORM */
+/* =========================
+   FORM
+========================= */
 .payment-form {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
   margin: 15px 0;
 }
 
-/* BUTTON */
+/* =========================
+   BUTTON
+========================= */
 .add-btn {
   background: linear-gradient(135deg,#0d2c6c,#123d8c);
   border: none;
+  box-shadow: 0 4px 12px rgba(13,44,108,0.25);
+  transition: 0.2s;
 }
 
-/* FILTER */
+.add-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(13,44,108,0.35);
+}
+
+/* =========================
+   FILTER
+========================= */
 .payment-filter {
   display: flex;
   gap: 10px;
@@ -41,6 +60,13 @@
   border-radius: 999px;
   background: #eef2ff;
   color: #0d2c6c;
+  padding: 6px 14px;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.filter-btn:hover {
+  background: #dbeafe;
 }
 
 .filter-btn.active {
@@ -48,7 +74,9 @@
   color: white;
 }
 
-/* SEARCH */
+/* =========================
+   SEARCH (FIXED ALIGN)
+========================= */
 .search-wrapper {
   position: relative;
   width: 260px;
@@ -61,6 +89,8 @@
   top: 50%;
   transform: translateY(-50%);
   color: #9ca3af;
+  font-size: 14px;
+  pointer-events: none;
 }
 
 .search-wrapper input {
@@ -68,30 +98,84 @@
   padding: 10px 14px 10px 36px;
   border-radius: 999px;
   border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  font-size: 14px;
+  transition: 0.25s;
 }
 
-/* TABLE */
+.search-wrapper input:hover {
+  border-color: #9ca3af;
+}
+
+.search-wrapper input:focus {
+  outline: none;
+  background: #fff;
+  border-color: #0d2c6c;
+  box-shadow: 0 0 0 3px rgba(13,44,108,0.08);
+}
+
+/* =========================
+   TABLE (PREMIUM STYLE)
+========================= */
 :host ::ng-deep .custom-table {
   border-radius: 14px;
   overflow: hidden;
 }
 
-:host ::ng-deep .p-datatable-tbody tr:hover {
-  background: #f9fbff;
+/* REMOVE HORIZONTAL SCROLL BUG */
+:host ::ng-deep .p-datatable-wrapper {
+  overflow-x: hidden !important;
 }
 
-/* ACTIONS */
-.actions {
-  display: flex;
-  gap: 6px;
+/* FORCE PERFECT FIT */
+:host ::ng-deep .p-datatable table {
+  width: 100% !important;
+  table-layout: fixed;
 }
-/* 🔥 EDIT MODE ROW (LIKE ATTENDANCE) */
+
+/* HEADER STYLE */
+:host ::ng-deep .p-datatable-thead > tr > th {
+  background: #f8fafc;
+  font-weight: 600;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* ROW STYLE */
+:host ::ng-deep .p-datatable-tbody > tr {
+  transition: 0.2s;
+}
+
+/* STRIPED EFFECT */
+:host ::ng-deep .p-datatable-tbody > tr:nth-child(even) {
+  background: #fbfdff;
+}
+
+/* HOVER EFFECT */
+:host ::ng-deep .p-datatable-tbody > tr:hover {
+  background: #f1f6ff;
+}
+
+/* CELL TEXT CONTROL (PREVENT OVERFLOW) */
+:host ::ng-deep .p-datatable td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  color: #374151;
+}
+
+/* =========================
+   EDIT MODE ROW
+========================= */
 .editing-row {
   background: #f4f8ff !important;
   transition: 0.3s;
 }
 
-/* 🔥 PREMIUM INPUT */
+/* =========================
+   INPUTS (EDIT MODE)
+========================= */
 .edit-input {
   width: 100%;
   padding: 6px 10px;
@@ -106,31 +190,33 @@
   box-shadow: 0 0 0 2px rgba(59,130,246,0.15);
 }
 
-/* 🔥 SELECT STYLE */
+/* SELECT */
 .edit-select {
   width: 100%;
 }
 
-/* 🔥 ACTION BUTTONS SPACING */
+/* =========================
+   ACTION BUTTONS
+========================= */
 .actions {
   display: flex;
   gap: 6px;
   align-items: center;
 }
 
-/* 🔥 SAVE BUTTON (LIKE ATTENDANCE) */
+/* PRIME BUTTON COLORS */
 :host ::ng-deep .p-button-success {
   background: #22c55e;
   border: none;
 }
 
-/* 🔥 CANCEL BUTTON */
 :host ::ng-deep .p-button-secondary {
   background: #e5e7eb;
   color: #374151;
   border: none;
 }
 
+/* ICON COLORS */
 .edit-btn { color:#0d6efd; }
 .save-btn { color:#198754; }
 .cancel-btn { color:#6c757d; }

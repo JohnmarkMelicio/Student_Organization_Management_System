@@ -220,7 +220,9 @@ export class OrganizationDetailsComponent {
   // 🔥 FINAL FIX HERE
   // =========================
 
-  saveMember() {
+  // 🔥 FIXED VERSION (DO NOT REMOVE ANY FEATURE)
+
+saveMember() {
   console.log('MODE:', this.isEditMode ? 'EDIT' : 'ADD');
   console.log('SELECTED ID:', this.selectedMember?.id);
 
@@ -231,7 +233,10 @@ export class OrganizationDetailsComponent {
   }
 }
 
-  addMember() {
+// =========================
+// ✅ ADD MEMBER (FIXED)
+// =========================
+addMember() {
   if (!this.newMember.name || !this.newMember.position) {
     Swal.fire({
       title: 'Error',
@@ -242,7 +247,6 @@ export class OrganizationDetailsComponent {
     return;
   }
 
-  // 🔥 FORCE correct orgId
   const orgId = this.organization?.id;
 
   if (!orgId) {
@@ -258,33 +262,42 @@ export class OrganizationDetailsComponent {
     age: this.newMember.age,
     course: this.newMember.course,
     year: this.newMember.year,
-    organizationId: orgId, // ✅ GUARANTEED
+    organizationId: orgId,
     imageUrl: this.selectedFileBase64 || ''
   };
 
-  console.log('SAVING MEMBER:', dataToSave); // 🔥 DEBUG
+  console.log('SAVING MEMBER:', dataToSave);
 
-  addDoc(ref, dataToSave).then(() => {
-    addDoc(ref, dataToSave)
-  .then(() => {
-    console.log('✅ SAVED SUCCESSFULLY');
-  })
-  .catch((err) => {
-    console.error('❌ ERROR SAVING:', err);
-  });
-    Swal.fire({
-      title: 'Success',
-      text: 'Officer saved!',
-      icon: 'success',
-      target: document.body
+  addDoc(ref, dataToSave)
+    .then(() => {
+      console.log('✅ SAVED SUCCESSFULLY');
+
+      Swal.fire({
+        title: 'Success',
+        text: 'Officer saved!',
+        icon: 'success',
+        target: document.body
+      });
+
+      this.resetMemberForm();
+      this.showOfficerModal = false;
+    })
+    .catch((err: any) => {
+      console.error('❌ ERROR SAVING:', err);
+
+      Swal.fire({
+        title: 'Error',
+        text: 'Failed to save officer',
+        icon: 'error',
+        target: document.body
+      });
     });
-
-    this.resetMemberForm();
-    this.showOfficerModal = false;
-  });
 }
 
-  updateMember() {
+// =========================
+// ✅ UPDATE MEMBER (FIXED)
+// =========================
+updateMember() {
   if (!this.selectedMember?.id) {
     console.error('❌ No selected member ID');
     return;
@@ -302,37 +315,54 @@ export class OrganizationDetailsComponent {
     imageUrl: this.selectedFileBase64 || this.selectedMember.imageUrl || ''
   };
 
-  updateDoc(ref, updatedData).then(() => {
-    Swal.fire({
-      title: 'Updated!',
-      icon: 'success',
-      target: document.body
-    });
+  updateDoc(ref, updatedData)
+    .then(() => {
+      Swal.fire({
+        title: 'Updated!',
+        text: 'Officer updated successfully',
+        icon: 'success',
+        target: document.body
+      });
 
-    this.resetMemberForm();
-    this.showOfficerModal = false;
-  });
+      this.resetMemberForm();
+      this.showOfficerModal = false;
+    })
+    .catch((err: any) => {
+      console.error('❌ ERROR UPDATING:', err);
+
+      Swal.fire({
+        title: 'Error',
+        text: 'Failed to update officer',
+        icon: 'error',
+        target: document.body
+      });
+    });
 }
 
   deleteMember(member: any) {
-    Swal.fire({
-      title: 'Delete officer?',
-      icon: 'warning',
-      showCancelButton: true,
-      target: document.body
-    }).then(res => {
-      if (res.isConfirmed) {
-        const ref = doc(this.firestore, `members/${member.id}`);
-        deleteDoc(ref).then(() => {
-          Swal.fire({
-            title: 'Deleted!',
-            icon: 'success',
-            target: document.body
-          });
+  Swal.fire({
+    title: 'Delete officer?',
+    text: 'This cannot be undone',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#dc2626',
+    cancelButtonColor: '#6b7280',
+    confirmButtonText: 'Yes, delete',
+    target: document.body,
+    backdrop: true
+  }).then(res => {
+    if (res.isConfirmed) {
+      const ref = doc(this.firestore, `members/${member.id}`);
+      deleteDoc(ref).then(() => {
+        Swal.fire({
+          title: 'Deleted!',
+          icon: 'success',
+          target: document.body
         });
-      }
-    });
-  }
+      });
+    }
+  });
+}
 
   editInline(member: any) {
   this.selectedMember = { ...member }; // 🔥 THIS WAS MISSING BEFORE

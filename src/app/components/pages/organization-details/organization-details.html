@@ -138,68 +138,73 @@
   header="Manage Officers"
   [(visible)]="showOfficerModal"
   [modal]="true"
+  [baseZIndex]="1000"
+  [autoZIndex]="true"
   [style]="{ width: '520px' }"
   styleClass="ultra-dialog">
 
   <div class="ultra-manage">
 
     <!-- 🔍 SEARCH -->
-    <div class="search-bar">
-      <span class="p-input-icon-left">
-        <i class="pi pi-search"></i>
-        <input 
-          pInputText 
-          placeholder="Search officer..."
-          [(ngModel)]="searchTerm">
-      </span>
-    </div>
+    <div class="search-wrapper">
+    <i class="pi pi-search search-icon"></i>
+    <input
+      type="text"
+      pInputText
+      placeholder="Search officer..."
+      [(ngModel)]="searchTerm"
+      class="search-input"
+    />
+  </div>
 
     <!-- 🔥 FORM -->
     <div class="form-card">
 
       <h4>Add / Edit Officer</h4>
 
-      <div class="p-fluid grid">
+      <div class="p-fluid formgrid grid">
 
-        <div class="col-12">
+        <div class="field col-12">
           <input pInputText placeholder="Full Name" [(ngModel)]="newMember.name" />
         </div>
 
-        <div class="col-12">
+        <div class="field col-12">
           <input pInputText placeholder="Position" [(ngModel)]="newMember.position" />
         </div>
 
-        <div class="col-6">
+        <div class="field col-6">
           <input pInputText placeholder="Age" [(ngModel)]="newMember.age" />
         </div>
 
-        <div class="col-6">
+        <div class="field col-6">
           <input pInputText placeholder="Year" [(ngModel)]="newMember.year" />
         </div>
 
-        <div class="col-12">
+        <div class="field col-12">
           <input pInputText placeholder="Course" [(ngModel)]="newMember.course" />
         </div>
 
-        <!-- 🔥 IMAGE PREVIEW -->
-        <div class="col-12 upload-area">
+        <!-- 🔥 IMAGE UPLOAD -->
+        <div class="field col-12 text-center upload-area">
 
-          <div class="preview" *ngIf="previewImage; else noPreview">
-            <img [src]="previewImage" />
+          <p-avatar 
+            *ngIf="previewImage"
+            [image]="previewImage"
+            shape="circle"
+            size="xlarge"
+            class="mb-2">
+          </p-avatar>
+
+          <div *ngIf="!previewImage" class="placeholder">
+            <i class="pi pi-image"></i>
+            <p>No image selected</p>
           </div>
-
-          <ng-template #noPreview>
-            <div class="placeholder">
-              <i class="pi pi-image"></i>
-              <p>No image selected</p>
-            </div>
-          </ng-template>
 
           <button 
             pButton 
-            icon="pi pi-upload"
             label="Upload Photo"
-            class="p-button-outlined"
+            icon="pi pi-upload"
+            class="p-button-outlined p-button-sm mt-2"
             (click)="fileInput.click()">
           </button>
 
@@ -209,13 +214,14 @@
 
       </div>
 
+      <!-- 🔥 SAVE BUTTON -->
       <button
-      pButton
-      [label]="isEditMode ? 'Update Officer' : 'Save Officer'"
-      icon="pi pi-check"
-      class="p-button-success w-full"
-      (click)="saveMember()">
-    </button>
+        pButton
+        [label]="isEditMode ? 'Update Officer' : 'Save Officer'"
+        icon="pi pi-check"
+        class="p-button-success w-full mt-2"
+        (click)="saveMember()">
+      </button>
 
     </div>
 
@@ -227,34 +233,34 @@
       <div class="officer-card"
            *ngFor="let m of filteredMembers()">
 
-        <div class="left">
+        <div class="flex align-items-center gap-2">
+
           <p-avatar 
             [image]="m.imageUrl"
             icon="pi pi-user"
             shape="circle">
           </p-avatar>
 
-          <div class="info">
+          <div>
             <div class="position">{{ m.position }}</div>
             <div class="name">{{ m.name }}</div>
           </div>
+
         </div>
 
-        <div class="actions">
+        <div class="flex gap-2">
 
           <button 
             pButton 
             icon="pi pi-pencil"
-            severity="info"
-            rounded
+            class="p-button-rounded p-button-info p-button-sm"
             (click)="editInline(m)">
           </button>
 
           <button 
             pButton 
             icon="pi pi-trash"
-            severity="danger"
-            rounded
+            class="p-button-rounded p-button-danger p-button-sm"
             (click)="deleteMember(m)">
           </button>
 
@@ -276,9 +282,9 @@
   header="Edit Organization"
   [(visible)]="showEditModal"
   [modal]="true"
-  [baseZIndex]="1500"
+  [baseZIndex]="1000"
+  [autoZIndex]="true"
   [style]="{width: '780px'}"
-  [contentStyle]="{maxHeight: '80vh', overflow: 'auto'}"
   styleClass="premium-modal">
 
   <div class="modal-content">

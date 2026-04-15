@@ -9,96 +9,145 @@
 
   <form #studentForm="ngForm" (ngSubmit)="createStudent(studentForm)">
 
-    <!-- STUDENT ID -->
-    <div class="form-group">
-      <label>Student ID</label>
-      <input pInputText
-        type="text"
-        name="studentID"
-        [(ngModel)]="studentID"
-        required
-        placeholder="Enter Student ID">
-    </div>
+    <!-- ACCOUNT SECTION -->
+    <div class="section">
+      <h4>Account Information</h4>
 
-    <!-- NAME ROW -->
-    <div class="form-row">
-
+      <!-- STUDENT ID -->
       <div class="form-group">
-        <label>First Name</label>
-        <input pInputText
-          type="text"
-          name="firstName"
-          [(ngModel)]="firstName"
+        <label>Student ID *</label>
+        <span class="p-input-icon-left">
+          <i class="pi pi-id-card"></i>
+          <input pInputText
+            type="text"
+            name="studentID"
+            [(ngModel)]="studentID"
+            required
+            #studentIdRef="ngModel"
+            placeholder="Enter Student ID">
+        </span>
+
+        <small *ngIf="studentIdRef.invalid && studentIdRef.touched" class="error">
+          Student ID is required
+        </small>
+      </div>
+
+      <!-- EMAIL -->
+      <div class="form-group">
+        <label>Email *</label>
+        <span class="p-input-icon-left">
+          <i class="pi pi-envelope"></i>
+          <input pInputText
+            type="email"
+            name="email"
+            [(ngModel)]="email"
+            required
+            #emailRef="ngModel"
+            placeholder="Enter Email">
+        </span>
+
+        <small *ngIf="emailRef.invalid && emailRef.touched" class="error">
+          Enter a valid email
+        </small>
+      </div>
+
+      <!-- PASSWORD -->
+      <div class="form-group">
+        <label>Password *</label>
+        <p-password
+          name="password"
+          [(ngModel)]="password"
           required
-          placeholder="Enter First Name">
+          [minlength]="6"
+          #passwordRef="ngModel"
+          [toggleMask]="true"
+          [feedback]="false"
+          placeholder="Enter Password"
+          inputStyleClass="w-full premium-input">
+        </p-password>
+
+        <small *ngIf="passwordRef.invalid && passwordRef.touched" class="error">
+          Password must be at least 6 characters
+        </small>
+      </div>
+    </div>
+
+    <!-- PERSONAL SECTION -->
+    <div class="section">
+      <h4>Personal Information</h4>
+
+      <div class="form-row">
+
+        <!-- FIRST NAME -->
+        <div class="form-group">
+          <label>First Name *</label>
+          <input pInputText
+            type="text"
+            name="firstName"
+            [(ngModel)]="firstName"
+            required
+            #firstNameRef="ngModel"
+            placeholder="Enter First Name">
+
+          <small *ngIf="firstNameRef.invalid && firstNameRef.touched" class="error">
+            First name is required
+          </small>
+        </div>
+
+        <!-- MIDDLE NAME -->
+        <div class="form-group">
+          <label>Middle Name</label>
+          <input pInputText
+            type="text"
+            name="middleName"
+            [(ngModel)]="middleName"
+            placeholder="Enter Middle Name">
+        </div>
+
       </div>
 
+      <!-- LAST NAME -->
       <div class="form-group">
-        <label>Middle Name</label>
+        <label>Last Name *</label>
         <input pInputText
           type="text"
-          name="middleName"
-          [(ngModel)]="middleName"
-          placeholder="Enter Middle Name">
+          name="lastName"
+          [(ngModel)]="lastName"
+          required
+          #lastNameRef="ngModel"
+          placeholder="Enter Last Name">
+
+        <small *ngIf="lastNameRef.invalid && lastNameRef.touched" class="error">
+          Last name is required
+        </small>
       </div>
 
+      <!-- PROGRAM -->
+      <div class="form-group">
+        <label>Program *</label>
+        <input pInputText
+          type="text"
+          name="program"
+          [(ngModel)]="program"
+          required
+          #programRef="ngModel"
+          placeholder="Enter Program (e.g. BSIT)">
+
+        <small *ngIf="programRef.invalid && programRef.touched" class="error">
+          Program is required
+        </small>
+      </div>
     </div>
 
-    <!-- LAST NAME -->
-    <div class="form-group">
-      <label>Last Name</label>
-      <input pInputText
-        type="text"
-        name="lastName"
-        [(ngModel)]="lastName"
-        required
-        placeholder="Enter Last Name">
-    </div>
-
-    <!-- PROGRAM -->
-    <div class="form-group">
-      <label>Program</label>
-      <input pInputText
-        type="text"
-        name="program"
-        [(ngModel)]="program"
-        required
-        placeholder="Enter Program (e.g. BSIT)">
-    </div>
-
-    <!-- EMAIL -->
-    <div class="form-group">
-      <label>Email</label>
-      <input pInputText
-        type="email"
-        name="email"
-        [(ngModel)]="email"
-        required
-        placeholder="Enter Email">
-    </div>
-
-    <!-- PASSWORD -->
-    <div class="form-group">
-      <label>Password</label>
-      <p-password
-        name="password"
-        [(ngModel)]="password"
-        required
-        [minlength]="6"
-        [toggleMask]="true"
-        placeholder="Enter Password"
-        inputStyleClass="w-full">
-      </p-password>
-    </div>
-
-    <!-- BUTTONS -->
+    <!-- ACTIONS -->
     <div class="form-actions">
 
       <button pButton
               type="submit"
               label="Create Account"
               icon="pi pi-user-plus"
-              class="primary-btn">
+              class="primary-btn"
+              [loading]="loading">
       </button>
 
       <button pButton

@@ -1,5 +1,93 @@
 <p-card class="event-container">
 
+  <p-dialog
+  [(visible)]="showEventModal"
+  [modal]="true"
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '750px', maxHeight: '90vh' }"
+  [contentStyle]="{ overflow: 'visible' }"
+  styleClass="premium-dialog"
+>
+
+  <!-- HEADER -->
+  <ng-template pTemplate="header">
+    <div class="modal-header">
+      <i class="pi pi-calendar-plus"></i>
+      <span>Create Event</span>
+    </div>
+  </ng-template>
+
+  <!-- BODY -->
+  <div class="modal-body">
+
+    <div class="form-group">
+      <label>Event Name</label>
+      <span class="p-input-icon-left">
+        <input pInputText [(ngModel)]="newEvent.name" placeholder="Enter event name">
+      </span>
+    </div>
+
+    <div class="form-row">
+
+      <div class="form-group">
+        <label>Date</label>
+        <input pInputText type="date" [(ngModel)]="newEvent.date">
+      </div>
+
+      <div class="form-group">
+        <label>Location</label>
+        <input pInputText [(ngModel)]="newEvent.location" placeholder="Enter location">
+      </div>
+
+    </div>
+
+    <div class="form-row">
+
+      <div class="form-group">
+        <label>Status</label>
+        <select [(ngModel)]="newEvent.status" class="custom-select">
+          <option value="">Select Status</option>
+          <option value="Upcoming">Upcoming</option>
+          <option value="Ongoing">Ongoing</option>
+          <option value="Completed">Completed</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Organization</label>
+        <select [(ngModel)]="newEvent.organization" class="custom-select">
+          <option value="">Select Organization</option>
+          <option *ngFor="let org of organizations" [value]="org.name">
+            {{ org.name }}
+          </option>
+        </select>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <ng-template pTemplate="footer">
+    <button pButton
+            label="Cancel"
+            icon="pi pi-times"
+            class="p-button-text"
+            (click)="showEventModal=false">
+    </button>
+
+    <button pButton
+            label="Create Event"
+            icon="pi pi-check"
+            class="add-btn"
+            (click)="addEvent()">
+    </button>
+  </ng-template>
+
+</p-dialog>
+
   <!-- HEADER TOGGLE -->
   <div class="top-toggle">
 
@@ -8,7 +96,7 @@
             icon="pi pi-plus"
             *ngIf="isAdmin"
             [class.active]="viewMode === 'create'"
-            (click)="viewMode='create'">
+            (click)="openEventModal()">
     </button>
 
     <button pButton

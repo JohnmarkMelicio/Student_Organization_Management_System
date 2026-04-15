@@ -10,6 +10,9 @@ import { AuthService } from '../../../services/auth.service';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { DialogModule } from 'primeng/dialog';
+
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-organization',
@@ -19,7 +22,8 @@ import { InputTextModule } from 'primeng/inputtext';
     FormsModule,
     CardModule,
     ButtonModule,
-    InputTextModule
+    InputTextModule,
+    DialogModule
   ],
   templateUrl: './organization.html',
   styleUrls: ['./organization.scss']
@@ -52,7 +56,6 @@ export class OrganizationComponent implements OnInit {
     this.loadOrganizations();
   }
 
-  // 🔥 FIXED: FORCE ACRONYM PRIORITY
   loadOrganizations(): void {
     this.orgService.getAll().subscribe({
       next: (res) => {
@@ -65,7 +68,6 @@ export class OrganizationComponent implements OnInit {
     });
   }
 
-  // 🔥 GENERATOR (fallback only)
   generateAcronym(name: string): string {
     if (!name) return '';
     return name
@@ -80,8 +82,20 @@ export class OrganizationComponent implements OnInit {
   }
 
   closeModal(): void {
-    this.showModal = false;
-    this.resetForm();
+    Swal.fire({
+      title: 'Cancel?',
+      text: 'Your input will be lost.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#0d2c6c',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: 'Yes, cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.showModal = false;
+        this.resetForm();
+      }
+    });
   }
 
   toggleMenu(id: string) {
@@ -89,19 +103,48 @@ export class OrganizationComponent implements OnInit {
   }
 
   addOrganization(): void {
-    if (!this.newOrg.name.trim()) return;
+    if (!this.newOrg.name.trim()) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Missing Name',
+        text: 'Organization name is required'
+      });
+      return;
+    }
 
-    // 🔥 AUTO GENERATE IF EMPTY
     if (!this.newOrg.acronym) {
       this.newOrg.acronym = this.generateAcronym(this.newOrg.name);
     }
 
+    Swal.fire({
+      title: 'Creating...',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
     this.orgService.create(this.newOrg)
       .then(() => {
         this.loadOrganizations();
-        this.closeModal();
+        this.showModal = false;
+        this.resetForm();
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Created!',
+          text: 'Organization added successfully',
+          timer: 1500,
+          showConfirmButton: false
+        });
       })
-      .catch(err => console.error(err));
+      .catch(() => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to create organization'
+        });
+      });
   }
 
   editOrganization(org: Organization) {
@@ -109,40 +152,93 @@ export class OrganizationComponent implements OnInit {
   }
 
   saveOrganization(org: Organization) {
+    Swal.fire({
+      title: 'Saving...',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
     this.orgService.update(org.id!, org)
       .then(() => {
         this.editingId = null;
         this.loadOrganizations();
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Updated!',
+          text: 'Organization updated',
+          timer: 1500,
+          showConfirmButton: false
+        });
       })
-      .catch(err => console.error(err));
+      .catch(() => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Update failed'
+        });
+      });
   }
 
   cancelEdit() {
-    this.editingId = null;
-    this.loadOrganizations();
+    Swal.fire({
+      title: 'Cancel changes?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.editingId = null;
+        this.loadOrganizations();
+      }
+    });
   }
 
   deleteOrganization(id: string) {
-    const confirmDelete = confirm("Are you sure you want to delete this organization?");
-    if (!confirmDelete) return;
+    Swal.fire({
+      title: 'Delete Organization?',
+      text: 'This action cannot be undone!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#dc2626',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: 'Yes, delete'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.orgService.delete(id)
+          .then(() => {
+            this.activeMenu = null;
+            this.loadOrganizations();
 
-    this.orgService.delete(id)
-      .then(() => {
-        this.activeMenu = null;
-        this.loadOrganizations();
-      })
-      .catch(err => console.error(err));
+            Swal.fire({
+              icon: 'success',
+              title: 'Deleted!',
+              text: 'Organization removed',
+              timer: 1500,
+              showConfirmButton: false
+            });
+          })
+          .catch(() => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Delete failed'
+            });
+          });
+      }
+    });
   }
 
   openOrganization(id: string): void {
     this.router.navigate(['/home/organization', id]);
   }
 
-  // 🔥 FIXED: REMOVE shortName
   private resetForm(): void {
     this.newOrg = {
       name: '',
-      acronym: '', // ✅ USE THIS
+      acronym: '',
       description: '',
       email: '',
       phone: '',
@@ -155,5 +251,4 @@ export class OrganizationComponent implements OnInit {
       }
     };
   }
-
 }

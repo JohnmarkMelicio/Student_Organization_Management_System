@@ -74,93 +74,85 @@
 
 
 <!-- MODAL -->
-<div class="modal-backdrop" *ngIf="showModal">
+<p-dialog
+  [(visible)]="showModal"
+  [modal]="true"
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '650px' }"
+  class="premium-dialog"
+>
 
-  <div class="modal-card">
-
+  <ng-template pTemplate="header">
     <div class="modal-header">
       <h3>Create Organization</h3>
-      <button pButton icon="pi pi-times"
-              class="p-button-text"
-              (click)="closeModal()">
-      </button>
     </div>
+  </ng-template>
 
-    <div class="modal-body">
+  <div class="modal-body">
 
-      <div class="form-grid">
+    <div class="form-grid">
 
-        <div class="form-group">
-          <label>Organization Name *</label>
-          <input pInputText [(ngModel)]="newOrg.name">
-        </div>
-
-        <div class="form-group">
-          <label>Acronym</label>
-          <input pInputText [(ngModel)]="newOrg.acronym">
-        </div>
-
-        <div class="form-group full">
-          <label>Description</label>
-          <textarea pInputTextarea [(ngModel)]="newOrg.description"></textarea>
-        </div>
-
-        <div class="form-group">
-          <label>Email</label>
-          <input pInputText [(ngModel)]="newOrg.email">
-        </div>
-
-        <div class="form-group">
-          <label>Phone</label>
-          <input pInputText [(ngModel)]="newOrg.phone">
-        </div>
-
-        <div class="form-group full">
-          <label>Location</label>
-          <input pInputText [(ngModel)]="newOrg.location">
-        </div>
-
-        <div class="form-group full">
-          <label>Mission</label>
-          <textarea pInputTextarea [(ngModel)]="newOrg.mission"></textarea>
-        </div>
-
-        <div class="form-group full">
-          <label>Vision</label>
-          <textarea pInputTextarea [(ngModel)]="newOrg.vision"></textarea>
-        </div>
-
-        <div class="form-group">
-          <label>Facebook</label>
-          <input pInputText [(ngModel)]="newOrg.social.facebook">
-        </div>
-
-        <div class="form-group">
-          <label>Instagram</label>
-          <input pInputText [(ngModel)]="newOrg.social.instagram">
-        </div>
-
+      <div class="form-group">
+        <label>Organization Name *</label>
+        <input pInputText [(ngModel)]="newOrg.name">
       </div>
 
-    </div>
+      <div class="form-group">
+        <label>Acronym</label>
+        <input pInputText [(ngModel)]="newOrg.acronym">
+      </div>
 
-    <div class="modal-footer">
+      <div class="form-group full">
+        <label>Description</label>
+        <textarea pInputTextarea [(ngModel)]="newOrg.description"></textarea>
+      </div>
 
-      <button pButton
-              label="Cancel"
-              class="secondary-btn"
-              (click)="closeModal()">
-      </button>
+      <div class="form-group">
+        <label>Email</label>
+        <input pInputText [(ngModel)]="newOrg.email">
+      </div>
 
-      <button pButton
-              label="Create Organization"
-              icon="pi pi-check"
-              class="primary-btn"
-              (click)="addOrganization()">
-      </button>
+      <div class="form-group">
+        <label>Phone</label>
+        <input pInputText [(ngModel)]="newOrg.phone">
+      </div>
+
+      <div class="form-group full">
+        <label>Location</label>
+        <input pInputText [(ngModel)]="newOrg.location">
+      </div>
+
+      <div class="form-group full">
+        <label>Mission</label>
+        <textarea pInputTextarea [(ngModel)]="newOrg.mission"></textarea>
+      </div>
+
+      <div class="form-group full">
+        <label>Vision</label>
+        <textarea pInputTextarea [(ngModel)]="newOrg.vision"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Facebook</label>
+        <input pInputText [(ngModel)]="newOrg.social.facebook">
+      </div>
+
+      <div class="form-group">
+        <label>Instagram</label>
+        <input pInputText [(ngModel)]="newOrg.social.instagram">
+      </div>
 
     </div>
 
   </div>
 
-</div>
+  <ng-template pTemplate="footer">
+    <div class="modal-footer">
+      <button pButton label="Cancel" class="secondary-btn" (click)="closeModal()"></button>
+      <button pButton label="Create Organization" icon="pi pi-check" class="primary-btn" (click)="addOrganization()"></button>
+    </div>
+  </ng-template>
+
+</p-dialog>

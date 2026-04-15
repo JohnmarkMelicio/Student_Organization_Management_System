@@ -11,19 +11,21 @@ import { TagModule } from 'primeng/tag';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { CardModule } from 'primeng/card';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-events',
   standalone: true,
   imports: [
-  CommonModule,
-  FormsModule,
-  TableModule,
-  TagModule,
-  ButtonModule,
-  InputTextModule,
-  CardModule
-],
+    CommonModule,
+    FormsModule,
+    TableModule,
+    TagModule,
+    ButtonModule,
+    InputTextModule,
+    CardModule,
+    DialogModule
+  ],
   templateUrl: './events.html',
   styleUrls: ['./events.scss']
 })
@@ -35,12 +37,14 @@ export class EventsComponent implements OnInit {
   filteredEvents: any[] = [];
   searchText: string = '';
 
-  // ✅ ADDED
   organizations: any[] = [];
 
   editingId: string | null = null;
 
   isAdmin = false;
+
+  // ✅ MODAL CONTROL
+  showEventModal = false;
 
   newEvent: any = {
     name: '',
@@ -53,7 +57,7 @@ export class EventsComponent implements OnInit {
   constructor(
     private eventsService: EventsService,
     private authService: AuthService,
-    private firestore: Firestore // ✅ ADDED
+    private firestore: Firestore
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -69,13 +73,10 @@ export class EventsComponent implements OnInit {
     }
 
     this.loadEvents();
-
-    // ✅ ADDED
     this.loadOrganizations();
   }
 
   loadEvents(): void {
-
     this.eventsService.getAll().subscribe({
       next: (res) => {
         this.events = res;
@@ -83,10 +84,8 @@ export class EventsComponent implements OnInit {
       },
       error: (err) => console.error('Failed to load events', err)
     });
-
   }
 
-  // ✅ ADDED FUNCTION
   loadOrganizations(): void {
     const ref = collection(this.firestore, 'organizations');
 
@@ -95,9 +94,13 @@ export class EventsComponent implements OnInit {
     });
   }
 
-  // ✅ ADDED FUNCTION
   selectOrganization(event: any) {
     this.newEvent.organization = event.target.value;
+  }
+
+  // ✅ OPEN MODAL
+  openEventModal(): void {
+    this.showEventModal = true;
   }
 
   addEvent(): void {
@@ -109,7 +112,8 @@ export class EventsComponent implements OnInit {
       Swal.fire({
         icon: 'warning',
         title: 'Missing Fields',
-        text: 'Please complete required fields'
+        text: 'Please complete required fields',
+        target: document.body
       });
 
       return;
@@ -121,7 +125,8 @@ export class EventsComponent implements OnInit {
     Swal.fire({
       title: 'Adding event...',
       allowOutsideClick: false,
-      didOpen: () => Swal.showLoading()
+      didOpen: () => Swal.showLoading(),
+      target: document.body
     });
 
     this.eventsService.create(this.newEvent)
@@ -131,32 +136,39 @@ export class EventsComponent implements OnInit {
           icon: 'success',
           title: 'Event Added!',
           timer: 1200,
-          showConfirmButton: false
+          showConfirmButton: false,
+          target: document.body
         });
 
         this.loadEvents();
         this.resetForm();
+
+        // ✅ CLOSE MODAL
+        this.showEventModal = false;
+
+        // (optional keep)
         this.viewMode = 'list';
 
       })
-      .catch((err:any) => {
+      .catch((err: any) => {
         console.error("Failed to add event", err);
 
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'Failed to save event'
+          text: 'Failed to save event',
+          target: document.body
         });
       });
 
   }
 
-  editEvent(event:any): void {
+  editEvent(event: any): void {
     if (!this.isAdmin) return;
     this.editingId = event.id;
   }
 
-  saveEvent(event:any): void {
+  saveEvent(event: any): void {
 
     if (!this.isAdmin) return;
 
@@ -165,7 +177,8 @@ export class EventsComponent implements OnInit {
     Swal.fire({
       title: 'Saving...',
       allowOutsideClick: false,
-      didOpen: () => Swal.showLoading()
+      didOpen: () => Swal.showLoading(),
+      target: document.body
     });
 
     this.eventsService.update(event.id, event)
@@ -175,25 +188,27 @@ export class EventsComponent implements OnInit {
           icon: 'success',
           title: 'Updated!',
           timer: 1000,
-          showConfirmButton: false
+          showConfirmButton: false,
+          target: document.body
         });
 
         this.editingId = null;
         this.loadEvents();
 
       })
-      .catch((err:any) => {
+      .catch((err: any) => {
         console.error("Failed to update event", err);
 
         Swal.fire({
           icon: 'error',
-          title: 'Update Failed'
+          title: 'Update Failed',
+          target: document.body
         });
       });
 
   }
 
-  deleteEvent(id:string): void {
+  deleteEvent(id: string): void {
 
     if (!this.isAdmin) return;
 
@@ -205,7 +220,8 @@ export class EventsComponent implements OnInit {
       confirmButtonColor: '#d33',
       cancelButtonColor: '#6c757d',
       confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'Cancel'
+      cancelButtonText: 'Cancel',
+      target: document.body
     }).then((result) => {
 
       if (result.isConfirmed) {
@@ -213,7 +229,8 @@ export class EventsComponent implements OnInit {
         Swal.fire({
           title: 'Deleting...',
           allowOutsideClick: false,
-          didOpen: () => Swal.showLoading()
+          didOpen: () => Swal.showLoading(),
+          target: document.body
         });
 
         this.eventsService.delete(id)
@@ -224,18 +241,20 @@ export class EventsComponent implements OnInit {
               title: 'Deleted!',
               text: 'Event has been removed.',
               timer: 1200,
-              showConfirmButton: false
+              showConfirmButton: false,
+              target: document.body
             });
 
             this.loadEvents();
 
           })
-          .catch((err:any) => {
+          .catch((err: any) => {
             console.error("Failed to delete event", err);
 
             Swal.fire({
               icon: 'error',
-              title: 'Delete Failed'
+              title: 'Delete Failed',
+              target: document.body
             });
           });
 
@@ -246,11 +265,9 @@ export class EventsComponent implements OnInit {
   }
 
   searchEvents(): void {
-
     this.filteredEvents = this.events.filter(e =>
       e.name.toLowerCase().includes(this.searchText.toLowerCase())
     );
-
   }
 
   resetForm(): void {
@@ -274,8 +291,8 @@ export class EventsComponent implements OnInit {
     const today = new Date();
     const eventDate = new Date(date);
 
-    today.setHours(0,0,0,0);
-    eventDate.setHours(0,0,0,0);
+    today.setHours(0, 0, 0, 0);
+    eventDate.setHours(0, 0, 0, 0);
 
     if (eventDate.getTime() === today.getTime()) return 'Ongoing';
     if (eventDate > today) return 'Upcoming';
