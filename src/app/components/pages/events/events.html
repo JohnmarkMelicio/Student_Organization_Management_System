@@ -1,164 +1,222 @@
-<div class="event-container">
+<p-card class="event-container">
 
+  <!-- HEADER TOGGLE -->
   <div class="top-toggle">
 
-    <button
-      *ngIf="isAdmin"
-      [class.active]="viewMode === 'create'"
-      (click)="viewMode='create'">
-      Create Event
+    <button pButton
+            label="Create Event"
+            icon="pi pi-plus"
+            *ngIf="isAdmin"
+            [class.active]="viewMode === 'create'"
+            (click)="viewMode='create'">
     </button>
 
-    <button
-      [class.active]="viewMode === 'list'"
-      (click)="viewMode='list'">
-      Event List
+    <button pButton
+            label="Event List"
+            icon="pi pi-list"
+            [class.active]="viewMode === 'list'"
+            (click)="viewMode='list'">
     </button>
 
   </div>
 
-  <!-- ✅ CREATE FORM (NOW MATCHES ATTENDANCE STYLE) -->
+  <!-- CREATE FORM -->
   <div *ngIf="viewMode === 'create' && isAdmin" class="event-form">
 
-    <label>Event Name</label>
-    <input [(ngModel)]="newEvent.name">
+    <input pInputText [(ngModel)]="newEvent.name" placeholder="Event Name">
 
-    <label>Date</label>
-    <input type="date" [(ngModel)]="newEvent.date">
+    <input pInputText type="date" [(ngModel)]="newEvent.date">
 
-    <label>Location</label>
-    <input [(ngModel)]="newEvent.location">
+    <input pInputText [(ngModel)]="newEvent.location" placeholder="Location">
 
-    <label>Status</label>
-    <select [(ngModel)]="newEvent.status">
-      <option value="">Select</option>
+    <!-- ✅ USING SELECT -->
+    <select [(ngModel)]="newEvent.status" class="custom-select">
+      <option value="">Select Status</option>
       <option value="Upcoming">Upcoming</option>
       <option value="Ongoing">Ongoing</option>
       <option value="Completed">Completed</option>
     </select>
 
-    <label>Organization</label>
-    <select (change)="selectOrganization($event)">
-    <option value="">Select Organization</option>
-    <option *ngFor="let org of organizations" [value]="org.name">
-      {{ org.name }}
-    </option>
-  </select>
+    <!-- ✅ USING SELECT -->
+    <select [(ngModel)]="newEvent.organization" class="custom-select">
+      <option value="">Select Organization</option>
+      <option *ngFor="let org of organizations" [value]="org.name">
+        {{ org.name }}
+      </option>
+    </select>
 
-    <button (click)="addEvent()">Add Event</button>
+    <button pButton
+            label="Add Event"
+            icon="pi pi-check"
+            class="add-btn"
+            (click)="addEvent()">
+    </button>
 
   </div>
 
-  <!-- ✅ LIST -->
+  <!-- LIST -->
   <div *ngIf="viewMode === 'list'" class="list-card">
 
     <div class="list-header">
       <h2>Event List</h2>
     </div>
 
-    <input class="search"
-           placeholder="Search events..."
-           [(ngModel)]="searchText"
-           (input)="searchEvents()">
+    <!-- SEARCH -->
+    <div class="search-wrapper">
+    <i class="pi pi-search"></i>
+    <input
+      type="text"
+      [(ngModel)]="searchText"
+      (input)="searchEvents()"
+      placeholder="Search events..."
+    />
+  </div>
 
-    <table *ngIf="filteredEvents.length">
+    <!-- TABLE -->
+    <p-table
+      [value]="filteredEvents"
+      [paginator]="true"
+      [rows]="8"
+      [rowsPerPageOptions]="[5,10,20]"
+      responsiveLayout="scroll">
 
-      <thead>
+      <!-- HEADER -->
+      <ng-template pTemplate="header">
         <tr>
-          <th>Event Name</th>
+          <th>Event</th>
           <th>Date</th>
           <th>Location</th>
           <th>Status</th>
           <th>Organization</th>
           <th *ngIf="isAdmin">Action</th>
         </tr>
-      </thead>
+      </ng-template>
 
-      <tbody>
+      <!-- BODY -->
+ <!-- BODY -->
+<ng-template pTemplate="body" let-event>
+  <tr [class.editing-row]="editingId === event.id">
 
-        <tr *ngFor="let event of filteredEvents">
+    <!-- NAME -->
+    <td>
+      <input *ngIf="editingId === event.id"
+             pInputText
+             class="edit-input"
+             [(ngModel)]="event.name">
 
-          <td>
-            <input *ngIf="editingId === event.id" [(ngModel)]="event.name">
-            <span *ngIf="editingId !== event.id">{{ event.name }}</span>
-          </td>
+      <span *ngIf="editingId !== event.id">
+        {{ event.name }}
+      </span>
+    </td>
 
-          <td>
-            <input type="date"
-                   *ngIf="editingId === event.id"
-                   [(ngModel)]="event.date">
-            <span *ngIf="editingId !== event.id">{{ event.date }}</span>
-          </td>
+    <!-- DATE -->
+    <td>
+      <input *ngIf="editingId === event.id"
+             type="date"
+             pInputText
+             class="edit-input"
+             [(ngModel)]="event.date">
 
-          <td>
-            <input *ngIf="editingId === event.id"
-                   [(ngModel)]="event.location">
-            <span *ngIf="editingId !== event.id">{{ event.location }}</span>
-          </td>
+      <span *ngIf="editingId !== event.id">
+        {{ event.date }}
+      </span>
+    </td>
 
-          <td>
-            <select *ngIf="editingId === event.id"
-                    [(ngModel)]="event.status">
-              <option value="Upcoming">Upcoming</option>
-              <option value="Ongoing">Ongoing</option>
-              <option value="Completed">Completed</option>
-            </select>
+    <!-- LOCATION -->
+    <td>
+      <input *ngIf="editingId === event.id"
+             pInputText
+             class="edit-input"
+             [(ngModel)]="event.location">
 
-            <span *ngIf="editingId !== event.id"
-              class="status"
-              [ngClass]="{
-                'upcoming': getEventStatus(event.date, event.status) === 'Upcoming',
-                'ongoing': getEventStatus(event.date, event.status) === 'Ongoing',
-                'completed': getEventStatus(event.date, event.status) === 'Completed'
-              }">
+      <span *ngIf="editingId !== event.id">
+        {{ event.location }}
+      </span>
+    </td>
 
-              {{ getEventStatus(event.date, event.status) }}
+    <!-- STATUS -->
+    <td>
 
-            </span>
-          </td>
+      <!-- EDIT MODE -->
+      <select *ngIf="editingId === event.id"
+              [(ngModel)]="event.status"
+              class="edit-select">
 
-          <td>
-            <input *ngIf="editingId === event.id"
-                   [(ngModel)]="event.organization">
-            <span *ngIf="editingId !== event.id">
-              {{ event.organization }}
-            </span>
-          </td>
+        <option value="Upcoming">Upcoming</option>
+        <option value="Ongoing">Ongoing</option>
+        <option value="Completed">Completed</option>
 
-          <td *ngIf="isAdmin">
+      </select>
 
-          <button class="btn edit-btn"
-                  *ngIf="editingId !== event.id"
-                  (click)="editEvent(event)">
-            Edit
-          </button>
+      <!-- VIEW MODE -->
+      <p-tag *ngIf="editingId !== event.id"
+        [value]="getEventStatus(event.date, event.status)"
+        [severity]="
+          getEventStatus(event.date, event.status) === 'Upcoming' ? 'info' :
+          getEventStatus(event.date, event.status) === 'Ongoing' ? 'warn' :
+          'success'
+        ">
+      </p-tag>
 
-          <button class="btn save-btn"
-                  *ngIf="editingId === event.id"
-                  (click)="saveEvent(event)">
-            Save
-          </button>
+    </td>
 
-          <button class="btn delete-btn"
-                  *ngIf="editingId !== event.id"
-                  (click)="deleteEvent(event.id)">
-            Delete
-          </button>
+    <!-- ORGANIZATION -->
+    <td>
+      <input *ngIf="editingId === event.id"
+             pInputText
+             class="edit-input"
+             [(ngModel)]="event.organization">
 
-          <button class="btn cancel-btn"
-          *ngIf="editingId === event.id"
-          (click)="cancelEdit()">
-            Cancel
-          </button>
+      <span *ngIf="editingId !== event.id">
+        {{ event.organization }}
+      </span>
+    </td>
 
-        </td>
+    <!-- ACTION -->
+    <td *ngIf="isAdmin" class="actions">
 
-        </tr>
+  <!-- EDIT MODE -->
+  <ng-container *ngIf="editingId === event.id">
 
-      </tbody>
+    <button pButton
+      label="Save"
+      icon="pi pi-check"
+      class="p-button-success"
+      (click)="saveEvent(event)">
+    </button>
 
-    </table>
+    <button pButton
+      label="Cancel"
+      icon="pi pi-times"
+      class="p-button-text"
+      (click)="cancelEdit()">
+    </button>
+
+  </ng-container>
+
+  <!-- VIEW MODE -->
+  <ng-container *ngIf="editingId !== event.id">
+
+    <button pButton
+      icon="pi pi-pencil"
+      class="p-button-text edit-btn"
+      (click)="editEvent(event)">
+    </button>
+
+    <button pButton
+      icon="pi pi-trash"
+      class="p-button-text delete-btn"
+      (click)="deleteEvent(event.id)">
+    </button>
+
+  </ng-container>
+
+</td>
+
+  </tr>
+</ng-template>
+    </p-table>
 
   </div>
 
-</div>
+</p-card>

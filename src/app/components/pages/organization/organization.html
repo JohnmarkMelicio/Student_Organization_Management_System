@@ -1,133 +1,163 @@
-<div class="org-container">
+<p-card class="org-container">
 
+  <!-- HEADER -->
   <div class="header">
     <div>
       <h2>Organizations</h2>
-      <p class="sub">Manage student organizations</p>
+      <span class="sub">Manage student organizations</span>
     </div>
 
-    <button *ngIf="isAdmin" class="add-btn" (click)="openModal()">
-      + Add Organization
+    <button *ngIf="isAdmin"
+            pButton
+            label="Add Organization"
+            icon="pi pi-plus"
+            class="add-btn"
+            (click)="openModal()">
     </button>
   </div>
 
+  <!-- GRID -->
   <div class="org-grid" *ngIf="organizations.length; else emptyState">
 
     <div class="org-card"
-     *ngFor="let org of organizations"
-     (click)="openOrganization(org.id!)">
+         *ngFor="let org of organizations"
+         (click)="openOrganization(org.id!)">
 
-      <!-- 3 DOT MENU -->
+      <!-- MENU -->
       <div *ngIf="isAdmin"
-        class="menu-wrapper"
-        (click)="$event.stopPropagation()">
+           class="menu-wrapper"
+           (click)="$event.stopPropagation()">
 
-        <span class="menu-btn" (click)="toggleMenu(org.id!)">⋮</span>
+        <button pButton
+                icon="pi pi-ellipsis-v"
+                class="p-button-text menu-btn"
+                (click)="toggleMenu(org.id!)">
+        </button>
 
         <div class="dropdown" *ngIf="activeMenu === org.id">
           <div class="dropdown-item delete"
-              (click)="deleteOrganization(org.id!)">
-            Delete Organization
+               (click)="deleteOrganization(org.id!)">
+            <i class="pi pi-trash"></i> Delete Organization
           </div>
         </div>
 
       </div>
 
-      <div class="org-icon">🏢</div>
+      <!-- ICON -->
+      <div class="org-icon">
+        <i class="pi pi-building"></i>
+      </div>
 
+      <!-- INFO -->
       <div class="org-info">
         <h3>
           {{ org.name }}
-          <span class="badge">{{ org.shortName }}</span>
+          <span class="badge">{{ org.acronym }}</span>
         </h3>
 
         <p>{{ org.description || 'No description available' }}</p>
       </div>
 
     </div>
+
   </div>
 
+  <!-- EMPTY -->
   <ng-template #emptyState>
     <div class="empty">
-      No organizations found.
+      <i class="pi pi-folder-open"></i>
+      <p>No organizations found</p>
     </div>
   </ng-template>
 
-  <!-- MODAL -->
-  <div class="modal-backdrop" *ngIf="showModal">
+</p-card>
 
-    <div class="modal-card">
 
-      <div class="modal-header">
-        <h3>Add Organization</h3>
-        <span class="close" (click)="closeModal()">✕</span>
-      </div>
+<!-- MODAL -->
+<div class="modal-backdrop" *ngIf="showModal">
 
-      <div class="modal-body">
+  <div class="modal-card">
 
-        <div class="form-grid">
+    <div class="modal-header">
+      <h3>Create Organization</h3>
+      <button pButton icon="pi pi-times"
+              class="p-button-text"
+              (click)="closeModal()">
+      </button>
+    </div>
 
-          <div class="form-group">
-            <label>Organization Name *</label>
-            <input [(ngModel)]="newOrg.name">
-          </div>
+    <div class="modal-body">
 
-          <div class="form-group">
-            <label>Acronym</label>
-            <input [(ngModel)]="newOrg.shortName">
-          </div>
+      <div class="form-grid">
 
-          <div class="form-group full">
-            <label>Description</label>
-            <textarea [(ngModel)]="newOrg.description"></textarea>
-          </div>
+        <div class="form-group">
+          <label>Organization Name *</label>
+          <input pInputText [(ngModel)]="newOrg.name">
+        </div>
 
-          <div class="form-group">
-            <label>Email</label>
-            <input [(ngModel)]="newOrg.email">
-          </div>
+        <div class="form-group">
+          <label>Acronym</label>
+          <input pInputText [(ngModel)]="newOrg.acronym">
+        </div>
 
-          <div class="form-group">
-            <label>Phone</label>
-            <input [(ngModel)]="newOrg.phone">
-          </div>
+        <div class="form-group full">
+          <label>Description</label>
+          <textarea pInputTextarea [(ngModel)]="newOrg.description"></textarea>
+        </div>
 
-          <div class="form-group full">
-            <label>Location</label>
-            <input [(ngModel)]="newOrg.location">
-          </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input pInputText [(ngModel)]="newOrg.email">
+        </div>
 
-          <div class="form-group full">
-            <label>Mission</label>
-            <textarea [(ngModel)]="newOrg.mission"></textarea>
-          </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input pInputText [(ngModel)]="newOrg.phone">
+        </div>
 
-          <div class="form-group full">
-            <label>Vision</label>
-            <textarea [(ngModel)]="newOrg.vision"></textarea>
-          </div>
+        <div class="form-group full">
+          <label>Location</label>
+          <input pInputText [(ngModel)]="newOrg.location">
+        </div>
 
-          <!-- ✅ SOCIAL LINKS -->
-          <div class="form-group">
-            <label>Facebook</label>
-            <input [(ngModel)]="newOrg.social.facebook">
-          </div>
+        <div class="form-group full">
+          <label>Mission</label>
+          <textarea pInputTextarea [(ngModel)]="newOrg.mission"></textarea>
+        </div>
 
-          <div class="form-group">
-            <label>Instagram</label>
-            <input [(ngModel)]="newOrg.social.instagram">
-          </div>
+        <div class="form-group full">
+          <label>Vision</label>
+          <textarea pInputTextarea [(ngModel)]="newOrg.vision"></textarea>
+        </div>
 
+        <div class="form-group">
+          <label>Facebook</label>
+          <input pInputText [(ngModel)]="newOrg.social.facebook">
+        </div>
+
+        <div class="form-group">
+          <label>Instagram</label>
+          <input pInputText [(ngModel)]="newOrg.social.instagram">
         </div>
 
       </div>
 
-      <div class="modal-footer">
-        <button class="cancel-btn" (click)="closeModal()">Cancel</button>
-        <button class="save-btn" (click)="addOrganization()">
-          Create Organization
-        </button>
-      </div>
+    </div>
+
+    <div class="modal-footer">
+
+      <button pButton
+              label="Cancel"
+              class="secondary-btn"
+              (click)="closeModal()">
+      </button>
+
+      <button pButton
+              label="Create Organization"
+              icon="pi pi-check"
+              class="primary-btn"
+              (click)="addOrganization()">
+      </button>
 
     </div>
 

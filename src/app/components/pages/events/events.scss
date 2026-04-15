@@ -1,199 +1,120 @@
 .event-container {
-  background: #ffffff;
-  padding: 25px;
-  border-radius: 14px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+  border-radius: 18px;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.06);
 }
 
 /* TOGGLE */
 .top-toggle {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   margin-bottom: 20px;
-}
-
-.top-toggle button {
-  padding: 8px 18px;
-  border-radius: 999px;
-  border: none;
-  background: #eef2ff;
-  cursor: pointer;
-  font-weight: 500;
 }
 
 .top-toggle button.active {
-  background: #0d2c6c;
-  color: white;
+  background: #0d2c6c !important;
+  color: #fff !important;
 }
 
-/* FORM (MATCH ATTENDANCE) */
+/* FORM */
 .event-form {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
   gap: 12px;
-
-  background: #f9fbff;
   padding: 15px;
+  background: #f9fbff;
   border-radius: 12px;
-  border: 1px solid #eef2f7;
   margin-bottom: 20px;
 }
 
-.event-form label {
-  font-size: 13px;
-  font-weight: 500;
-  color: #555;
+.event-form .p-inputtext,
+.custom-select {
+  min-width: 180px;
 }
 
-.event-form input,
-.event-form select {
+/* SELECT */
+.custom-select {
   padding: 10px 12px;
-  border-radius: 8px;
+  border-radius: 10px;
   border: 1px solid #d1d5db;
   background: #fff;
   font-size: 14px;
-  min-width: 140px;
+  transition: all 0.2s ease;
 }
 
-.event-form input:focus,
-.event-form select:focus {
+.custom-select:focus {
   border-color: #0d2c6c;
   outline: none;
-  box-shadow: 0 0 0 2px rgba(13, 44, 108, 0.1);
+  box-shadow: 0 0 0 2px rgba(13,44,108,0.1);
 }
 
-.event-form button {
-  height: 42px;
-  padding: 0 18px;
-  border-radius: 8px;
+/* BUTTON */
+.add-btn {
+  background: linear-gradient(135deg, #0d2c6c, #123d8c);
   border: none;
-  background: #0d2c6c;
-  color: white;
-  cursor: pointer;
-}
-
-/* LIST CARD */
-.list-card {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  border: 1px solid #eef2f7;
-}
-
-/* SEARCH */
-.search {
-  width: 100%;
-  margin-bottom: 12px;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
 }
 
 /* TABLE */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  border-radius: 10px;
+:host ::ng-deep .p-datatable {
+  border-radius: 12px;
   overflow: hidden;
 }
 
-th {
-  background: #f1f5f9;
-  padding: 12px;
-  text-align: left;
+:host ::ng-deep .p-datatable-thead > tr > th {
+  background: #f8fafc;
   font-weight: 600;
 }
 
-td {
-  padding: 12px;
-  border-bottom: 1px solid #eee;
-}
-
-tr:hover {
+:host ::ng-deep .p-datatable-tbody > tr:hover {
   background: #f9fbff;
 }
 
-/* ✅ FIX: INPUT STYLE INSIDE TABLE (EDIT MODE) */
-td input,
-td select {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
-  background: #fff;
+/* SEARCH */
+.search-wrapper {
+  position: relative;
+  width: 260px;
+  margin-bottom: 15px;
+}
+
+.search-wrapper i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
   font-size: 14px;
-  min-width: 140px;
-  transition: all 0.2s ease;
 }
 
-td input:focus,
-td select:focus {
-  border-color: #0d2c6c;
+.search-wrapper input {
+  width: 100%;
+  padding: 10px 12px 10px 36px;
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
+  font-size: 14px;
+  transition: all 0.25s ease;
+}
+
+.search-wrapper input:hover {
+  border-color: #9ca3af;
+}
+
+.search-wrapper input:focus {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(13, 44, 108, 0.1);
+  background: #fff;
+  border-color: #0d2c6c;
+  box-shadow: 0 0 0 3px rgba(13, 44, 108, 0.08);
 }
 
-/* STATUS */
-.upcoming {
-  background: #3b82f6;
-  color: white;
-  padding: 4px 10px;
-  border-radius: 6px;
-}
-
-.completed {
-  background: #16a34a;
-  color: white;
-  padding: 4px 10px;
-  border-radius: 6px;
-}
-
-.ongoing {
-  background: #f59e0b;
-  color: white;
-  padding: 4px 10px;
-  border-radius: 6px;
-}
-
-/* BUTTON SYSTEM (MATCH ATTENDANCE) */
-.btn {
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 13px;
-  margin-right: 5px;
-  transition: all 0.2s ease;
-  border: none;
-  cursor: pointer;
+/* ACTIONS (MATCH ATTENDANCE) */
+.actions {
+  display: flex;
+  gap: 6px;
 }
 
 .edit-btn {
-  background: #0d6efd;
-  color: #fff;
-}
-.edit-btn:hover {
-  background: #0b5ed7;
-}
-
-.save-btn {
-  background: #198754;
-  color: #fff;
-}
-.save-btn:hover {
-  background: #157347;
-}
-
-.cancel-btn {
-  background: #6c757d;
-  color: #fff;
-}
-.cancel-btn:hover {
-  background: #5c636a;
+  color: #0d6efd;
 }
 
 .delete-btn {
-  background: #dc3545;
-  color: #fff;
-}
-.delete-btn:hover {
-  background: #b02a37;
+  color: #dc3545;
 }

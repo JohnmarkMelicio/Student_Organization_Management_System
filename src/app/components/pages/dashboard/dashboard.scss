@@ -62,7 +62,7 @@
 /* CONTENT */
 .content-grid {
   display: grid;
-  grid-template-columns: 1.5fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 20px;
 }
 
@@ -82,4 +82,19 @@
   .content-grid {
     grid-template-columns: 1fr;
   }
+}
+/* MATCH TABLE STYLE */
+:host ::ng-deep .custom-table {
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+:host ::ng-deep .p-datatable-thead > tr > th {
+  background: #f8fafc;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+:host ::ng-deep .p-datatable-tbody > tr:hover {
+  background: #f9fbff;
 }

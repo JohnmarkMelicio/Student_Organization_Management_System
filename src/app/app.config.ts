@@ -8,7 +8,10 @@ import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 
 import { providePrimeNG } from 'primeng/config';
 
-// ✅ NEW THEME (correct package)
+// ✅ ADD THIS
+import { provideAnimations } from '@angular/platform-browser/animations';
+
+// ✅ THEME
 import Aura from '@primeuix/themes/aura';
 
 import { environment } from '../environments/environment';
@@ -23,7 +26,9 @@ export const appConfig: ApplicationConfig = {
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
 
-    // ✅ PRIME NG CONFIG (REQUIRED)
+    // 🔥 FIX: REQUIRED FOR PRIMENG INTERACTIONS
+    provideAnimations(),
+
     providePrimeNG({
       theme: {
         preset: Aura

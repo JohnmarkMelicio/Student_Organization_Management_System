@@ -5,10 +5,23 @@ import { Auth, createUserWithEmailAndPassword } from '@angular/fire/auth';
 import { Firestore, doc, setDoc } from '@angular/fire/firestore';
 import Swal from 'sweetalert2';
 
+// ✅ PrimeNG
+import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+
 @Component({
   selector: 'app-admin-create-account',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    InputTextModule,
+    PasswordModule,
+    ButtonModule,
+    CardModule // ✅ FIXED ERROR (p-card)
+  ],
   templateUrl: './admin-create-account.html',
   styleUrls: ['./admin-create-account.scss']
 })
@@ -75,7 +88,6 @@ export class AdminCreateAccount {
       });
 
     }
-
   }
 
   cancel(form: NgForm) {
@@ -101,7 +113,5 @@ export class AdminCreateAccount {
       }
 
     });
-
   }
-
 }

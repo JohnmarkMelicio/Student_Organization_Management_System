@@ -1,208 +1,137 @@
 .payment-container {
-  background: #ffffff;
-  padding: 25px;
-  border-radius: 14px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+  border-radius: 18px;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.06);
+  padding: 15px;
 }
-.payment-container h2 {
+
+/* HEADER */
+.header h2 {
   font-size: 22px;
   font-weight: 600;
   color: #0d2c6c;
-  margin-bottom: 15px;
 }
 
+.header span {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* FORM */
 .payment-form {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 25px;
-  background: #f9fbff;
-  padding: 15px;
-  border-radius: 12px;
-  border: 1px solid #eef2f7;
-  align-items: center;
-}
-
-.payment-form input,
-.payment-form select {
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
-  background: #fff;
-  font-size: 14px;
-  min-width: 140px;
-  transition: all 0.2s ease;
-}
-
-.payment-form input:focus,
-.payment-form select:focus {
-  border-color: #0d2c6c;
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(13, 44, 108, 0.1);
-}
-
-button {
-  padding: 9px 16px;
-  border-radius: 8px;
-  border: none;
-  background: #0d2c6c;
-  color: white;
-  cursor: pointer;
-  font-size: 14px;
-  transition: all 0.25s ease;
-}
-
-button:hover {
-  background: #123d8c;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(13, 44, 108, 0.2);
-}
-
-.payment-filter {
-  display: flex;
-  align-items: center;
   gap: 10px;
   margin: 15px 0;
 }
 
-.payment-filter button {
+/* BUTTON */
+.add-btn {
+  background: linear-gradient(135deg,#0d2c6c,#123d8c);
+  border: none;
+}
+
+/* FILTER */
+.payment-filter {
+  display: flex;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.filter-btn {
+  border-radius: 999px;
   background: #eef2ff;
   color: #0d2c6c;
-  border-radius: 999px;
-  padding: 8px 18px;
-  font-weight: 500;
-  transition: all 0.25s ease;
 }
 
-.payment-filter button:hover {
-  background: #dbe4ff;
-  transform: translateY(-1px);
+.filter-btn.active {
+  background: #0d2c6c;
+  color: white;
 }
 
-.payment-filter button.active {
-  background: linear-gradient(135deg, #0d2c6c, #123d8c);
-  color: #fff;
-  box-shadow: 0 4px 12px rgba(13, 44, 108, 0.25);
+/* SEARCH */
+.search-wrapper {
+  position: relative;
+  width: 260px;
+  margin-bottom: 15px;
 }
 
-.payment-filter select {
-  padding: 8px 12px;
-  border-radius: 10px;
-  border: 1px solid #d1d5db;
-  background: #fff;
-  font-size: 14px;
+.search-wrapper i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
 }
 
-.payment-filter select:focus {
-  border-color: #0d2c6c;
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(13, 44, 108, 0.15);
-}
-
-table {
+.search-wrapper input {
   width: 100%;
-  border-collapse: collapse;
-  border-radius: 10px;
+  padding: 10px 14px 10px 36px;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+}
+
+/* TABLE */
+:host ::ng-deep .custom-table {
+  border-radius: 14px;
   overflow: hidden;
 }
 
-th {
-  background: #f1f5f9;
-  padding: 12px;
-  text-align: left;
-  font-weight: 600;
-  font-size: 14px;
-}
-
-td {
-  padding: 12px;
-  border-bottom: 1px solid #eee;
-  font-size: 14px;
-}
-
-tr:hover {
+:host ::ng-deep .p-datatable-tbody tr:hover {
   background: #f9fbff;
 }
 
-td input,
-td select {
-  padding: 6px 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 13px;
-  min-width: 120px;
-  max-width: 160px;
-  background: #fff;
+/* ACTIONS */
+.actions {
+  display: flex;
+  gap: 6px;
+}
+/* 🔥 EDIT MODE ROW (LIKE ATTENDANCE) */
+.editing-row {
+  background: #f4f8ff !important;
+  transition: 0.3s;
 }
 
-td input:focus,
-td select:focus {
-  border-color: #0d2c6c;
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(13, 44, 108, 0.1);
-}
-
-h3 {
-  margin-top: 30px;
-  margin-bottom: 10px;
-  font-size: 18px;
-  color: #0d2c6c;
-}
-
-
-.btn {
-  padding: 6px 12px;
-  border-radius: 6px;
-  border: none;
-  font-size: 13px;
-  cursor: pointer;
-  margin-right: 5px;
-  transition: all 0.2s ease;
-}
-
-
-.edit-btn {
-  background: #0d6efd;
-  color: #fff;
-}
-.edit-btn:hover {
-  background: #0b5ed7;
-  transform: translateY(-1px);
-}
-
-
-.save-btn {
-  background: #198754;
-  color: #fff;
-}
-.save-btn:hover {
-  background: #157347;
-  transform: translateY(-1px);
-}
-
-
-.cancel-btn {
-  background: #6c757d;
-  color: #fff;
-}
-.cancel-btn:hover {
-  background: #5c636a;
-  transform: translateY(-1px);
-}
-
-
-.delete-btn {
-  background: #dc3545;
-  color: #fff;
-}
-.delete-btn:hover {
-  background: #b02a37;
-  transform: translateY(-1px);
-}
-.search {
+/* 🔥 PREMIUM INPUT */
+.edit-input {
   width: 100%;
-  padding: 10px;
-  margin: 10px 0 15px;
+  padding: 6px 10px;
   border-radius: 8px;
-  border: 1px solid #ddd;
+  border: 1px solid #dbeafe;
+  background: #ffffff;
+  transition: 0.2s;
 }
+
+.edit-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59,130,246,0.15);
+}
+
+/* 🔥 SELECT STYLE */
+.edit-select {
+  width: 100%;
+}
+
+/* 🔥 ACTION BUTTONS SPACING */
+.actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+/* 🔥 SAVE BUTTON (LIKE ATTENDANCE) */
+:host ::ng-deep .p-button-success {
+  background: #22c55e;
+  border: none;
+}
+
+/* 🔥 CANCEL BUTTON */
+:host ::ng-deep .p-button-secondary {
+  background: #e5e7eb;
+  color: #374151;
+  border: none;
+}
+
+.edit-btn { color:#0d6efd; }
+.save-btn { color:#198754; }
+.cancel-btn { color:#6c757d; }
+.delete-btn { color:#dc3545; }

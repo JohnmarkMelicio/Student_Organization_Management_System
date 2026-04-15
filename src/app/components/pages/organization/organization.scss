@@ -1,7 +1,18 @@
-.org-container {
-  padding: 30px;
+:host {
+  display: block;
+  background: #f5f7fb; /* 🔥 MAIN BACKGROUND (fix white issue) */
+  min-height: 100vh;
 }
 
+/* CONTAINER */
+.org-container {
+  border-radius: 20px;
+  padding: 25px;
+  background: #ffffff;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.06);
+}
+
+/* HEADER */
 .header {
   display: flex;
   justify-content: space-between;
@@ -9,189 +20,120 @@
   margin-bottom: 25px;
 }
 
-.sub {
-  color: #6b7280;
-  font-size: 14px;
+.header h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0d2c6c;
 }
 
+.sub {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* ADD BUTTON */
 .add-btn {
-  background: #3b82f6;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 10px;
+  background: linear-gradient(135deg, #0d2c6c, #123d8c);
   border: none;
-  cursor: pointer;
-  font-weight: 500;
-  transition: 0.2s;
+  border-radius: 10px;
 }
 
 .add-btn:hover {
-  background: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(13,44,108,0.25);
 }
 
+/* GRID */
 .org-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
 }
 
+/* CARD */
 .org-card {
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 24px;
+  position: relative;
   display: flex;
-  gap: 18px;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 16px;
+
+  /* 🔥 GLASS EFFECT */
+  background: linear-gradient(180deg, #ffffff, #f9fbff);
+  border: 1px solid #eef2f7;
+
   cursor: pointer;
-  border: 1px solid #f1f5f9;
-  transition: all 0.25s ease;
+  transition: all 0.3s ease;
 }
 
+/* 🔥 HOVER PREMIUM EFFECT */
 .org-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.08);
 }
 
+/* ICON */
 .org-icon {
-  width: 65px;
-  height: 65px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #e0edff, #f5f7ff);
+  width: 60px;
+  height: 60px;
+  border-radius: 14px;
+
+  background: linear-gradient(135deg, #e0edff, #f0f4ff);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 26px;
+
+  font-size: 22px;
+  color: #0d2c6c;
 }
 
+/* INFO */
 .org-info h3 {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
-  margin-bottom: 6px;
+  color: #111827;
 }
 
 .org-info p {
-  font-size: 14px;
-  color: #6b7280;
-}
-
-.badge {
-  background: #e0edff;
-  color: #2563eb;
-  padding: 3px 10px;
-  border-radius: 20px;
-  font-size: 11px;
-  margin-left: 8px;
-}
-
-.empty {
-  text-align: center;
-  color: #9ca3af;
-  padding: 50px;
-}
-
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000;
-}
-
-.modal-card {
-  background: white;
-  width: 650px;
-  border-radius: 16px;
-  box-shadow: 0 25px 60px rgba(0,0,0,0.25);
-}
-
-.modal-header {
-  padding: 18px 24px;
-  border-bottom: 1px solid #eee;
-  display: flex;
-  justify-content: space-between;
-}
-
-.modal-body {
-  padding: 20px 24px;
-}
-
-.form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px;
-}
-
-.form-group.full {
-  grid-column: span 2;
-}
-
-.form-group label {
   font-size: 13px;
-  margin-bottom: 6px;
-  display: block;
+  color: #6b7280;
+  margin-top: 5px;
 }
 
-.form-group input,
-.form-group textarea {
-  width: 100%;
-  padding: 10px 14px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
+/* BADGE */
+.badge {
+  margin-left: 8px;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 20px;
+
+  background: #eef2ff;
+  color: #2563eb;
 }
 
-.modal-footer {
-  padding: 15px 24px 22px;
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-.cancel-btn {
-  background: #f3f4f6;
-  border: none;
-  padding: 8px 18px;
-  border-radius: 8px;
-}
-
-.save-btn {
-  background: #3b82f6;
-  color: white;
-  border: none;
-  padding: 8px 18px;
-  border-radius: 8px;
-}
+/* MENU */
 .menu-wrapper {
   position: absolute;
-  top: 15px;
-  right: 15px;
-}
-
-.org-card {
-  position: relative;
+  top: 10px;
+  right: 10px;
 }
 
 .menu-btn {
-  font-size: 18px;
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 6px;
+  color: #6b7280;
 }
 
-.menu-btn:hover {
-  background: #f3f4f6;
-}
-
+/* DROPDOWN */
 .dropdown {
   position: absolute;
+  top: 32px;
   right: 0;
-  top: 28px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-  border: 1px solid #eee;
   width: 180px;
-  z-index: 10;
+
+  background: #ffffff;
+  border-radius: 12px;
+
+  box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+  overflow: hidden;
 }
 
 .dropdown-item {
@@ -206,4 +148,114 @@
 
 .dropdown-item.delete {
   color: #dc2626;
+}
+
+/* EMPTY STATE */
+.empty {
+  text-align: center;
+  padding: 60px;
+  color: #9ca3af;
+}
+
+.empty i {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+/* MODAL BACKDROP */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(6px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* MODAL */
+.modal-card {
+  width: 650px;
+  background: #ffffff;
+  border-radius: 16px;
+
+  box-shadow: 0 30px 70px rgba(0,0,0,0.25);
+  animation: fadeIn 0.25s ease;
+}
+
+/* HEADER */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 18px 20px;
+  border-bottom: 1px solid #eee;
+}
+
+/* BODY */
+.modal-body {
+  padding: 20px;
+}
+
+/* FORM GRID */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.form-group.full {
+  grid-column: span 2;
+}
+
+.form-group label {
+  font-size: 12px;
+  margin-bottom: 5px;
+  display: block;
+}
+
+/* INPUT */
+:host ::ng-deep .p-inputtext {
+  border-radius: 10px;
+  padding: 10px;
+}
+
+/* TEXTAREA */
+.custom-textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+}
+
+.custom-textarea:focus {
+  outline: none;
+  border-color: #0d2c6c;
+  box-shadow: 0 0 0 3px rgba(13,44,108,0.08);
+}
+
+/* FOOTER */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 15px 20px;
+}
+
+/* BUTTONS */
+.primary-btn {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  border: none;
+}
+
+.secondary-btn {
+  background: #f1f5f9;
+  color: #333;
+}
+
+/* ANIMATION */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }

@@ -1,21 +1,23 @@
-<div class="create-student-container">
+<p-card class="create-student-container">
 
-  <h2>Create Student Account</h2>
+  <ng-template pTemplate="title">
+    <div class="header">
+      <h2>Create Student Account</h2>
+      <span>Register a new student user</span>
+    </div>
+  </ng-template>
 
   <form #studentForm="ngForm" (ngSubmit)="createStudent(studentForm)">
 
     <!-- STUDENT ID -->
     <div class="form-group">
       <label>Student ID</label>
-      <input
+      <input pInputText
         type="text"
         name="studentID"
         [(ngModel)]="studentID"
         required
-        pattern="[0-9]*"
-        inputmode="numeric"
-        placeholder="Enter Student ID"
-      >
+        placeholder="Enter Student ID">
     </div>
 
     <!-- NAME ROW -->
@@ -23,23 +25,21 @@
 
       <div class="form-group">
         <label>First Name</label>
-        <input
+        <input pInputText
           type="text"
           name="firstName"
           [(ngModel)]="firstName"
           required
-          placeholder="Enter First Name"
-        >
+          placeholder="Enter First Name">
       </div>
 
       <div class="form-group">
         <label>Middle Name</label>
-        <input
+        <input pInputText
           type="text"
           name="middleName"
           [(ngModel)]="middleName"
-          placeholder="Enter Middle Name"
-        >
+          placeholder="Enter Middle Name">
       </div>
 
     </div>
@@ -47,65 +47,70 @@
     <!-- LAST NAME -->
     <div class="form-group">
       <label>Last Name</label>
-      <input
+      <input pInputText
         type="text"
         name="lastName"
         [(ngModel)]="lastName"
         required
-        placeholder="Enter Last Name"
-      >
+        placeholder="Enter Last Name">
     </div>
 
     <!-- PROGRAM -->
     <div class="form-group">
       <label>Program</label>
-      <input
+      <input pInputText
         type="text"
         name="program"
         [(ngModel)]="program"
         required
-        placeholder="Enter Program (e.g. BSIT)"
-      >
+        placeholder="Enter Program (e.g. BSIT)">
     </div>
 
     <!-- EMAIL -->
     <div class="form-group">
       <label>Email</label>
-      <input
+      <input pInputText
         type="email"
         name="email"
         [(ngModel)]="email"
         required
-        placeholder="Enter Email"
-      >
+        placeholder="Enter Email">
     </div>
 
     <!-- PASSWORD -->
     <div class="form-group">
       <label>Password</label>
-      <input
-        type="password"
+      <p-password
         name="password"
         [(ngModel)]="password"
         required
-        minlength="6"
+        [minlength]="6"
+        [toggleMask]="true"
         placeholder="Enter Password"
-      >
+        inputStyleClass="w-full">
+      </p-password>
     </div>
 
-    <!-- ACTION BUTTONS -->
+    <!-- BUTTONS -->
     <div class="form-actions">
 
-      <button type="submit" class="btn primary">
-        Create Account
+      <button pButton
+              type="submit"
+              label="Create Account"
+              icon="pi pi-user-plus"
+              class="primary-btn">
       </button>
 
-      <button type="button" class="btn secondary" (click)="cancel(studentForm)">
-        Cancel
+      <button pButton
+              type="button"
+              label="Cancel"
+              icon="pi pi-times"
+              class="secondary-btn"
+              (click)="cancel(studentForm)">
       </button>
 
     </div>
 
   </form>
 
-</div>
+</p-card>

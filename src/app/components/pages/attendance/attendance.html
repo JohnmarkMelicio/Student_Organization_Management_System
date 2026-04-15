@@ -1,136 +1,203 @@
-<div class="attendance-container">
+<p-card class="attendance-card">
 
-  <h2>Event Attendance</h2>
+  <!-- HEADER -->
+  <ng-template pTemplate="title">
+    <div class="header">
+      <div>
+        <h2>Attendance Management</h2>
+        <span>Track and manage event participation</span>
+      </div>
+    </div>
+  </ng-template>
 
-  <div class="attendance-form">
+  <!-- TOOLBAR -->
+  <div class="toolbar">
 
-    <label>Event</label>
-    <select [(ngModel)]="selectedEventId"
-            (change)="loadAttendance()">
-      <option [ngValue]="null">Select Event</option>
-      <option *ngFor="let event of events"
-              [ngValue]="event.id">
-        {{ event.name }} ({{ event.date }})
-      </option>
-    </select>
+    <div class="left">
 
-    <ng-container *ngIf="isAdmin">
+      <p-select
+        [options]="events"
+        [(ngModel)]="selectedEventId"
+        optionLabel="name"
+        optionValue="id"
+        placeholder="Select Event"
+        (onChange)="loadAttendance()"
+        class="field">
+      </p-select>
 
-      <label>Student ID</label>
-      <input placeholder="Enter Student ID"
-             [(ngModel)]="newRecord.studentId">
+      <ng-container *ngIf="isAdmin">
 
-      <label>Status</label>
-      <select [(ngModel)]="newRecord.status">
-        <option value="Present">Present</option>
-        <option value="Absent">Absent</option>
-        <option value="Late">Late</option>
-      </select>
+        <input pInputText
+               placeholder="Student ID"
+               [(ngModel)]="newRecord.studentId"
+               class="field"/>
 
-      <button (click)="addAttendance()">
-        Add Attendance
-      </button>
+        <p-select
+          [options]="statusOptions"
+          [(ngModel)]="newRecord.status"
+          class="field small">
+        </p-select>
 
-    </ng-container>
+        <button pButton
+                label="Add"
+                icon="pi pi-plus"
+                class="add-btn"
+                (click)="addAttendance()">
+        </button>
+
+      </ng-container>
+
+    </div>
+
+    <!-- SEARCH -->
+    <div class="right">
+  <div class="search-wrapper">
+    <i class="pi pi-search"></i>
+    <input pInputText
+           placeholder="Search students..."
+           (input)="dt.filterGlobal($event.target.value, 'contains')" />
+  </div>
+</div>
 
   </div>
 
-  <!-- 🔍 SEARCH -->
-  <input class="search"
-         placeholder="Search attendance..."
-         [(ngModel)]="searchText"
-         (input)="searchAttendance()">
+  <!-- TABLE -->
+  <p-table
+    #dt
+    [value]="attendanceList"
+    [paginator]="true"
+    [rows]="8"
+    [rowsPerPageOptions]="[5,10,20]"
+    [globalFilterFields]="['studentId','name','program']"
+    [responsiveLayout]="'scroll'"
+    class="custom-table">
 
-  <table *ngIf="selectedEventId">
-
-    <thead>
+    <!-- HEADER -->
+    <ng-template pTemplate="header">
       <tr>
-        <th (click)="sortBy('studentId')">Student ID</th>
-        <th (click)="sortBy('name')">Name</th>
-        <th (click)="sortBy('program')">Program</th>
+        <th pSortableColumn="studentId">
+          Student ID
+          <p-sortIcon field="studentId"></p-sortIcon>
+        </th>
+
+        <th pSortableColumn="name">
+          Name
+          <p-sortIcon field="name"></p-sortIcon>
+        </th>
+
+        <th>Program</th>
+
         <th>Status</th>
-        <th (click)="sortBy('datetime')">Date & Time</th>
+
+        <th pSortableColumn="datetime">
+          Date
+          <p-sortIcon field="datetime"></p-sortIcon>
+        </th>
+
         <th *ngIf="isAdmin">Action</th>
       </tr>
-    </thead>
+    </ng-template>
 
-    <tbody>
+    <!-- BODY -->
+    <ng-template pTemplate="body" let-record>
+      <tr>
 
-      <tr *ngFor="let record of filteredAttendance">
-
-        <td>
-          <input *ngIf="editingId === record.id && isAdmin"
-                 [(ngModel)]="record.studentId">
-          <span *ngIf="editingId !== record.id || !isAdmin">
+        <!-- STUDENT ID -->
+        <td class="student-id">
+          <input *ngIf="editingId === record.id"
+                 pInputText
+                 [(ngModel)]="record.studentId" />
+          <span *ngIf="editingId !== record.id">
             {{ record.studentId }}
           </span>
         </td>
 
+        <!-- NAME -->
         <td>
-          <input *ngIf="editingId === record.id && isAdmin"
-                 [(ngModel)]="record.name">
-          <span *ngIf="editingId !== record.id || !isAdmin">
-            {{ record.name }}
-          </span>
+          <div class="name-cell">
+            <input *ngIf="editingId === record.id"
+                   pInputText
+                   [(ngModel)]="record.name" />
+            <span *ngIf="editingId !== record.id" class="name">
+              {{ record.name }}
+            </span>
+          </div>
         </td>
 
+        <!-- PROGRAM -->
         <td>
-          <input *ngIf="editingId === record.id && isAdmin"
-                 [(ngModel)]="record.program">
-          <span *ngIf="editingId !== record.id || !isAdmin">
+          <input *ngIf="editingId === record.id"
+                 pInputText
+                 [(ngModel)]="record.program" />
+          <span *ngIf="editingId !== record.id" class="program">
             {{ record.program }}
           </span>
         </td>
 
+        <!-- STATUS -->
         <td>
-          <select *ngIf="editingId === record.id && isAdmin"
-                  [(ngModel)]="record.status">
-            <option value="Present">Present</option>
-            <option value="Absent">Absent</option>
-            <option value="Late">Late</option>
-          </select>
 
-          <span *ngIf="editingId !== record.id || !isAdmin">
-            {{ record.status }}
-          </span>
+          <p-select *ngIf="editingId === record.id"
+            [options]="statusOptions"
+            [(ngModel)]="record.status">
+          </p-select>
+
+          <p-tag *ngIf="editingId !== record.id"
+            [value]="record.status"
+            [severity]="getStatusSeverity(record.status)">
+          </p-tag>
+
         </td>
 
-        <td>
+        <!-- DATE -->
+        <td class="date">
           {{ record.datetime | date:'MMM d, y, h:mm a' }}
         </td>
 
-        <td *ngIf="isAdmin">
+        <!-- ACTION -->
+        <td *ngIf="isAdmin" class="actions">
 
-          <button class="btn edit-btn"
-                  *ngIf="editingId !== record.id"
-                  (click)="editRecord(record)">
-            Edit
-          </button>
+          <!-- EDIT MODE -->
+          <ng-container *ngIf="editingId === record.id">
 
-          <button class="btn save-btn"
-                  *ngIf="editingId === record.id"
-                  (click)="saveRecord(record)">
-            Save
-          </button>
+            <button pButton
+                    label="Save"
+                    icon="pi pi-check"
+                    class="p-button-sm p-button-success"
+                    (click)="saveRecord(record)">
+            </button>
 
-          <button class="btn cancel-btn"
-                  *ngIf="editingId === record.id"
-                  (click)="cancelEdit()">
-            Cancel
-          </button>
+            <button pButton
+                    label="Cancel"
+                    icon="pi pi-times"
+                    class="p-button-sm p-button-secondary"
+                    (click)="cancelEdit()">
+            </button>
 
-          <button class="btn delete-btn"
-                  *ngIf="editingId !== record.id"
-                  (click)="deleteRecord(record.id)">
-            Delete
-          </button>
+          </ng-container>
+
+          <!-- NORMAL MODE -->
+          <ng-container *ngIf="editingId !== record.id">
+
+            <button pButton
+                    icon="pi pi-pencil"
+                    class="p-button-rounded p-button-text edit-btn"
+                    (click)="editRecord(record)">
+            </button>
+
+            <button pButton
+                    icon="pi pi-trash"
+                    class="p-button-rounded p-button-text delete-btn"
+                    (click)="deleteRecord(record.id)">
+            </button>
+
+          </ng-container>
 
         </td>
 
       </tr>
+    </ng-template>
 
-    </tbody>
+  </p-table>
 
-  </table>
-
-</div>
+</p-card>

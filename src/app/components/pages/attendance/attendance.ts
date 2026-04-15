@@ -2,45 +2,64 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
+// 🔥 PrimeNG
+import { TableModule } from 'primeng/table';
+import { SelectModule } from 'primeng/select';
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
+import { TagModule } from 'primeng/tag';
+import { CardModule } from 'primeng/card';
+
+// 🔥 Services
 import { AttendanceService } from '../../../services/attendance.service';
 import { EventsService } from '../../../services/events.service';
 import { AuthService } from '../../../services/auth.service';
 
+// 🔥 Firebase
 import { Firestore, collection, query, where, getDocs } from '@angular/fire/firestore';
 
-import Swal from 'sweetalert2'; // ✅ ADDED
+// 🔥 Alerts
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-attendance',
   standalone: true,
-  imports: [CommonModule, FormsModule],
   templateUrl: './attendance.html',
-  styleUrls: ['./attendance.scss']
+  styleUrls: ['./attendance.scss'],
+  imports: [
+    CommonModule,
+    FormsModule,
+    TableModule,
+    SelectModule,
+    InputTextModule,
+    ButtonModule,
+    TagModule,
+    CardModule
+  ]
 })
 export class AttendanceComponent implements OnInit {
 
   events: any[] = [];
   attendanceList: any[] = [];
-  filteredAttendance: any[] = [];
 
   selectedEventId: string | null = null;
 
-  editingId: string | null = null;
-
   isAdmin = false;
-
-  searchText: string = '';
-
-  sortField: string = '';
-  sortDirection: 'asc' | 'desc' = 'asc';
 
   newRecord: any = {
     studentId: '',
-    name: '',
-    program: '',
-    status: 'Present',
-    datetime: ''
+    status: 'Present'
   };
+
+  statusOptions = [
+    { label: 'Present', value: 'Present' },
+    { label: 'Late', value: 'Late' },
+    { label: 'Absent', value: 'Absent' }
+  ];
+
+  // ✅ EDITING STATE
+  editingId: string | null = null;
+  backupRecord: any = null;
 
   constructor(
     private attendanceService: AttendanceService,
@@ -50,7 +69,6 @@ export class AttendanceComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
-
     const user: any = await this.authService.getCurrentUserData();
 
     if (user) {
@@ -60,6 +78,7 @@ export class AttendanceComponent implements OnInit {
     this.loadEvents();
   }
 
+  // 📌 LOAD EVENTS
   loadEvents() {
     this.eventsService.getAll().subscribe({
       next: (res) => this.events = res,
@@ -67,90 +86,50 @@ export class AttendanceComponent implements OnInit {
     });
   }
 
+  // 📌 LOAD ATTENDANCE
   loadAttendance() {
-
     if (!this.selectedEventId) return;
 
     this.attendanceService.getByEvent(this.selectedEventId)
       .subscribe({
-        next: (res) => {
-          this.attendanceList = res;
-          this.applyFilters();
-        },
+        next: (res) => this.attendanceList = res,
         error: (err) => console.error(err)
       });
   }
 
-  // 🔥 FILTER + SORT
-  applyFilters(): void {
-
-    let data = [...this.attendanceList];
-
-    if (this.searchText.trim()) {
-      const search = this.searchText.toLowerCase();
-
-      data = data.filter(r =>
-        r.studentId?.toLowerCase().includes(search) ||
-        r.name?.toLowerCase().includes(search) ||
-        r.program?.toLowerCase().includes(search)
-      );
+  // 🎨 STATUS COLOR
+  getStatusSeverity(status: string) {
+    switch (status) {
+      case 'Present': return 'success';
+      case 'Late': return 'warn';
+      case 'Absent': return 'danger';
+      default: return 'info';
     }
-
-    if (this.sortField) {
-      data.sort((a, b) => {
-
-        let valueA = a[this.sortField];
-        let valueB = b[this.sortField];
-
-        if (this.sortField === 'datetime') {
-          valueA = new Date(valueA);
-          valueB = new Date(valueB);
-        }
-
-        if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
-        if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
-        return 0;
-      });
-    }
-
-    this.filteredAttendance = data;
   }
 
-  searchAttendance(): void {
-    this.applyFilters();
-  }
-
-  sortBy(field: string): void {
-
-    if (this.sortField === field) {
-      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-    } else {
-      this.sortField = field;
-      this.sortDirection = 'asc';
-    }
-
-    this.applyFilters();
-  }
-
+  // ➕ ADD ATTENDANCE
   async addAttendance() {
 
     if (!this.isAdmin) return;
 
     if (!this.selectedEventId) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Select Event',
-        text: 'Please select an event'
-      });
+      Swal.fire('Select Event', 'Please select an event', 'warning');
       return;
     }
 
     if (!this.newRecord.studentId) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Missing Student ID',
-        text: 'Please enter Student ID'
-      });
+      Swal.fire('Missing Student ID', 'Enter Student ID', 'warning');
+      return;
+    }
+
+    // 🚫 PREVENT DUPLICATE
+    const exists = this.attendanceList.find(a =>
+      a.studentId === this.newRecord.studentId &&
+      a.eventId === this.selectedEventId
+    );
+
+    if (exists) {
+      Swal.fire('Duplicate', 'Student already recorded', 'warning');
       return;
     }
 
@@ -162,35 +141,50 @@ export class AttendanceComponent implements OnInit {
         didOpen: () => Swal.showLoading()
       });
 
+      // 🔍 FIND USER
       const usersRef = collection(this.firestore, 'users');
       const q = query(usersRef, where('studentID', '==', this.newRecord.studentId));
       const snapshot = await getDocs(q);
 
       if (snapshot.empty) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Not Found',
-          text: 'Student not found'
-        });
+        Swal.fire('Not Found', 'Student not found', 'error');
         return;
       }
 
       const userData: any = snapshot.docs[0].data();
 
+      // ✅ EVENT-BASED STATUS
+      const event = this.events.find(e => e.id === this.selectedEventId);
+
+      const now = new Date();
+      let status = this.newRecord.status;
+
+      if (event) {
+        const eventDate = new Date(event.date);
+
+        if (!status || status === 'Present') {
+          if (now < eventDate) {
+            status = 'Present';
+          } else {
+            status = 'Late';
+          }
+        }
+      }
+
       const record = {
         studentId: this.newRecord.studentId,
         name: `${userData.firstName} ${userData.lastName}`,
         program: userData.program,
-        status: this.newRecord.status,
+        status,
         eventId: this.selectedEventId,
-        datetime: new Date().toLocaleString()
+        datetime: now.toISOString()
       };
 
       await this.attendanceService.create(record);
 
       Swal.fire({
         icon: 'success',
-        title: 'Attendance Added!',
+        title: 'Attendance Added',
         timer: 1200,
         showConfirmButton: false
       });
@@ -200,22 +194,20 @@ export class AttendanceComponent implements OnInit {
 
     } catch (error) {
       console.error(error);
-
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Failed to add attendance'
-      });
+      Swal.fire('Error', 'Failed to add attendance', 'error');
     }
   }
 
+  // ✏️ EDIT (INLINE)
   editRecord(record: any) {
     if (!this.isAdmin) return;
+
     this.editingId = record.id;
+    this.backupRecord = { ...record };
   }
 
+  // 💾 SAVE
   saveRecord(record: any) {
-    if (!this.isAdmin) return;
 
     Swal.fire({
       title: 'Saving...',
@@ -228,7 +220,7 @@ export class AttendanceComponent implements OnInit {
 
         Swal.fire({
           icon: 'success',
-          title: 'Updated!',
+          title: 'Updated',
           timer: 1000,
           showConfirmButton: false
         });
@@ -236,75 +228,64 @@ export class AttendanceComponent implements OnInit {
         this.editingId = null;
         this.loadAttendance();
       })
-      .catch((err:any) => {
-        console.error(err);
-
-        Swal.fire({
-          icon: 'error',
-          title: 'Update Failed'
-        });
+      .catch(() => {
+        Swal.fire('Error', 'Update failed', 'error');
       });
   }
 
+  // ❌ CANCEL
   cancelEdit() {
+
+    if (!this.backupRecord) return;
+
+    const index = this.attendanceList.findIndex(r => r.id === this.backupRecord.id);
+
+    if (index !== -1) {
+      this.attendanceList[index] = this.backupRecord;
+    }
+
     this.editingId = null;
-    this.loadAttendance();
   }
 
+  // ❌ DELETE
   deleteRecord(id: string) {
 
     if (!this.isAdmin) return;
 
     Swal.fire({
-      title: 'Are you sure?',
-      text: 'This record will be deleted!',
+      title: 'Delete?',
+      text: 'This cannot be undone',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#6c757d',
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'Cancel'
+      confirmButtonColor: '#d33'
     }).then((result) => {
 
       if (result.isConfirmed) {
-
-        Swal.fire({
-          title: 'Deleting...',
-          allowOutsideClick: false,
-          didOpen: () => Swal.showLoading()
-        });
 
         this.attendanceService.delete(id)
           .then(() => {
 
             Swal.fire({
               icon: 'success',
-              title: 'Deleted!',
-              timer: 1200,
+              title: 'Deleted',
+              timer: 1000,
               showConfirmButton: false
             });
 
             this.loadAttendance();
           })
-          .catch((err:any) => {
-            console.error(err);
-
-            Swal.fire({
-              icon: 'error',
-              title: 'Delete Failed'
-            });
+          .catch(() => {
+            Swal.fire('Error', 'Delete failed', 'error');
           });
       }
     });
   }
 
+  // 🔄 RESET
   resetForm() {
     this.newRecord = {
       studentId: '',
-      name: '',
-      program: '',
-      status: 'Present',
-      datetime: ''
+      status: 'Present'
     };
   }
 

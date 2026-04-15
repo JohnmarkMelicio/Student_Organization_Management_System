@@ -1,45 +1,58 @@
 <div class="topbar">
 
+  <!-- LEFT -->
   <div class="system-name">
     <h2>SOMS</h2>
     <span>Student Organization Management System</span>
   </div>
 
+  <!-- RIGHT PROFILE -->
   <div class="profile-wrapper" (click)="toggleDropdown()">
 
-    <div class="profile-trigger">
+    <!-- ICON ONLY -->
+    <div class="profile-trigger p-ripple">
 
       <div class="avatar">
         {{ user?.firstName?.charAt(0) }}
       </div>
 
-      <div class="user-info">
-        <div class="name">
-          {{ user?.firstName }} {{ user?.lastName }}
-        </div>
-        <div class="role">
-          {{ user?.role }}
-        </div>
-      </div>
-
-      <span class="arrow">▼</span>
+      <i class="pi pi-angle-down arrow"></i>
 
     </div>
 
+    <!-- DROPDOWN -->
     <div class="dropdown" *ngIf="showDropdown">
 
+      <!-- USER INFO INSIDE DROPDOWN -->
       <div class="dropdown-header">
-        <strong>{{ user?.firstName }} {{ user?.lastName }}</strong>
-        <p>{{ user?.email }}</p>
+        <div class="avatar large">
+          {{ user?.firstName?.charAt(0) }}
+        </div>
+
+        <div class="info">
+          <strong>{{ user?.firstName }} {{ user?.lastName }}</strong>
+          <span class="role">{{ user?.role }}</span>
+          <p>{{ user?.email }}</p>
+        </div>
       </div>
 
       <div class="dropdown-divider"></div>
-      <div class="menu-item" (click)="goToProfile(); $event.stopPropagation()">
-      👤 My Profile
-    </div>
 
-      <div class="logout-item" (click)="logout(); $event.stopPropagation()">
-        ⏻ Logout
+      <div class="menu-item"
+           (click)="goToProfile(); $event.stopPropagation()">
+        <i class="pi pi-user"></i>
+        My Profile
+      </div>
+
+      <div class="menu-item">
+        <i class="pi pi-cog"></i>
+        Settings
+      </div>
+
+      <div class="logout-item"
+           (click)="logout(); $event.stopPropagation()">
+        <i class="pi pi-sign-out"></i>
+        Logout
       </div>
 
     </div>

@@ -1,85 +1,110 @@
-<div class="payment-container">
+<p-card class="payment-container">
 
-  <h2>Payment Management</h2>
+  <!-- HEADER -->
+  <ng-template pTemplate="title">
+    <div class="header">
+      <div>
+        <h2>Payment Management</h2>
+        <span>Manage student payments and transactions</span>
+      </div>
+    </div>
+  </ng-template>
 
   <!-- FORM -->
   <div class="payment-form" *ngIf="isAdmin">
 
-    <label>Payment Type</label>
-    <select [(ngModel)]="newPayment.type">
-      <option value="USG">USG Fee</option>
-      <option value="Event">Event</option>
-    </select>
+    <p-select
+      [options]="[{label:'USG Fee',value:'USG'},{label:'Event',value:'Event'}]"
+      [(ngModel)]="newPayment.type"
+      placeholder="Payment Type">
+    </p-select>
 
-    <div *ngIf="newPayment.type === 'Event'">
+    <p-select *ngIf="newPayment.type === 'Event'"
+      [options]="events"
+      optionLabel="name"
+      optionValue="id"
+      [(ngModel)]="newPayment.eventId"
+      placeholder="Select Event">
+    </p-select>
 
-      <label>Select Event</label>
-      <select [(ngModel)]="newPayment.eventId">
-        <option [ngValue]="null">Select Event</option>
-        <option *ngFor="let event of events" [ngValue]="event.id">
-          {{ event.name }}
-        </option>
-      </select>
+    <input pInputText
+      placeholder="Student ID"
+      [(ngModel)]="newPayment.studentId"
+      (blur)="fetchStudent()">
 
-    </div>
+    <input pInputText
+      type="number"
+      placeholder="Amount"
+      [(ngModel)]="newPayment.amount">
 
-    <label>Student ID</label>
-    <input placeholder="Enter Student ID" [(ngModel)]="newPayment.studentId"
-           (blur)="fetchStudent()">
+    <p-select
+      [options]="[
+        {label:'Cash',value:'Cash'},
+        {label:'GCash',value:'GCash'},
+        {label:'Bank Transfer',value:'Bank Transfer'}
+      ]"
+      [(ngModel)]="newPayment.paymentMethod"
+      placeholder="Payment Method">
+    </p-select>
 
-    <label>Amount</label>
-    <input type="number" [(ngModel)]="newPayment.amount">
-
-    <label>Method</label>
-    <select [(ngModel)]="newPayment.paymentMethod">
-      <option value="Cash">Cash</option>
-      <option value="GCash">GCash</option>
-      <option value="Bank Transfer">Bank Transfer</option>
-    </select>
-
-    <button (click)="addPayment()">Add Payment</button>
+    <button pButton
+      label="Add Payment"
+      icon="pi pi-plus"
+      class="add-btn"
+      (click)="addPayment()">
+    </button>
 
   </div>
 
   <!-- FILTER -->
   <div class="payment-filter">
 
-    <button (click)="viewMode = 'USG'; applyFilters()"
-            [class.active]="viewMode === 'USG'">
-      USG
+    <button pButton
+      label="USG"
+      class="filter-btn"
+      [class.active]="viewMode === 'USG'"
+      (click)="viewMode='USG'; applyFilters()">
     </button>
 
-    <button (click)="viewMode = 'Event'; applyFilters()"
-            [class.active]="viewMode === 'Event'">
-      Event
+    <button pButton
+      label="Event"
+      class="filter-btn"
+      [class.active]="viewMode === 'Event'"
+      (click)="viewMode='Event'; applyFilters()">
     </button>
 
-    <select *ngIf="viewMode === 'Event'"
-            [(ngModel)]="selectedEventId"
-            (change)="onEventChange()">
-
-      <option [ngValue]="null">Select Event</option>
-
-      <option *ngFor="let event of events"
-              [ngValue]="event.id">
-        {{ event.name }}
-      </option>
-
-    </select>
+    <p-select *ngIf="viewMode === 'Event'"
+      [options]="events"
+      optionLabel="name"
+      optionValue="id"
+      [(ngModel)]="selectedEventId"
+      (onChange)="onEventChange()"
+      placeholder="Filter Event">
+    </p-select>
 
   </div>
 
   <!-- SEARCH -->
-  <input class="search"
-         placeholder="Search payments..."
-         [(ngModel)]="searchText"
-         (input)="searchPayments()">
+  <div class="search-wrapper">
+    <i class="pi pi-search"></i>
+    <input pInputText
+      placeholder="Search payments..."
+      [(ngModel)]="searchText"
+      (input)="searchPayments()">
+  </div>
 
-  <!-- USG TABLE -->
-  <table *ngIf="viewMode === 'USG' && filteredUSGPayments.length">
+  <!-- TABLE -->
+  <p-table
+    [value]="viewMode === 'USG' ? filteredUSGPayments : filteredEventPayments"
+    [paginator]="true"
+    [rows]="8"
+    [responsiveLayout]="'scroll'"
+    class="custom-table">
 
-    <thead>
+    <!-- HEADER -->
+    <ng-template pTemplate="header">
       <tr>
+        <th *ngIf="viewMode==='Event'">Event</th>
         <th>Student ID</th>
         <th>Name</th>
         <th>Program</th>
@@ -87,157 +112,122 @@
         <th>Method</th>
         <th *ngIf="isAdmin">Action</th>
       </tr>
-    </thead>
+    </ng-template>
 
-    <tbody>
+    <ng-template pTemplate="body" let-pay>
+  <tr [ngClass]="{'editing-row': editingId===pay.id}">
 
-      <tr *ngFor="let pay of filteredUSGPayments">
+    <td *ngIf="viewMode==='Event'">
+      {{ getEventName(pay.eventId) }}
+    </td>
 
-        <td>
-          <input *ngIf="editingId === pay.id" [(ngModel)]="pay.studentId">
-          <span *ngIf="editingId !== pay.id">{{ pay.studentId }}</span>
-        </td>
+    <!-- STUDENT ID -->
+    <td>
+      <input *ngIf="editingId===pay.id"
+        pInputText
+        class="edit-input"
+        [(ngModel)]="pay.studentId">
 
-        <td>
-          <input *ngIf="editingId === pay.id" [(ngModel)]="pay.name">
-          <span *ngIf="editingId !== pay.id">{{ pay.name }}</span>
-        </td>
+      <span *ngIf="editingId!==pay.id">
+        {{ pay.studentId }}
+      </span>
+    </td>
 
-        <td>
-          <input *ngIf="editingId === pay.id" [(ngModel)]="pay.program">
-          <span *ngIf="editingId !== pay.id">{{ pay.program }}</span>
-        </td>
+    <!-- NAME -->
+    <td>
+      <input *ngIf="editingId===pay.id"
+        pInputText
+        class="edit-input"
+        [(ngModel)]="pay.name">
 
-        <td>
-          <input *ngIf="editingId === pay.id" type="number" [(ngModel)]="pay.amount">
-          <span *ngIf="editingId !== pay.id">₱{{ pay.amount }}</span>
-        </td>
+      <span *ngIf="editingId!==pay.id">
+        {{ pay.name }}
+      </span>
+    </td>
 
-        <td>
-          <select *ngIf="editingId === pay.id" [(ngModel)]="pay.paymentMethod">
-            <option>Cash</option>
-            <option>GCash</option>
-            <option>Bank Transfer</option>
-          </select>
-          <span *ngIf="editingId !== pay.id">{{ pay.paymentMethod }}</span>
-        </td>
+    <!-- PROGRAM -->
+    <td>
+      <input *ngIf="editingId===pay.id"
+        pInputText
+        class="edit-input"
+        [(ngModel)]="pay.program">
 
-        <td *ngIf="isAdmin">
+      <span *ngIf="editingId!==pay.id">
+        {{ pay.program }}
+      </span>
+    </td>
 
-          <button *ngIf="editingId !== pay.id"
-                  class="btn edit-btn"
-                  (click)="editPayment(pay)">
-            Edit
-          </button>
+    <!-- AMOUNT -->
+    <td>
+      <input *ngIf="editingId===pay.id"
+        pInputText
+        type="number"
+        class="edit-input"
+        [(ngModel)]="pay.amount">
 
-          <button *ngIf="editingId === pay.id"
-                  class="btn save-btn"
-                  (click)="savePayment(pay)">
-            Save
-          </button>
+      <span *ngIf="editingId!==pay.id">
+        ₱{{ pay.amount }}
+      </span>
+    </td>
 
-          <button *ngIf="editingId === pay.id"
-                  class="btn cancel-btn"
-                  (click)="cancelEdit()">
-            Cancel
-          </button>
+    <!-- METHOD -->
+    <td>
+      <p-select *ngIf="editingId===pay.id"
+        [options]="[
+          {label:'Cash',value:'Cash'},
+          {label:'GCash',value:'GCash'},
+          {label:'Bank Transfer',value:'Bank Transfer'}
+        ]"
+        [(ngModel)]="pay.paymentMethod"
+        class="edit-select">
+      </p-select>
 
-          <button *ngIf="editingId !== pay.id"
-                  class="btn delete-btn"
-                  (click)="deletePayment(pay.id)">
-            Delete
-          </button>
+      <span *ngIf="editingId!==pay.id">
+        {{ pay.paymentMethod }}
+      </span>
+    </td>
 
-        </td>
+    <!-- ACTION -->
+    <td *ngIf="isAdmin" class="actions">
 
-      </tr>
+      <!-- NORMAL -->
+      <ng-container *ngIf="editingId!==pay.id">
 
-    </tbody>
+        <button pButton icon="pi pi-pencil"
+          class="p-button-rounded p-button-text p-button-info"
+          (click)="editPayment(pay)">
+        </button>
 
-  </table>
+        <button pButton icon="pi pi-trash"
+          class="p-button-rounded p-button-text p-button-danger"
+          (click)="deletePayment(pay.id)">
+        </button>
 
-  <!-- EVENT TABLE -->
-  <table *ngIf="viewMode === 'Event' && filteredEventPayments.length">
+      </ng-container>
 
-    <thead>
-      <tr>
-        <th>Event</th>
-        <th>Student ID</th>
-        <th>Name</th>
-        <th>Program</th>
-        <th>Amount</th>
-        <th>Method</th>
-        <th *ngIf="isAdmin">Action</th>
-      </tr>
-    </thead>
+      <!-- EDIT MODE (LIKE ATTENDANCE) -->
+      <ng-container *ngIf="editingId===pay.id">
 
-    <tbody>
+        <button pButton
+          label="Save"
+          icon="pi pi-check"
+          class="p-button-success p-button-sm"
+          (click)="savePayment(pay)">
+        </button>
 
-      <tr *ngFor="let pay of filteredEventPayments">
+        <button pButton
+          label="Cancel"
+          icon="pi pi-times"
+          class="p-button-secondary p-button-sm"
+          (click)="cancelEdit()">
+        </button>
 
-        <td>{{ getEventName(pay.eventId) }}</td>
+      </ng-container>
 
-        <td>
-          <input *ngIf="editingId === pay.id" [(ngModel)]="pay.studentId">
-          <span *ngIf="editingId !== pay.id">{{ pay.studentId }}</span>
-        </td>
+    </td>
 
-        <td>
-          <input *ngIf="editingId === pay.id" [(ngModel)]="pay.name">
-          <span *ngIf="editingId !== pay.id">{{ pay.name }}</span>
-        </td>
+  </tr>
+</ng-template>
+  </p-table>
 
-        <td>
-          <input *ngIf="editingId === pay.id" [(ngModel)]="pay.program">
-          <span *ngIf="editingId !== pay.id">{{ pay.program }}</span>
-        </td>
-
-        <td>
-          <input *ngIf="editingId === pay.id" type="number" [(ngModel)]="pay.amount">
-          <span *ngIf="editingId !== pay.id">₱{{ pay.amount }}</span>
-        </td>
-
-        <td>
-          <select *ngIf="editingId === pay.id" [(ngModel)]="pay.paymentMethod">
-            <option>Cash</option>
-            <option>GCash</option>
-            <option>Bank Transfer</option>
-          </select>
-          <span *ngIf="editingId !== pay.id">{{ pay.paymentMethod }}</span>
-        </td>
-
-        <td *ngIf="isAdmin">
-
-          <button *ngIf="editingId !== pay.id"
-                  class="btn edit-btn"
-                  (click)="editPayment(pay)">
-            Edit
-          </button>
-
-          <button *ngIf="editingId === pay.id"
-                  class="btn save-btn"
-                  (click)="savePayment(pay)">
-            Save
-          </button>
-
-          <button *ngIf="editingId === pay.id"
-                  class="btn cancel-btn"
-                  (click)="cancelEdit()">
-            Cancel
-          </button>
-
-          <button *ngIf="editingId !== pay.id"
-                  class="btn delete-btn"
-                  (click)="deletePayment(pay.id)">
-            Delete
-          </button>
-
-        </td>
-
-      </tr>
-
-    </tbody>
-
-  </table>
-
-</div>
+</p-card>

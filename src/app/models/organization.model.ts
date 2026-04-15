@@ -3,7 +3,7 @@ export interface Organization {
   id?: string;
 
   name: string;
-  shortName: string;
+  acronym?: string;
   description: string;
 
   email: string;
@@ -23,7 +23,7 @@ export interface Organization {
 export const EMPTY_ORGANIZATION: Organization = {
 
   name: '',
-  shortName: '',
+  acronym: '',
   description: '',
 
   email: '',

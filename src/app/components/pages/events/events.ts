@@ -6,10 +6,24 @@ import { AuthService } from '../../../services/auth.service';
 import Swal from 'sweetalert2';
 import { Firestore, collection, collectionData } from '@angular/fire/firestore';
 
+import { TableModule } from 'primeng/table';
+import { TagModule } from 'primeng/tag';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { CardModule } from 'primeng/card';
+
 @Component({
   selector: 'app-events',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+  CommonModule,
+  FormsModule,
+  TableModule,
+  TagModule,
+  ButtonModule,
+  InputTextModule,
+  CardModule
+],
   templateUrl: './events.html',
   styleUrls: ['./events.scss']
 })

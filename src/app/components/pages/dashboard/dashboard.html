@@ -3,7 +3,7 @@
   <!-- HEADER -->
   <div class="dashboard-header">
     <h1>Dashboard</h1>
-    <h2>Welcome back, {{ user?.firstName }} {{ user?.lastName }} 👋</h2>
+    <h2>Welcome back, {{ user?.firstName }} {{ user?.lastName }} !</h2>
   </div>
 
   <!-- STATS -->
@@ -47,28 +47,14 @@
 
   </div>
 
-  <!-- CHARTS -->
-  <div class="charts-grid">
-
-    <p-card>
-      <h3>Attendance Trend</h3>
-      <p-chart type="line" [data]="attendanceChartData"></p-chart>
-    </p-card>
-
-    <p-card>
-      <h3>Events Overview</h3>
-      <p-chart type="bar" [data]="eventsChartData"></p-chart>
-    </p-card>
-
-  </div>
-
   <!-- CONTENT -->
   <div class="content-grid">
 
+    <!-- UPCOMING -->
     <p-card>
       <h3>Upcoming Events</h3>
 
-      <p-table [value]="upcomingEvents" [paginator]="true" [rows]="3">
+      <p-table [value]="upcomingEvents" [paginator]="true" [rows]="3" class="custom-table">
 
         <ng-template pTemplate="header">
           <tr>
@@ -91,19 +77,31 @@
       </p-table>
     </p-card>
 
+    <!-- RECENT ACTIVITY (FIXED) -->
     <p-card>
       <h3>Recent Activity</h3>
 
-      <p-timeline [value]="completedEvents">
-        <ng-template pTemplate="content" let-event>
-          <strong>{{ event.name }}</strong>
-          <div class="event-meta">
-            {{ event.date | date:'mediumDate' }}
-          </div>
-          <p-tag value="Completed" severity="success"></p-tag>
-        </ng-template>
-      </p-timeline>
+      <p-table [value]="completedEvents" [paginator]="true" [rows]="3" class="custom-table">
 
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Event</th>
+            <th>Date</th>
+            <th>Status</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-event>
+          <tr>
+            <td>{{ event.name }}</td>
+            <td>{{ event.date | date:'mediumDate' }}</td>
+            <td>
+              <p-tag value="Completed" severity="success"></p-tag>
+            </td>
+          </tr>
+        </ng-template>
+
+      </p-table>
     </p-card>
 
   </div>

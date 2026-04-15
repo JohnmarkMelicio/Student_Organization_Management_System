@@ -8,12 +8,28 @@ import { AuthService } from '../../../services/auth.service';
 
 import { Firestore, collection, query, where, getDocs } from '@angular/fire/firestore';
 
-import Swal from 'sweetalert2'; // ✅ ADDED
+import Swal from 'sweetalert2';
 
+/* ✅ ADD THESE PRIME NG MODULES */
+import { CardModule } from 'primeng/card';
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
+import { TableModule } from 'primeng/table';
+import { SelectModule } from 'primeng/select';
 @Component({
   selector: 'app-payments',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+
+    /* ✅ REQUIRED PRIME NG */
+    CardModule,
+    InputTextModule,
+    ButtonModule,
+    TableModule,
+    SelectModule
+  ],
   templateUrl: './payments.html',
   styleUrls: ['./payments.scss']
 })
@@ -87,7 +103,6 @@ export class PaymentsComponent implements OnInit {
     });
   }
 
-  // 🔥 FILTER
   applyFilters() {
 
     const search = this.searchText.toLowerCase();
