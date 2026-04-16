@@ -1,154 +1,272 @@
-.create-student-container {
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 28px;
-  border-radius: 20px;
-  background: #ffffff;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.08);
-  border: 1px solid #e5e7eb;
+.account-container {
+  border-radius: 18px;
+  padding: 25px;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.06);
 }
 
 /* HEADER */
 .header {
-  text-align: center;
-  margin-bottom: 10px;
-
-  h2 {
-    margin: 0;
-    font-size: 22px;
-    font-weight: 600;
-    color: #0d2c6c;
-  }
-
-  span {
-    font-size: 13px;
-    color: #6b7280;
-  }
-}
-
-/* SECTION */
-.section {
-  margin-top: 20px;
-  padding: 15px;
-  border-radius: 14px;
-  background: #f8fafc;
-  border: 1px solid #e5e7eb;
-
-  h4 {
-    margin-bottom: 10px;
-    font-size: 14px;
-    color: #0d2c6c;
-    font-weight: 600;
-  }
-}
-
-/* FORM */
-form {
   display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-/* GROUP */
-.form-group {
-  display: flex;
-  flex-direction: column;
-
-  label {
-    font-size: 13px;
-    font-weight: 500;
-    color: #475569;
-    margin-bottom: 5px;
-  }
-}
-
-/* ROW */
-.form-row {
-  display: flex;
-  gap: 12px;
-
-  .form-group {
-    flex: 1;
-  }
-}
-
-/* INPUT */
-:host ::ng-deep .p-inputtext,
-:host ::ng-deep .p-password input {
-  width: 100%;
-  padding: 11px 12px;
-  border-radius: 10px;
-  border: 1px solid #d1d5db;
-  transition: all 0.25s ease;
-  background: #ffffff;
-}
-
-:host ::ng-deep .p-inputtext:hover,
-:host ::ng-deep .p-password input:hover {
-  border-color: #9ca3af;
-}
-
-:host ::ng-deep .p-inputtext:focus,
-:host ::ng-deep .p-password input:focus {
-  border-color: #0d2c6c;
-  box-shadow: 0 0 0 3px rgba(13,44,108,0.08);
-}
-
-/* ICON INPUT */
-:host ::ng-deep .p-input-icon-left > i {
-  color: #9ca3af;
-}
-
-/* PASSWORD */
-:host ::ng-deep .p-password {
-  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
 }
 
 /* BUTTONS */
-.form-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-}
-
 .primary-btn {
-  flex: 1;
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  background: linear-gradient(135deg, #0d2c6c, #123d8c);
   border: none;
   border-radius: 10px;
-  font-weight: 500;
-  transition: all 0.25s ease;
-}
-
-.primary-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
 }
 
 .secondary-btn {
-  flex: 1;
-  background: #f1f5f9;
-  color: #334155;
-  border: none;
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
   border-radius: 10px;
+  transition: all 0.2s ease;
 }
 
 .secondary-btn:hover {
-  background: #e2e8f0;
+  background: #fecaca;
+  color: #991b1b;
+}
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 15px;
 }
 
-/* MOBILE */
-@media (max-width: 768px) {
-  .form-row {
-    flex-direction: column;
-  }
-
-  .form-actions {
-    flex-direction: column;
-  }
+/* SEARCH */
+.search-wrapper {
+  position: relative;
+  width: 280px;
+  margin-bottom: 18px;
 }
-.error {
-  color: #dc2626;
+
+.search-wrapper i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+}
+
+.search-wrapper input {
+  padding-left: 38px;
+  border-radius: 999px;
+}
+
+/* TABLE */
+.empty {
+  text-align: center;
+  padding: 20px;
+  color: #94a3b8;
+}
+
+/* ROLE BADGE */
+.role {
+  padding: 4px 10px;
+  border-radius: 999px;
   font-size: 12px;
-  margin-top: 4px;
+  font-weight: 500;
+}
+
+.role.student {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.role.admin {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+/* ACTION ICONS */
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.edit-btn {
+  color: #2563eb;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.edit-btn:hover {
+  transform: scale(1.1);
+}
+
+.delete-btn {
+  color: #ef4444;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.delete-btn:hover {
+  transform: scale(1.1);
+}
+
+/* STUDENT ID */
+.student-id {
+  font-weight: 600;
+  color: #0d2c6c;
+}
+
+/* =========================
+   PREMIUM TABLE (MATCH EVENTS)
+========================= */
+
+:host ::ng-deep .premium-table {
+  width: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+}
+
+:host ::ng-deep .premium-table .p-datatable-wrapper {
+  overflow-x: hidden !important;
+}
+
+:host ::ng-deep .premium-table table {
+  width: 100% !important;
+  table-layout: fixed;
+}
+
+:host ::ng-deep .premium-table .p-datatable-thead > tr > th {
+  background: #f1f5f9;
+  font-weight: 600;
+  color: #334155;
+  font-size: 13.5px;
+  padding: 14px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+:host ::ng-deep .premium-table .p-datatable-tbody > tr {
+  transition: all 0.2s ease;
+}
+
+:host ::ng-deep .premium-table .p-datatable-tbody > tr:nth-child(even) {
+  background: #f9fafb;
+}
+
+:host ::ng-deep .premium-table .p-datatable-tbody > tr:hover {
+  background: #eef2ff;
+}
+
+:host ::ng-deep .premium-table .p-datatable-tbody > tr > td {
+  padding: 14px;
+  font-size: 14px;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* =========================
+   🔥 PREMIUM MODAL (NEW)
+========================= */
+
+/* MAIN DIALOG */
+:host ::ng-deep .premium-dialog .p-dialog {
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 0;
+}
+
+/* HEADER */
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+/* BODY */
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+}
+
+/* SECTION (CARD STYLE 🔥) */
+.modal-section {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+}
+
+.modal-section h4 {
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 12px;
+}
+
+/* FORM GROUP */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.form-group label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #64748b;
+}
+
+/* INPUT */
+.modal-body input,
+.modal-body .p-password,
+.modal-body .p-password input {
+  width: 100% !important;
+  display: block;
+  border-radius: 10px;
+}
+.modal-body .p-password input {
+  padding: 10px;
+  height: 40px;
+}
+
+/* FOCUS EFFECT */
+.modal-body input:focus {
+  border-color: #0d2c6c;
+  box-shadow: 0 0 0 2px rgba(13,44,108,0.1);
+}
+
+/* GRID */
+.form-row-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.form-row-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+/* ACTIONS */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* BUTTON POLISH */
+.primary-btn {
+  padding: 8px 18px;
+}
+
+.secondary-btn {
+  padding: 8px 18px;
 }
