@@ -8,8 +8,13 @@
       <button pButton label="Create Account" icon="pi pi-user-plus"
         class="primary-btn" (click)="openModal()"></button>
 
-      <button pButton label="Import" icon="pi pi-upload"
-        class="secondary-btn" (click)="openImportModal()"></button>
+      <button pButton
+        type="button"
+        label="Import"
+        icon="pi pi-upload"
+        class="secondary-btn"
+        (click)="openImportModal()">
+      </button>
     </div>
   </div>
 
@@ -21,7 +26,7 @@
   </div>
 
   <!-- TABLE -->
-  <p-table [value]="filteredUsers" [paginator]="true" [rows]="8" styleClass="premium-table">
+  <p-table [value]="filteredUsers" [paginator]="true" [rows]="15" styleClass="premium-table">
 
   <ng-template pTemplate="header">
     <tr>
@@ -77,8 +82,9 @@
   [closable]="true"
   [draggable]="false"
   [style]="{ width: '720px' }"
-  styleClass="premium-dialog">
+  styleClass="create-dialog">
 
+  <!-- HEADER -->
   <ng-template pTemplate="header">
     <div class="modal-header">
       <i class="pi pi-user-plus"></i>
@@ -88,79 +94,149 @@
 
   <form #form="ngForm" (ngSubmit)="createStudent(form)" class="modal-body">
 
-  <!-- ========================= -->
-  <!-- ACCOUNT SECTION -->
-  <!-- ========================= -->
-  <div class="modal-section">
-    <h4>Account Information</h4>
+    <!-- ACCOUNT INFO -->
+    <div class="modal-section">
+      <h4>Account Information</h4>
 
-    <div class="form-group">
-      <label>Student ID</label>
-      <input pInputText [(ngModel)]="studentID" name="studentID" required>
+      <div class="form-group">
+        <label>Student ID</label>
+        <input pInputText [(ngModel)]="studentID" name="studentID" required>
+      </div>
+
+      <div class="form-group">
+        <label>Email Address</label>
+        <input pInputText [(ngModel)]="email" name="email" required>
+      </div>
+
+      <div class="form-group" *ngIf="!isEditMode">
+        <label>Password</label>
+        <p-password [(ngModel)]="password" name="password" [toggleMask]="true"></p-password>
+      </div>
     </div>
 
-    <div class="form-group">
-      <label>Email Address</label>
-      <input pInputText [(ngModel)]="email" name="email" required>
+    <!-- PERSONAL INFO -->
+    <div class="modal-section">
+      <h4>Personal Information</h4>
+
+      <div class="form-row-3">
+        <div class="form-group">
+          <label>First Name</label>
+          <input pInputText [(ngModel)]="firstName" name="firstName">
+        </div>
+
+        <div class="form-group">
+          <label>Middle Name</label>
+          <input pInputText [(ngModel)]="middleName" name="middleName">
+        </div>
+
+        <div class="form-group">
+          <label>Last Name</label>
+          <input pInputText [(ngModel)]="lastName" name="lastName">
+        </div>
+      </div>
+
+      <div class="form-row-2">
+        <div class="form-group">
+          <label>Program</label>
+          <input pInputText [(ngModel)]="program" name="program">
+        </div>
+
+        <div class="form-group">
+          <label>Year Level</label>
+          <input pInputText [(ngModel)]="year" name="year">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Contact Number</label>
+        <input pInputText [(ngModel)]="contact" name="contact">
+      </div>
     </div>
 
-    <div class="form-group" *ngIf="!isEditMode">
-      <label>Password</label>
-      <p-password [(ngModel)]="password" name="password"></p-password>
+    <!-- ACTIONS -->
+    <div class="modal-actions">
+      <button pButton type="button"
+        label="Cancel"
+        class="secondary-btn"
+        (click)="closeModal()">
+      </button>
+
+      <button pButton type="submit"
+        [label]="isEditMode ? 'Update Account' : 'Create Account'"
+        class="primary-btn">
+      </button>
     </div>
+
+  </form>
+
+</p-dialog>
+
+<p-dialog
+  [(visible)]="showImportModal"
+  [modal]="true"
+  [closable]="true"
+  [style]="{ width: '520px' }"
+  [dismissableMask]="true"
+  [blockScroll]="true"
+  styleClass="import-dialog">
+
+  <!-- HEADER -->
+  <ng-template pTemplate="header">
+    <div class="modal-header">
+      <i class="pi pi-upload"></i>
+      <span>Import Accounts</span>
+    </div>
+  </ng-template>
+
+  <!-- BODY -->
+  <div class="import-body">
+
+    <!-- 🔥 PREMIUM UPLOAD BOX -->
+    <div class="upload-box" (click)="fileInput.click()">
+
+      <i class="pi pi-cloud-upload upload-icon"></i>
+
+      <p class="upload-title">Click to upload file</p>
+      <span class="upload-sub">CSV or Excel (.csv, .xlsx)</span>
+
+      <input #fileInput
+        type="file"
+        (change)="onFileSelect($event)"
+        accept=".csv, .xlsx"
+        hidden />
+
+    </div>
+
+    <!-- FILE NAME -->
+    <div class="file-preview" *ngIf="selectedFileName">
+      <i class="pi pi-file"></i>
+      <span>{{ selectedFileName }}</span>
+    </div>
+
+    <!-- INFO -->
+    <div class="import-info">
+      Upload file with columns:<br>
+      <b>studentID, firstName, middleName, lastName, email, program, year, contact</b>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="modal-actions">
+
+      <button pButton type="button"
+        label="Cancel"
+        class="cancel-btn"
+        (click)="showImportModal=false">
+      </button>
+
+      <button pButton type="button"
+        label="Import"
+        icon="pi pi-check"
+        class="primary-btn"
+        (click)="importUsers()">
+      </button>
+
+    </div>
+
   </div>
-
-  <!-- ========================= -->
-  <!-- PERSONAL SECTION -->
-  <!-- ========================= -->
-  <div class="modal-section">
-    <h4>Personal Information</h4>
-
-    <div class="form-row-3">
-      <div class="form-group">
-        <label>First Name</label>
-        <input pInputText [(ngModel)]="firstName" name="firstName">
-      </div>
-
-      <div class="form-group">
-        <label>Middle Name</label>
-        <input pInputText [(ngModel)]="middleName" name="middleName">
-      </div>
-
-      <div class="form-group">
-        <label>Last Name</label>
-        <input pInputText [(ngModel)]="lastName" name="lastName">
-      </div>
-    </div>
-
-    <div class="form-row-2">
-      <div class="form-group">
-        <label>Program</label>
-        <input pInputText [(ngModel)]="program" name="program">
-      </div>
-
-      <div class="form-group">
-        <label>Year Level</label>
-        <input pInputText [(ngModel)]="year" name="year">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label>Contact Number</label>
-      <input pInputText [(ngModel)]="contact" name="contact">
-    </div>
-  </div>
-
-  <!-- ACTIONS -->
-  <div class="modal-actions">
-    <button pButton type="button" label="Cancel"
-      class="secondary-btn" (click)="closeModal()"></button>
-
-    <button pButton type="submit"
-      [label]="isEditMode ? 'Update Account' : 'Create Account'"
-      class="primary-btn"></button>
-  </div>
-
-</form>
 
 </p-dialog>

@@ -31,6 +31,7 @@
   background: #fecaca;
   color: #991b1b;
 }
+
 .modal-actions {
   display: flex;
   justify-content: flex-end;
@@ -116,7 +117,7 @@
 }
 
 /* =========================
-   PREMIUM TABLE (MATCH EVENTS)
+   PREMIUM TABLE
 ========================= */
 
 :host ::ng-deep .premium-table {
@@ -166,37 +167,38 @@
 }
 
 /* =========================
-   🔥 PREMIUM MODAL (NEW)
+   🔥 PREMIUM CREATE MODAL
 ========================= */
 
-/* MAIN DIALOG */
-:host ::ng-deep .premium-dialog .p-dialog {
+:host ::ng-deep .create-dialog .p-dialog {
   border-radius: 20px;
   overflow: hidden;
   padding: 0;
+  box-shadow: 0 25px 70px rgba(0,0,0,0.18);
 }
 
 /* HEADER */
-.modal-header {
+:host ::ng-deep .create-dialog .modal-header {
   display: flex;
   align-items: center;
   gap: 10px;
   font-size: 17px;
   font-weight: 600;
+  color: #1e293b;
 }
 
 /* BODY */
-.modal-body {
+:host ::ng-deep .create-dialog .modal-body {
+  padding: 22px;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 20px;
 }
 
-/* SECTION (CARD STYLE 🔥) */
+/* SECTION */
 .modal-section {
   background: #f8fafc;
-  border-radius: 12px;
+  border-radius: 14px;
   padding: 16px;
   border: 1px solid #e5e7eb;
 }
@@ -208,7 +210,7 @@
   margin-bottom: 12px;
 }
 
-/* FORM GROUP */
+/* FORM */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -222,23 +224,18 @@
   color: #64748b;
 }
 
-/* INPUT */
-.modal-body input,
-.modal-body .p-password,
-.modal-body .p-password input {
+/* INPUT FIX */
+:host ::ng-deep .create-dialog input,
+:host ::ng-deep .create-dialog .p-password,
+:host ::ng-deep .create-dialog .p-password input {
   width: 100% !important;
-  display: block;
   border-radius: 10px;
 }
-.modal-body .p-password input {
-  padding: 10px;
-  height: 40px;
-}
 
-/* FOCUS EFFECT */
-.modal-body input:focus {
-  border-color: #0d2c6c;
-  box-shadow: 0 0 0 2px rgba(13,44,108,0.1);
+/* PASSWORD FIX */
+:host ::ng-deep .create-dialog .p-password input {
+  height: 40px;
+  padding: 10px;
 }
 
 /* GRID */
@@ -254,19 +251,85 @@
   gap: 12px;
 }
 
-/* ACTIONS */
-.modal-actions {
+/* =========================
+   🔥 PREMIUM IMPORT MODAL
+========================= */
+
+:host ::ng-deep .import-dialog .p-dialog {
+  border-radius: 20px;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+
+:host ::ng-deep .import-dialog .modal-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 16px;
+  color: #1e293b;
+}
+
+:host ::ng-deep .import-dialog .import-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+:host ::ng-deep .import-dialog .upload-box {
+  border: 2px dashed #cbd5f5;
+  border-radius: 16px;
+  padding: 30px;
+  text-align: center;
+  cursor: pointer;
+  background: linear-gradient(145deg, #f8fafc, #ffffff);
+  transition: all 0.3s ease;
+}
+
+:host ::ng-deep .import-dialog .upload-box:hover {
+  border-color: #0d2c6c;
+  background: #f1f5ff;
+  transform: translateY(-2px);
+}
+
+:host ::ng-deep .import-dialog .upload-icon {
+  font-size: 40px;
+  color: #0d2c6c;
+  margin-bottom: 10px;
+}
+
+:host ::ng-deep .import-dialog .file-preview {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f1f5f9;
+  padding: 10px 14px;
+  border-radius: 10px;
+}
+
+:host ::ng-deep .import-dialog .import-info {
+  font-size: 12px;
+  color: #64748b;
+  background: #f8fafc;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+}
+
+:host ::ng-deep .import-dialog .modal-actions {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-  margin-top: 10px;
 }
 
-/* BUTTON POLISH */
-.primary-btn {
-  padding: 8px 18px;
+.cancel-btn {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-radius: 10px;
 }
 
-.secondary-btn {
-  padding: 8px 18px;
+.cancel-btn:hover {
+  background: #fecaca;
 }

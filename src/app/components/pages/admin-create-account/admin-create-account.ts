@@ -13,6 +13,9 @@ import {
   updateDoc
 } from '@angular/fire/firestore';
 
+import { initializeApp, getApps } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { environment } from '../../../../environments/environment';
 import Swal from 'sweetalert2';
 
 /* PrimeNG */
@@ -22,6 +25,8 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
+
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-admin-create-account',
@@ -41,9 +46,6 @@ import { DialogModule } from 'primeng/dialog';
 })
 export class AdminCreateAccount implements OnInit {
 
-  /* ========================= */
-  /* FORM DATA */
-  /* ========================= */
   studentID = '';
   firstName = '';
   middleName = '';
@@ -53,6 +55,10 @@ export class AdminCreateAccount implements OnInit {
   contact = '';
   email = '';
   password = '';
+
+  showImportModal = false;
+  importedData: any[] = [];
+  selectedFileName = '';
 
   selectedUserId: string | null = null;
 
@@ -69,9 +75,6 @@ export class AdminCreateAccount implements OnInit {
     private firestore: Firestore
   ) {}
 
-  /* ========================= */
-  /* LOAD USERS */
-  /* ========================= */
   ngOnInit() {
     const usersRef = collection(this.firestore, 'users');
 
@@ -82,9 +85,19 @@ export class AdminCreateAccount implements OnInit {
       });
   }
 
-  /* ========================= */
-  /* CREATE / UPDATE USER */
-  /* ========================= */
+  /* 🔥 SECONDARY AUTH FIX */
+  getSecondaryAuth() {
+    let secondaryApp;
+
+    if (!getApps().some(app => app.name === 'Secondary')) {
+      secondaryApp = initializeApp(environment.firebase, 'Secondary');
+    } else {
+      secondaryApp = getApps().find(app => app.name === 'Secondary')!;
+    }
+
+    return getAuth(secondaryApp);
+  }
+
   async createStudent(form: NgForm) {
 
     if (form.invalid) {
@@ -94,7 +107,6 @@ export class AdminCreateAccount implements OnInit {
 
     try {
 
-      /* 🔥 CLEAN DATA (REMOVE UNDEFINED) */
       const userData: any = {
         studentID: this.studentID || '',
         firstName: this.firstName || '',
@@ -106,9 +118,6 @@ export class AdminCreateAccount implements OnInit {
         email: this.email || ''
       };
 
-      /* ========================= */
-      /* UPDATE */
-      /* ========================= */
       if (this.isEditMode && this.selectedUserId) {
 
         await updateDoc(
@@ -120,11 +129,11 @@ export class AdminCreateAccount implements OnInit {
 
       } else {
 
-        /* ========================= */
-        /* CREATE */
-        /* ========================= */
+        /* 🔥 FIX HERE */
+        const secondaryAuth = this.getSecondaryAuth();
+
         const cred = await createUserWithEmailAndPassword(
-          this.auth,
+          secondaryAuth,
           this.email,
           this.password
         );
@@ -136,6 +145,8 @@ export class AdminCreateAccount implements OnInit {
           role: 'student',
           createdAt: new Date()
         });
+
+        await secondaryAuth.signOut(); // prevent auto login
 
         Swal.fire('Success', 'Account created!', 'success');
       }
@@ -149,9 +160,6 @@ export class AdminCreateAccount implements OnInit {
     }
   }
 
-  /* ========================= */
-  /* DELETE */
-  /* ========================= */
   async deleteUser(id: string) {
 
     const confirm = await Swal.fire({
@@ -166,9 +174,6 @@ export class AdminCreateAccount implements OnInit {
     }
   }
 
-  /* ========================= */
-  /* SEARCH */
-  /* ========================= */
   filterUsers() {
     const keyword = this.search.toLowerCase();
 
@@ -179,9 +184,87 @@ export class AdminCreateAccount implements OnInit {
     );
   }
 
-  /* ========================= */
-  /* MODAL CONTROL */
-  /* ========================= */
+  onFileSelect(event: any) {
+    const file = event.target.files[0];
+
+    if (!file) {
+      Swal.fire('No file selected', '', 'warning');
+      return;
+    }
+
+    this.selectedFileName = file.name;
+
+    const reader = new FileReader();
+
+    reader.onload = (e: any) => {
+      try {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        this.importedData = XLSX.utils.sheet_to_json(sheet);
+
+        Swal.fire('Loaded', `${this.importedData.length} users ready`, 'info');
+
+      } catch (err) {
+        Swal.fire('Error reading file', '', 'error');
+      }
+    };
+
+    reader.readAsArrayBuffer(file);
+  }
+
+  async importUsers() {
+
+    if (!this.importedData.length) {
+      Swal.fire('No Data', 'Upload file first', 'warning');
+      return;
+    }
+
+    try {
+
+      const secondaryAuth = this.getSecondaryAuth();
+
+      for (const raw of this.importedData) {
+
+        const user = {
+          studentID: String(raw.studentID) || '',
+          firstName: raw.firstName || '',
+          middleName: raw.middleName || '',
+          lastName: raw.lastName || '',
+          email: raw.email || '',
+          program: raw.program || '',
+          year: raw.year || '',
+          contact: raw.contact || ''
+        };
+
+        if (!user.email) continue;
+
+        const cred = await createUserWithEmailAndPassword(
+          secondaryAuth,
+          user.email,
+          user.studentID || '123456'
+        );
+
+        await setDoc(doc(this.firestore, 'users', cred.user.uid), {
+          ...user,
+          role: 'student',
+          createdAt: new Date()
+        });
+      }
+
+      await secondaryAuth.signOut(); // prevent auto login
+
+      Swal.fire('Success', 'Users imported!', 'success');
+
+      this.showImportModal = false;
+      this.importedData = [];
+
+    } catch (err: any) {
+      Swal.fire('Error', err.message, 'error');
+    }
+  }
+
   openModal() {
     this.resetForm();
     this.isEditMode = false;
@@ -192,16 +275,12 @@ export class AdminCreateAccount implements OnInit {
     this.showModal = false;
   }
 
-  /* ========================= */
-  /* EDIT USER */
-  /* ========================= */
   editUser(user: any) {
     this.isEditMode = true;
     this.showModal = true;
 
     this.selectedUserId = user.id;
 
-    /* 🔥 SAFE ASSIGN (NO UNDEFINED) */
     this.studentID = user.studentID || '';
     this.firstName = user.firstName || '';
     this.middleName = user.middleName || '';
@@ -212,9 +291,6 @@ export class AdminCreateAccount implements OnInit {
     this.email = user.email || '';
   }
 
-  /* ========================= */
-  /* RESET FORM */
-  /* ========================= */
   resetForm() {
     this.studentID = '';
     this.firstName = '';
@@ -228,10 +304,7 @@ export class AdminCreateAccount implements OnInit {
     this.selectedUserId = null;
   }
 
-  /* ========================= */
-  /* IMPORT */
-  /* ========================= */
   openImportModal() {
-    Swal.fire('Coming soon: Import feature');
+    this.showImportModal = true;
   }
 }
