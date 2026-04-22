@@ -12,6 +12,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { CardModule } from 'primeng/card';
 import { DialogModule } from 'primeng/dialog';
+import { SelectModule } from 'primeng/select';
 
 @Component({
   selector: 'app-events',
@@ -24,7 +25,8 @@ import { DialogModule } from 'primeng/dialog';
     ButtonModule,
     InputTextModule,
     CardModule,
-    DialogModule
+    DialogModule,
+    SelectModule
   ],
   templateUrl: './events.html',
   styleUrls: ['./events.scss']
@@ -40,24 +42,29 @@ export class EventsComponent implements OnInit {
   organizations: any[] = [];
 
   editingId: string | null = null;
+  expandedEventId: string | null = null;
 
   isAdmin = false;
 
-  // ✅ MODAL CONTROL
   showEventModal = false;
+  showEditModal: boolean = false;
+  selectedEvent: any = {};
 
+  // ✅ FIXED EVENT MODEL
   newEvent: any = {
     name: '',
     date: '',
     location: '',
     organization: '',
-    status: ''
+    status: '',
+    startTime: '',
+    endTime: ''
   };
 
   constructor(
     private eventsService: EventsService,
     private authService: AuthService,
-    private firestore: Firestore
+    private firestore: Firestore,
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -75,6 +82,24 @@ export class EventsComponent implements OnInit {
     this.loadEvents();
     this.loadOrganizations();
   }
+
+  formatTime(time: string): string {
+  if (!time) return '-';
+
+  const [hour, minute] = time.split(':');
+  let h = parseInt(hour, 10);
+  const ampm = h >= 12 ? 'PM' : 'AM';
+
+  h = h % 12;
+  h = h ? h : 12; // 0 becomes 12
+
+  return `${h}:${minute} ${ampm}`;
+}
+
+toggleRow(event: any) {
+  this.expandedEventId =
+    this.expandedEventId === event.id ? null : event.id;
+}
 
   loadEvents(): void {
     this.eventsService.getAll().subscribe({
@@ -98,7 +123,6 @@ export class EventsComponent implements OnInit {
     this.newEvent.organization = event.target.value;
   }
 
-  // ✅ OPEN MODAL
   openEventModal(): void {
     this.showEventModal = true;
   }
@@ -108,14 +132,12 @@ export class EventsComponent implements OnInit {
     if (!this.isAdmin) return;
 
     if (!this.newEvent.name || !this.newEvent.date) {
-
       Swal.fire({
         icon: 'warning',
         title: 'Missing Fields',
         text: 'Please complete required fields',
         target: document.body
       });
-
       return;
     }
 
@@ -142,11 +164,7 @@ export class EventsComponent implements OnInit {
 
         this.loadEvents();
         this.resetForm();
-
-        // ✅ CLOSE MODAL
         this.showEventModal = false;
-
-        // (optional keep)
         this.viewMode = 'list';
 
       })
@@ -162,6 +180,7 @@ export class EventsComponent implements OnInit {
       });
 
   }
+  
 
   editEvent(event: any): void {
     if (!this.isAdmin) return;
@@ -207,6 +226,53 @@ export class EventsComponent implements OnInit {
       });
 
   }
+
+  openEditModal(event: any) {
+  this.selectedEvent = { ...event };
+  this.showEditModal = true;
+}
+
+ async updateEvent() {
+  try {
+
+    // 🚫 PREVENT undefined
+    if (!this.selectedEvent.organizationId) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Select Organization',
+        text: 'Please select an organization before saving'
+      });
+      return;
+    }
+
+    await this.eventsService.update(this.selectedEvent.id, {
+      name: this.selectedEvent.name,
+      date: this.selectedEvent.date,
+      startTime: this.selectedEvent.startTime,
+      endTime: this.selectedEvent.endTime,
+      location: this.selectedEvent.location,
+      status: this.selectedEvent.status,
+      organizationId: this.selectedEvent.organizationId
+    });
+
+    Swal.fire({
+      icon: 'success',
+      title: 'Saved!',
+      timer: 1200,
+      showConfirmButton: false
+    });
+
+    this.showEditModal = false;
+
+  } catch (err: any) {
+    Swal.fire('Error', err.message, 'error');
+  }
+}
+
+  getOrganizationName(id: string): string {
+  const org = this.organizations.find(o => o.id === id);
+  return org ? org.name : 'Unknown';
+}
 
   deleteEvent(id: string): void {
 
@@ -270,13 +336,16 @@ export class EventsComponent implements OnInit {
     );
   }
 
+  // ✅ FIXED RESET (IMPORTANT)
   resetForm(): void {
     this.newEvent = {
       name: '',
       date: '',
       location: '',
       organization: '',
-      status: ''
+      status: '',
+      startTime: '',
+      endTime: ''
     };
   }
 
@@ -285,7 +354,6 @@ export class EventsComponent implements OnInit {
     this.loadEvents();
   }
 
-  // ✅ AUTO STATUS LOGIC
   getEventStatus(date: string, manualStatus?: string): string {
 
     const today = new Date();

@@ -4,9 +4,11 @@ export interface Event {
 
   name: string;
   date: string;
+  startTime: string;
+  endTime: string;
   location: string;
 
   status: string;
-  organization: string;
+  organizationId: string;
 
 }

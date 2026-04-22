@@ -37,6 +37,25 @@
       </div>
 
       <div class="form-group">
+      <label>Start Time</label>
+      <input
+        type="time"
+        [(ngModel)]="newEvent.startTime"
+        name="startTime"
+      />
+    </div>
+
+    <!-- END TIME -->
+    <div class="form-group">
+      <label>End Time</label>
+      <input
+        type="time"
+        [(ngModel)]="newEvent.endTime"
+        name="endTime"
+      />
+    </div>
+
+      <div class="form-group">
         <label>Location</label>
         <input pInputText [(ngModel)]="newEvent.location" placeholder="Enter location">
       </div>
@@ -56,14 +75,23 @@
       </div>
 
       <div class="form-group">
-        <label>Organization</label>
-        <select [(ngModel)]="newEvent.organization" class="custom-select">
-          <option value="">Select Organization</option>
-          <option *ngFor="let org of organizations" [value]="org.name">
-            {{ org.name }}
-          </option>
-        </select>
-      </div>
+      <label>Organization</label>
+
+      <select [(ngModel)]="newEvent.organizationId" class="custom-select">
+        <option value="">Select Organization</option>
+
+        <option *ngFor="let org of organizations" [value]="org.id">
+          {{ org.name }}
+        </option>
+
+      </select>
+    </div>
+
+      <div class="form-row">
+  
+
+
+</div>
 
     </div>
 
@@ -88,7 +116,7 @@
 
 </p-dialog>
 
-  <!-- HEADER TOGGLE -->
+  
   <div class="top-toggle">
 
     <button pButton
@@ -99,12 +127,6 @@
             (click)="openEventModal()">
     </button>
 
-    <button pButton
-            label="Event List"
-            icon="pi pi-list"
-            [class.active]="viewMode === 'list'"
-            (click)="viewMode='list'">
-    </button>
 
   </div>
 
@@ -145,27 +167,28 @@
   <!-- LIST -->
   <div *ngIf="viewMode === 'list'" class="list-card">
 
-    <div class="list-header">
-      <h2>Event List</h2>
-    </div>
+  <!-- TITLE -->
+<div class="list-header">
+  <h2>Event List</h2>
+</div>
 
-    <!-- SEARCH -->
-    <div class="search-wrapper">
-    <i class="pi pi-search"></i>
-    <input
-      type="text"
-      [(ngModel)]="searchText"
-      (input)="searchEvents()"
-      placeholder="Search events..."
-    />
-  </div>
+<!-- SEARCH BELOW -->
+<div class="search-wrapper">
+  <i class="pi pi-search"></i>
+  <input
+    type="text"
+    [(ngModel)]="searchText"
+    (input)="searchEvents()"
+    placeholder="Search events..."
+  />
+</div>
+
 
     <!-- TABLE -->
     <p-table
       [value]="filteredEvents"
       [paginator]="true"
       [rows]="8"
-      [rowsPerPageOptions]="[5,10,20]"
       responsiveLayout="scroll">
 
       <!-- HEADER -->
@@ -173,6 +196,8 @@
         <tr>
           <th>Event</th>
           <th>Date</th>
+          <th>Start</th>
+          <th>End</th>
           <th>Location</th>
           <th>Status</th>
           <th>Organization</th>
@@ -183,11 +208,17 @@
       <!-- BODY -->
  <!-- BODY -->
 <ng-template pTemplate="body" let-event>
-  <tr [class.editing-row]="editingId === event.id">
+  
+  <!-- 🔥 MAIN ROW -->
+  <tr
+    [class.editing-row]="editingId === event.id"
+    (click)="toggleRow(event)"
+    style="cursor: pointer;"
+  >
 
     <!-- NAME -->
     <td>
-      <input *ngIf="editingId === event.id"
+      <input *ngIf="false"
              pInputText
              class="edit-input"
              [(ngModel)]="event.name">
@@ -210,6 +241,32 @@
       </span>
     </td>
 
+    <!-- START -->
+    <td>
+      <input *ngIf="editingId === event.id"
+             type="time"
+             pInputText
+             class="edit-input"
+             [(ngModel)]="event.startTime">
+
+      <span *ngIf="editingId !== event.id">
+        {{ formatTime(event.startTime) }}
+      </span>
+    </td>
+
+    <!-- END -->
+    <td>
+      <input *ngIf="editingId === event.id"
+             type="time"
+             pInputText
+             class="edit-input"
+             [(ngModel)]="event.endTime">
+
+      <span *ngIf="editingId !== event.id">
+        {{ formatTime(event.endTime) }}
+      </span>
+    </td>
+
     <!-- LOCATION -->
     <td>
       <input *ngIf="editingId === event.id"
@@ -224,8 +281,6 @@
 
     <!-- STATUS -->
     <td>
-
-      <!-- EDIT MODE -->
       <select *ngIf="editingId === event.id"
               [(ngModel)]="event.status"
               class="edit-select">
@@ -236,7 +291,6 @@
 
       </select>
 
-      <!-- VIEW MODE -->
       <p-tag *ngIf="editingId !== event.id"
         [value]="getEventStatus(event.date, event.status)"
         [severity]="
@@ -245,65 +299,219 @@
           'success'
         ">
       </p-tag>
-
     </td>
 
     <!-- ORGANIZATION -->
     <td>
-      <input *ngIf="editingId === event.id"
-             pInputText
-             class="edit-input"
-             [(ngModel)]="event.organization">
+  <!-- EDIT MODE -->
+  <select *ngIf="editingId === event.id"
+          [(ngModel)]="event.organizationId"
+          class="edit-select">
 
-      <span *ngIf="editingId !== event.id">
-        {{ event.organization }}
-      </span>
-    </td>
+    <option *ngFor="let org of organizations"
+            [value]="org.id">
+      {{ org.name }}
+    </option>
+
+  </select>
+
+  <!-- VIEW MODE -->
+  <span *ngIf="editingId !== event.id">
+    {{ getOrganizationName(event.organizationId) }}
+  </span>
+</td>
 
     <!-- ACTION -->
     <td *ngIf="isAdmin" class="actions">
 
   <!-- EDIT MODE -->
   <ng-container *ngIf="editingId === event.id">
+    <div class="action-buttons">
 
-    <button pButton
-      label="Save"
-      icon="pi pi-check"
-      class="p-button-success"
-      (click)="saveEvent(event)">
-    </button>
+      <button pButton
+        label="Save"
+        icon="pi pi-check"
+        class="p-button-success"
+        (click)="saveEvent(event); $event.stopPropagation()">
+      </button>
 
-    <button pButton
-      label="Cancel"
-      icon="pi pi-times"
-      class="p-button-text"
-      (click)="cancelEdit()">
-    </button>
+      <button pButton
+        label="Cancel"
+        icon="pi pi-times"
+        class="p-button-text"
+        (click)="cancelEdit(); $event.stopPropagation()">
+      </button>
 
+    </div>
   </ng-container>
 
   <!-- VIEW MODE -->
   <ng-container *ngIf="editingId !== event.id">
+    <div class="action-buttons">
 
-    <button pButton
-      icon="pi pi-pencil"
-      class="p-button-text edit-btn"
-      (click)="editEvent(event)">
-    </button>
+      <button pButton
+        icon="pi pi-pencil"
+        class="p-button-text edit-btn"
+        (click)="openEditModal(event); $event.stopPropagation()">
+      </button>
 
-    <button pButton
-      icon="pi pi-trash"
-      class="p-button-text delete-btn"
-      (click)="deleteEvent(event.id)">
-    </button>
+      <button pButton
+        icon="pi pi-trash"
+        class="p-button-text delete-btn"
+        (click)="deleteEvent(event.id); $event.stopPropagation()">
+      </button>
 
+    </div>
   </ng-container>
 
 </td>
+  <!-- 🔥 EXPANDABLE ROW -->
+  <tr *ngIf="expandedEventId === event.id" class="expanded-row">
+    <td colspan="8">
 
+      <div class="expanded-content">
+
+  <div class="expand-grid">
+
+    <div>
+      <label>Event</label>
+      <p>{{ event.name }}</p>
+    </div>
+
+    <div>
+      <label>Date</label>
+      <p>{{ event.date }}</p>
+    </div>
+
+    <div>
+      <label>Time</label>
+      <p> {{ formatTime(event.startTime) }} - {{ formatTime(event.endTime) }}</p>
+    </div>
+
+    <div>
+      <label>Status</label>
+      <p class="status-text">{{ event.status }}</p>
+    </div>
+
+    <div>
+      <label>Location</label>
+      <p>{{ event.location }}</p>
+    </div>
+
+    <div>
+      <label>Organization</label>
+      <p>{{ getOrganizationName(event.organizationId) }}</p>
+    </div>
+
+  </div>
+
+</div>
+
+    </td>
   </tr>
+
 </ng-template>
     </p-table>
+
+    <p-dialog
+  [(visible)]="showEditModal"
+  [modal]="true"
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '750px' }"
+  styleClass="premium-dialog">
+
+  <!-- HEADER -->
+  <ng-template pTemplate="header">
+    <div class="modal-header premium-header">
+      <div>
+        <i class="pi pi-pencil"></i>
+        <span>Edit Event</span>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- BODY -->
+  <div class="modal-body premium-body">
+
+    <!-- EVENT NAME -->
+    <div class="form-group full">
+      <label>Event Name</label>
+      <input pInputText [(ngModel)]="selectedEvent.name">
+    </div>
+
+    <!-- GRID -->
+    <div class="form-grid">
+
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" [(ngModel)]="selectedEvent.date">
+      </div>
+
+      <div class="form-group">
+        <label>Location</label>
+        <input pInputText [(ngModel)]="selectedEvent.location">
+      </div>
+
+      <div class="form-group">
+        <label>Start Time</label>
+        <input type="time" [(ngModel)]="selectedEvent.startTime">
+      </div>
+
+      <div class="form-group">
+        <label>End Time</label>
+        <input type="time" [(ngModel)]="selectedEvent.endTime">
+      </div>
+
+      <div class="form-group">
+        <label>Status</label>
+        <select [(ngModel)]="selectedEvent.status" class="custom-select">
+          <option value="Upcoming">Upcoming</option>
+          <option value="Ongoing">Ongoing</option>
+          <option value="Completed">Completed</option>
+        </select>
+      </div>
+
+      <!-- 🔥 CONNECTED DROPDOWN -->
+      <div class="form-group">
+        <label>Organization</label>
+
+        <p-select
+        [options]="organizations"
+        optionLabel="name"
+        optionValue="id"
+        [(ngModel)]="selectedEvent.organizationId"
+        placeholder="Select Organization"
+        class="w-full premium-dropdown">
+      </p-select>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <ng-template pTemplate="footer">
+
+    <button pButton
+      label="Cancel"
+      icon="pi pi-times"
+      class="p-button-text cancel-btn"
+      (click)="showEditModal=false">
+    </button>
+
+    <button pButton
+      label="Save Changes"
+      icon="pi pi-check"
+      class="save-btn"
+      (click)="updateEvent()">
+    </button>
+
+  </ng-template>
+
+</p-dialog>
 
   </div>
 
