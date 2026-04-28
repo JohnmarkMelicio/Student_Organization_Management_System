@@ -10,41 +10,54 @@
     </div>
   </ng-template>
 
-  <!-- FORM -->
-  <div class="payment-form" *ngIf="isAdmin">
+ <div class="payment-toolbar">
 
-    <p-select
-      [options]="[{label:'USG Fee',value:'USG'},{label:'Event',value:'Event'}]"
-      [(ngModel)]="newPayment.type"
-      placeholder="Payment Type">
-    </p-select>
+  <!-- 🔹 FILTER (ALL USERS) -->
+  <p-select
+    class="field small"
+    [options]="[
+      {label:'USG Fee', value:'USG'},
+      {label:'Event', value:'Event'}
+    ]"
+    [(ngModel)]="viewMode"
+    (onChange)="onTypeChange()"
+    placeholder="Type">
+  </p-select>
 
-    <p-select *ngIf="newPayment.type === 'Event'"
-      [options]="events"
-      optionLabel="name"
-      optionValue="id"
-      [(ngModel)]="newPayment.eventId"
-      placeholder="Select Event">
-    </p-select>
+  <p-select *ngIf="viewMode === 'Event'"
+    class="field"
+    [options]="events"
+    optionLabel="name"
+    optionValue="id"
+    [(ngModel)]="selectedEventId"
+    (onChange)="applyFilters()"
+    placeholder="Select Event">
+  </p-select>
+
+  <!-- 🔹 ADMIN ONLY -->
+  <ng-container *ngIf="isAdmin">
 
     <input pInputText
+      class="field"
       placeholder="Student ID"
       [(ngModel)]="newPayment.studentId"
       (blur)="fetchStudent()">
 
     <input pInputText
+      class="field"
       type="number"
       placeholder="Amount"
       [(ngModel)]="newPayment.amount">
 
     <p-select
+      class="field small"
       [options]="[
         {label:'Cash',value:'Cash'},
         {label:'GCash',value:'GCash'},
         {label:'Bank Transfer',value:'Bank Transfer'}
       ]"
       [(ngModel)]="newPayment.paymentMethod"
-      placeholder="Payment Method">
+      placeholder="Method">
     </p-select>
 
     <button pButton
@@ -54,35 +67,9 @@
       (click)="addPayment()">
     </button>
 
-  </div>
+  </ng-container>
 
-  <!-- FILTER -->
-  <div class="payment-filter">
-
-    <button pButton
-      label="USG"
-      class="filter-btn"
-      [class.active]="viewMode === 'USG'"
-      (click)="viewMode='USG'; applyFilters()">
-    </button>
-
-    <button pButton
-      label="Event"
-      class="filter-btn"
-      [class.active]="viewMode === 'Event'"
-      (click)="viewMode='Event'; applyFilters()">
-    </button>
-
-    <p-select *ngIf="viewMode === 'Event'"
-      [options]="events"
-      optionLabel="name"
-      optionValue="id"
-      [(ngModel)]="selectedEventId"
-      (onChange)="onEventChange()"
-      placeholder="Filter Event">
-    </p-select>
-
-  </div>
+</div>
 
   <!-- SEARCH -->
   <div class="search-wrapper">
@@ -95,7 +82,7 @@
 
   <!-- TABLE -->
   <p-table
-    [value]="viewMode === 'USG' ? filteredUSGPayments : filteredEventPayments"
+    [value]="filteredPayments"
     [paginator]="true"
     [rows]="8"
     [responsiveLayout]="'scroll'"

@@ -11,46 +11,94 @@
   </ng-template>
 
   <!-- TOOLBAR -->
-  <div class="toolbar">
+  <!-- TOOLBAR -->
+<div class="toolbar">
 
-    <div class="left">
+  <div class="left">
+
+    <p-select
+      [options]="events"
+      [(ngModel)]="selectedEventId"
+      optionLabel="name"
+      optionValue="id"
+      placeholder="Select Event"
+      (onChange)="loadAttendance()"
+      class="field">
+    </p-select>
+
+    <ng-container *ngIf="isAdmin">
+
+      <input pInputText
+             placeholder="Student ID"
+             [(ngModel)]="newRecord.studentId"
+             class="field"/>
 
       <p-select
-        [options]="events"
-        [(ngModel)]="selectedEventId"
-        optionLabel="name"
-        optionValue="id"
-        placeholder="Select Event"
-        (onChange)="loadAttendance()"
-        class="field">
+        [options]="statusOptions"
+        [(ngModel)]="newRecord.status"
+        class="field small">
       </p-select>
 
-      <ng-container *ngIf="isAdmin">
+      <button pButton
+              label="Add"
+              icon="pi pi-plus"
+              class="add-btn"
+              (click)="addAttendance()">
+      </button>
 
-        <input pInputText
-               placeholder="Student ID"
-               [(ngModel)]="newRecord.studentId"
-               class="field"/>
+      <button pButton
+        icon="pi pi-qrcode"
+        label="Scan QR"
+        class="qr-btn-wide"
+        (click)="openScanner()">
+      </button>
 
-        <p-select
-          [options]="statusOptions"
-          [(ngModel)]="newRecord.status"
-          class="field small">
-        </p-select>
+    </ng-container>
 
-        <button pButton
-                label="Add"
-                icon="pi pi-plus"
-                class="add-btn"
-                (click)="addAttendance()">
-        </button>
+  </div>
 
-      </ng-container>
+</div>
 
-    </div>
+<p-dialog
+  [(visible)]="showScanner"
+  header="Scan Student QR"
+  [modal]="true"
+  [style]="{ width: '380px' }"
+  [draggable]="false"
+  styleClass="qr-dialog"
+>
 
-    <!-- SEARCH -->
-    <div class="right">
+  <!-- CAMERA SELECTOR -->
+  <div class="camera-select-wrapper">
+    <i class="pi pi-camera"></i>
+    <select [(ngModel)]="currentDevice" class="camera-select">
+      <option *ngFor="let d of availableDevices" [ngValue]="d">
+        {{ d.label || 'Camera ' + (availableDevices.indexOf(d) + 1) }}
+      </option>
+    </select>
+  </div>
+
+  <!-- SCANNER -->
+  <div class="scanner-container">
+    <zxing-scanner
+      [device]="currentDevice"
+      (camerasFound)="onCamerasFound($event)"
+      (scanSuccess)="onScan($event)">
+    </zxing-scanner>
+
+    <!-- 🔥 OVERLAY FRAME -->
+    <div class="scan-frame"></div>
+  </div>
+
+  <!-- HINT -->
+  <div class="scan-hint">
+    Align QR inside the frame
+  </div>
+
+</p-dialog>
+
+<!-- ✅ NEW SEARCH ROW -->
+<div class="search-row">
   <div class="search-wrapper">
     <i class="pi pi-search"></i>
     <input pInputText
@@ -58,8 +106,6 @@
            (input)="dt.filterGlobal($event.target.value, 'contains')" />
   </div>
 </div>
-
-  </div>
 
   <!-- TABLE -->
   <p-table

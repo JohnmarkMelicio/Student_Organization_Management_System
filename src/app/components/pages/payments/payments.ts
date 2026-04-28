@@ -37,6 +37,7 @@ export class PaymentsComponent implements OnInit {
 
   events: any[] = [];
   payments: any[] = [];
+  filteredPayments: any[] = [];
 
   usgPayments: any[] = [];
   eventPayments: any[] = [];
@@ -105,26 +106,35 @@ export class PaymentsComponent implements OnInit {
 
   applyFilters() {
 
-    const search = this.searchText.toLowerCase();
+  const search = this.searchText.toLowerCase();
 
-    this.filteredUSGPayments = this.usgPayments.filter(p =>
-      p.studentId?.toLowerCase().includes(search) ||
-      p.name?.toLowerCase().includes(search) ||
-      p.program?.toLowerCase().includes(search)
-    );
+  let data = this.payments;
 
-    let eventData = this.eventPayments;
-
-    if (this.selectedEventId) {
-      eventData = eventData.filter(p => p.eventId === this.selectedEventId);
-    }
-
-    this.filteredEventPayments = eventData.filter(p =>
-      p.studentId?.toLowerCase().includes(search) ||
-      p.name?.toLowerCase().includes(search) ||
-      p.program?.toLowerCase().includes(search)
-    );
+  // 🔥 FILTER TYPE
+  if (this.viewMode === 'USG') {
+    data = data.filter(p => p.type === 'USG');
   }
+
+  if (this.viewMode === 'Event') {
+    data = data.filter(p => p.type === 'Event');
+
+    // 🔥 FILTER EVENT
+    if (this.selectedEventId) {
+      data = data.filter(p => p.eventId === this.selectedEventId);
+    }
+  }
+
+  // 🔍 SEARCH
+  this.filteredPayments = data.filter(p =>
+    p.studentId?.toLowerCase().includes(search) ||
+    p.name?.toLowerCase().includes(search) ||
+    p.program?.toLowerCase().includes(search)
+  );
+}
+onTypeChange() {
+  this.selectedEventId = null; // reset event
+  this.applyFilters();
+}
 
   searchPayments() {
     this.applyFilters();
@@ -186,52 +196,74 @@ export class PaymentsComponent implements OnInit {
 
   addPayment() {
 
-    if (!this.newPayment.studentId ||
-        !this.newPayment.name ||
-        !this.newPayment.amount) {
-
-      Swal.fire({
-        icon: 'warning',
-        title: 'Missing Fields',
-        text: 'Please complete required fields'
-      });
-
-      return;
-    }
-
-    const payment = {
-      ...this.newPayment,
-      paymentDate: new Date().toISOString()
-    };
+  if (!this.newPayment.studentId ||
+      !this.newPayment.name ||
+      !this.newPayment.amount) {
 
     Swal.fire({
-      title: 'Processing payment...',
-      allowOutsideClick: false,
-      didOpen: () => Swal.showLoading()
+      icon: 'warning',
+      title: 'Missing Fields',
+      text: 'Please complete required fields'
     });
 
-    this.paymentsService.create(payment)
-      .then(() => {
-
-        Swal.fire({
-          icon: 'success',
-          title: 'Payment Added!',
-          timer: 1200,
-          showConfirmButton: false
-        });
-
-        this.loadPayments();
-        this.resetForm();
-      })
-      .catch(err => {
-        console.error(err);
-
-        Swal.fire({
-          icon: 'error',
-          title: 'Failed to save payment'
-        });
-      });
+    return;
   }
+
+  // 🔥 DUPLICATE CHECK
+  const existing = this.payments.find(p =>
+    p.studentId === this.newPayment.studentId &&
+    p.type === this.newPayment.type &&
+    (
+      this.newPayment.type === 'USG' ||
+      p.eventId === this.newPayment.eventId
+    )
+  );
+
+  if (existing) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Duplicate',
+      text: 'Student already recorded',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#6366f1'
+    });
+    return;
+  }
+
+  // ✅ CONTINUE IF NO DUPLICATE
+  const payment = {
+    ...this.newPayment,
+    paymentDate: new Date().toISOString()
+  };
+
+  Swal.fire({
+    title: 'Processing payment...',
+    allowOutsideClick: false,
+    didOpen: () => Swal.showLoading()
+  });
+
+  this.paymentsService.create(payment)
+    .then(() => {
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Payment Added!',
+        timer: 1200,
+        showConfirmButton: false
+      });
+
+      this.loadPayments();
+      this.resetForm();
+    })
+    .catch(err => {
+      console.error(err);
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Failed to save payment'
+      });
+    });
+}
 
   editPayment(payment:any) {
     this.editingId = payment.id;

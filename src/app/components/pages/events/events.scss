@@ -344,3 +344,12 @@ box-shadow: 0 10px 18px rgba(29,78,216,0.35);
 ::ng-deep .p-datatable .p-datatable-row-expansion {
   background: transparent !important;
 }
+/* =========================
+SEARCH ROW (NEW)
+========================= */
+.search-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}

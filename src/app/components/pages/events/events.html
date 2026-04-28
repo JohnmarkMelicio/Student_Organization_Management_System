@@ -172,15 +172,17 @@
   <h2>Event List</h2>
 </div>
 
-<!-- SEARCH BELOW -->
-<div class="search-wrapper">
-  <i class="pi pi-search"></i>
-  <input
-    type="text"
-    [(ngModel)]="searchText"
-    (input)="searchEvents()"
-    placeholder="Search events..."
-  />
+<!-- SEARCH ROW (ALIGNED LEFT LIKE PAYMENTS) -->
+<div class="search-row">
+  <div class="search-wrapper">
+    <i class="pi pi-search"></i>
+    <input
+      type="text"
+      [(ngModel)]="searchText"
+      (input)="searchEvents()"
+      placeholder="Search events..."
+    />
+  </div>
 </div>
 
 

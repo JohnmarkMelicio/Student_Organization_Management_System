@@ -50,60 +50,74 @@
   <!-- CONTENT -->
   <div class="content-grid">
 
-    <!-- UPCOMING -->
-    <p-card>
-      <h3>Upcoming Events</h3>
+  <!-- UPCOMING EVENTS -->
+  <!-- UPCOMING EVENTS -->
+<p-card class="content-card">
 
-      <p-table [value]="upcomingEvents" [paginator]="true" [rows]="3" class="custom-table">
+  <div class="card-header">
+    <h3>Upcoming Events</h3>
+    <span class="count">{{ upcomingEvents.length }}</span>
+  </div>
 
-        <ng-template pTemplate="header">
-          <tr>
-            <th>Event</th>
-            <th>Date</th>
-            <th>Status</th>
-          </tr>
-        </ng-template>
+  <div class="event-list">
 
-        <ng-template pTemplate="body" let-event>
-          <tr>
-            <td>{{ event.name }}</td>
-            <td>{{ event.date | date:'mediumDate' }}</td>
-            <td>
-              <p-tag value="Upcoming" severity="info"></p-tag>
-            </td>
-          </tr>
-        </ng-template>
+    <div class="event-item" *ngFor="let event of upcomingEvents">
 
-      </p-table>
-    </p-card>
+      <div class="event-left">
+        <div class="event-icon upcoming">
+          <i class="pi pi-calendar"></i>
+        </div>
 
-    <!-- RECENT ACTIVITY (FIXED) -->
-    <p-card>
-      <h3>Recent Activity</h3>
+        <div class="event-info">
+          <h4>{{ event.name }}</h4>
+          <span>{{ event.date | date:'MMM d, y' }}</span>
+        </div>
+      </div>
 
-      <p-table [value]="completedEvents" [paginator]="true" [rows]="3" class="custom-table">
+      <div class="event-right">
+        <p-tag value="Upcoming" severity="info"></p-tag>
+      </div>
 
-        <ng-template pTemplate="header">
-          <tr>
-            <th>Event</th>
-            <th>Date</th>
-            <th>Status</th>
-          </tr>
-        </ng-template>
-
-        <ng-template pTemplate="body" let-event>
-          <tr>
-            <td>{{ event.name }}</td>
-            <td>{{ event.date | date:'mediumDate' }}</td>
-            <td>
-              <p-tag value="Completed" severity="success"></p-tag>
-            </td>
-          </tr>
-        </ng-template>
-
-      </p-table>
-    </p-card>
+    </div>
 
   </div>
+
+</p-card>
+
+
+<!-- RECENT EVENTS -->
+<p-card class="content-card">
+
+  <div class="card-header">
+    <h3>Recent Activity</h3>
+    <span class="count">{{ completedEvents.length }}</span>
+  </div>
+
+  <div class="event-list">
+
+    <div class="event-item" *ngFor="let event of completedEvents">
+
+      <div class="event-left">
+        <div class="event-icon done">
+          <i class="pi pi-check-circle"></i>
+        </div>
+
+        <div class="event-info">
+          <h4>{{ event.name }}</h4>
+          <span>{{ event.date | date:'MMM d, y' }}</span>
+        </div>
+      </div>
+
+      <div class="event-right">
+        <p-tag value="Completed" severity="success"></p-tag>
+      </div>
+
+    </div>
+
+  </div>
+
+</p-card>
+
+</div>
 
 </div>

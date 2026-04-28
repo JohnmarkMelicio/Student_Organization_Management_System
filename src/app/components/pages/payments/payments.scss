@@ -33,18 +33,28 @@
 }
 
 /* =========================
-   BUTTON
+   BUTTON (CLEAN - NO BOUNCE)
 ========================= */
 .add-btn {
   background: linear-gradient(135deg,#0d2c6c,#123d8c);
   border: none;
+  border-radius: 10px;
   box-shadow: 0 4px 12px rgba(13,44,108,0.25);
-  transition: 0.2s;
+
+  /* 🔥 smooth but no movement */
+  transition: background 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* REMOVE BOUNCE */
 .add-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(13,44,108,0.35);
+  transform: none; /* ❌ no movement */
+  box-shadow: 0 6px 16px rgba(13,44,108,0.28); /* slight depth only */
+}
+
+/* OPTIONAL: subtle click feedback */
+.add-btn:active {
+  transform: none;
+  box-shadow: 0 3px 8px rgba(13,44,108,0.2);
 }
 
 /* =========================
@@ -221,3 +231,60 @@
 .save-btn { color:#198754; }
 .cancel-btn { color:#6c757d; }
 .delete-btn { color:#dc3545; }
+
+/* =========================
+   TOOLBAR (MAIN FIX)
+========================= */
+.payment-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 15px 0;
+}
+
+/* =========================
+   FIELD SIZES
+========================= */
+.field {
+  min-width: 180px;
+}
+
+.field.small {
+  min-width: 140px;
+}
+
+/* =========================
+   UNIFY HEIGHT (IMPORTANT)
+========================= */
+:host ::ng-deep .p-select {
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+input[pInputText] {
+  height: 40px;
+}
+
+/* =========================
+   BUTTON (NO BOUNCE)
+========================= */
+.add-btn {
+  height: 40px;
+  background: linear-gradient(135deg,#0d2c6c,#123d8c);
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(13,44,108,0.25);
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.add-btn:hover {
+  transform: none;
+  box-shadow: 0 6px 16px rgba(13,44,108,0.28);
+}
+
+.add-btn:active {
+  transform: none;
+  box-shadow: 0 3px 8px rgba(13,44,108,0.2);
+}
